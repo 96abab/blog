@@ -497,8 +497,7 @@ h3 {
 }
 
 a {
-    color: #4276b6;
-    font-weight: 400;
+
     text-decoration: none
 }
 
@@ -660,17 +659,13 @@ header p {
 }
 
 #banner .button {
-    border: 1px solid rgb(255 255 255 / 40%);
+    
     background: linear-gradient(rgb(255 255 255 / 40%), rgb(255 255 255 / 40%));
-    border-radius: 40px;
+    border-radius: 41px;
     box-shadow: inset 0px 1px 0px rgb(255 255 255 / 40%), 0px 1px 1px rgb(0 0 0 / 10%);
-    background-color: #76767;
-    margin-left: 7p;
-    padding: 38px 22px;
-    7px: ;
-    margin-top: 6px;
-    line-height: 14px;
-    font-size: 14px;
+   
+    
+    
     color: #333;
     font-weight: bold;
     display: inline-block;
@@ -684,14 +679,12 @@ header p {
 
 #banner .fork {
     position: fixed;
-    left: 100;
-    margin-left: 91px;
-    padding: 10px -9px;
-    margin-top: 72px;
-    line-height: px;
-    line-height: 4px;
-    ne-height: 14px;
-    font-size: 20px;
+    left: 50%;
+    margin-left: -902px;
+    
+    margin-top: 149px;
+    line-height: 14px;
+    font-size: 14px;
     background-color: rgb(255 255 255 / 40%);
 }
 
