@@ -726,10 +726,10 @@ header p {
     position: absolute;
     height: 36px;
     width: 36px;
-    right: 7px;
-    top: 7px;
+    right: 21px;
+    top: 5px;
     display: block;
-    background: url(https://96abab.github.io/test.io/ducklogo.jpg)
+    background: url(https://96abab.github.io/test.io/ducklogo.png)
 }
 
 section {
