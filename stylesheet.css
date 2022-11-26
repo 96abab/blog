@@ -623,6 +623,7 @@ header {
     z-index: 10;
     -webkit-font-smoothing: antialiased;
     min-height: 66px;
+    border-radius: 45px;
 }
 
 header h1 {
