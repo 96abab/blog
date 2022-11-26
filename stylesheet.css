@@ -664,7 +664,7 @@ header p {
     border-radius: 41px;
     box-shadow: inset 0px 1px 0px rgb(255 255 255 / 40%), 0px 1px 1px rgb(0 0 0 / 10%);
    
-    
+    padding: 112px 17px;
     
     color: #333;
     font-weight: bold;
@@ -728,7 +728,7 @@ header p {
     right: 7px;
     top: 7px;
     display: block;
-    background: url(/testfile\test.io\ducklogo.jpg)
+    background: url(ducklogo.jpg)
 }
 
 section {

@@ -1,13 +1,61 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+<html lang="en-US"><head>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LINUX 명령어</title>
-    <link rel="stylesheet" href="https://96abab.github.io/test.io/stylesheet.css">
-</head>
-<body>
 
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>리눅스 명령어 | 96abab.github.io</title>
+<meta name="generator" content="Jekyll v3.9.2">
+<meta property="og:title" content="리눅스 명령어">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://96abab.github.io/linux.html">
+<meta property="og:url" content="https://96abab.github.io/linux.html">
+<meta property="og:site_name" content="96abab.github.io">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="리눅스 명령어">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"리눅스 명령어","url":"https://96abab.github.io/linux.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="https://96abab.github.io/test.io/stylesheet.css">
+    <script src="https://code.jquery.com/jquery-3.3.0.min.js" integrity="sha256-RTQy8VOmNlT6b2PIRur37p6JEBZUE7o8wPgMvu18MC4=" crossorigin="anonymous"></script>
+    <script src="/assets/js/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+
+      <header>
+        <h1>리눅스 명령어</h1>
+        <p></p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/96abab/test.io.git" class="button fork"><strong>GitHub</strong></a>
+        
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+      </nav>
+      <section style="height: auto;">
+        <h1 id="-">리눅스 명령어</h1>
 <details>
     <summary><h2>목차</h2></summary>
     <div>
@@ -25,300 +73,266 @@
     </div>
 </details>
 
+<hr>
 
-<h1>LINUX 명령어</h1>
-
-
-<hr/>
-1. 파일 시스템 탐색 기본 명령어
-<br>
-
-
-<br>
-<pre>
-    $ pwd   : 작업 디렉토리 위치를 확인한다
-
-        /home/vagrant/git
-</pre>
-<br>
-<br>
-<pre>
-    $ cd  (디렉토리명) : 현재 작업하는 디렉토리의 위치를 이동 시킨다 
-
-        [vagrant@host1 git]$ cd bitcamp-ncp
-
-        [vagrant@host1 bitcamp-ncp]$
-</pre>
-
-<br>
-<br>
-
-<pre>
-    $ ls  : 현재 위치한 디렉토리에 있는 디렉토리와 파일들의 리스트를 출력한다
-
-        b.txt    x.txt    README.md 
-</pre>
-
-<br>
-<br>
-
-<pre>
-$ file (파일명):  지정한 파일의 타입을 확인한다
-
-        [vagrant@host1 bitcamp-ncp]$ file README.md
-
-        README.md: ASCII text, with no line terminators
-</pre>
-
-<pre>
+<ol>
+  <li>파일 시스템 탐색 기본 명령어
+<br></li>
+</ol>
 
-    $ less  (파일명): 텍스트형식의 파일의 내용을 1페이지씩 보여준다 pageup과 pagedown으로
-     이동가능하고 화살표 커맨드와 스페이스바로도 이동이 가능하다 그리고 q를 누르면 출력모드가 종료된다
-    
-            1111
-    
-            2222
-    
-            3333
-    
-            4444
-    
-            5555
-    
-            6666
-    
-            b.txt (END)
-    
-    
-    
-     
-    
-    2. 파일과 디렉토리 조작 명령어
-    
-    $ cp (복사할파일) (붙여넣을 파일) : 지정파일 내용을 붙여넣을 파일에 복사하여 넣는다 만약
-     붙여넣을 파일이 없다면 생성하여 붙여넣는다 
-</pre>
+<p><br></p>
 
-<br>
-<pre>
-    [vagrant@host1 bitcamp-ncp]$ cp b.txt bb.txt <- 해당 파일이 없을경우 만들어서 붙여넣는다 (파일생성가능)
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ pwd   : 작업 디렉토리 위치를 확인한다
 
-</pre>
+    /home/vagrant/git
+</code></pre></div></div>
 
-<br>
-<br>
-<pre>
-    $ mv (파일의 현재 경로/파일 이름)(이동시킬 경로) : 파일의 경로를 이동시킬때 사용한다  *주의점 : pwd등을 이용하여 home/경로부터 지정해줘야 이동한다
-    
-    
-    
-            [vagrant@host1 bitcamp-ncp]$ ls
-    
-            bb.txt  b.txt
-    
-            [vagrant@host1 bitcamp-ncp]$ mv b.txt /home/vagrant/git/bitcamp-ncp/xxx
-    
-            [vagrant@host1 bitcamp-ncp]$ ls
-    
-            bb.txt
-    
-            [vagrant@host1 bitcamp-ncp]$ cd xxx
-    
-            [vagrant@host1 xxx]$ ls
-    
-            b.txt
-</pre>
+<p><br>
+<br></p>
 
-<br>
-<br>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cd  (디렉토리명) : 현재 작업하는 디렉토리의 위치를 이동 시킨다 
 
-<pre>
-    $ mkdir (디렉토리명):  디렉토리를 생성한다
-    
-    
-    
-            [vagrant@host1 xxx]$ ls
-    
-            b.txt
-    
-            [vagrant@host1 xxx]$ mkdir ccc
-    
-            [vagrant@host1 xxx]$ ls
-    
-            b.txt  ccc
-</pre>
+    [vagrant@host1 git]$ cd bitcamp-ncp
 
+    [vagrant@host1 bitcamp-ncp]$
+</code></pre></div></div>
 
-<br>
-<br>
+<p><br>
+<br></p>
 
-3. 명령어를 다루는 명령어
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ls  : 현재 위치한 디렉토리에 있는 디렉토리와 파일들의 리스트를 출력한다
 
-<br>
+    b.txt    x.txt    README.md 
+</code></pre></div></div>
 
-<pre>
-$type : 지정한 리눅스 명령어를 내장된 명령어 외부명령어인지 확인해준다
+<p><br>
+<br></p>
 
+<p>$ file (파일명):  지정한 파일의 타입을 확인한다</p>
 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    [vagrant@host1 bitcamp-ncp]$ file README.md
 
- [vagrant@host1 xxx]$ type ls
+    README.md: ASCII text, with no line terminators
+</code></pre></div></div>
 
-ls is aliased to `ls --color=auto'
+<p>$ less  (파일명): 텍스트형식의 파일의 내용을 1페이지씩 보여준다 pageup과 pagedown으로 이동가능하고 화살표 커맨드와 스페이스바로도 이동이 가능하다 그리고 q를 누르면 출력모드가 종료된다</p>
 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    1111
 
+    2222
 
- $which : 명령어 위치를 찾는다
+    3333
 
+    4444
 
+    5555
 
-[vagrant@host1 xxx]$ which ls
+    6666
 
-alias ls='ls --color=auto'
+    b.txt (END)
+</code></pre></div></div>
 
-        /usr/bin/ls
+<ol>
+  <li>파일과 디렉토리 조작 명령어</li>
+</ol>
 
-$ man (명령어): 설명페이지를 볼 수 있다
+<p>$ cp (복사할파일) (붙여넣을 파일) : 지정파일 내용을 붙여넣을 파일에 복사하여 넣는다 만약 붙여넣을 파일이 없다면 생성하여 붙여넣는다</p>
 
+<p><br></p>
 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[vagrant@host1 bitcamp-ncp]$ cp b.txt bb.txt &lt;- 해당 파일이 없을경우 만들어서 붙여넣는다 (파일생성가능)
+</code></pre></div></div>
 
+<p><br>
+<br></p>
 
-    LS(1)    User Commands       LS(1)
+<p>$ mv (파일의 현재 경로/파일 이름)(이동시킬 경로) : 파일의 경로를 이동시킬때 사용한다  *주의점 : pwd등을 이용하여 home/경로부터 지정해줘야 이동한다</p>
 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    [vagrant@host1 bitcamp-ncp]$ ls
 
+    bb.txt  b.txt
 
-    NAME
+    [vagrant@host1 bitcamp-ncp]$ mv b.txt /home/vagrant/git/bitcamp-ncp/xxx
 
-        ls - list directory contents
+    [vagrant@host1 bitcamp-ncp]$ ls
 
+    bb.txt
 
+    [vagrant@host1 bitcamp-ncp]$ cd xxx
 
-    SYNOPSIS
+    [vagrant@host1 xxx]$ ls
 
-        ls [OPTION]... [FILE]...
+    b.txt
+</code></pre></div></div>
 
+<p><br>
+<br></p>
 
+<p>$ mkdir (디렉토리명):  디렉토리를 생성한다</p>
 
-    DESCRIPTION
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    [vagrant@host1 xxx]$ ls
 
-        List  information  about the FILEs (the current directory by default).  Sort entries alphabetically if none of
+    b.txt
 
-        -cftuvSUX nor --sort is specified.
+    [vagrant@host1 xxx]$ mkdir ccc
 
+    [vagrant@host1 xxx]$ ls
 
+    b.txt  ccc
+</code></pre></div></div>
 
-        Mandatory arguments to long options are mandatory for short options too.
+<p><br>
+<br></p>
 
+<ol>
+  <li>명령어를 다루는 명령어</li>
+</ol>
 
+<p><br></p>
 
-        -a, --all
+<p>$type : 지정한 리눅스 명령어를 내장된 명령어 외부명령어인지 확인해준다</p>
 
-                do not ignore entries starting with .
+<p>[vagrant@host1 xxx]$ type ls</p>
 
+<p>ls is aliased to `ls –color=auto’</p>
 
+<p>$which : 명령어 위치를 찾는다</p>
 
-        -A, --almost-all
+<p>[vagrant@host1 xxx]$ which ls</p>
 
-                do not list implied . and ..
+<p>alias ls=’ls –color=auto’</p>
 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    /usr/bin/ls
+</code></pre></div></div>
 
+<p>$ man (명령어): 설명페이지를 볼 수 있다</p>
 
-        --author
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>LS(1)                                               User Commands                                               LS(1)
 
-                with -l, print the author of each file
 
 
+NAME
 
-        -b, --escape
+    ls - list directory contents
 
-                print C-style escapes for nongraphic characters
 
 
+SYNOPSIS
 
-        --block-size=SIZE
+    ls [OPTION]... [FILE]...
 
-                scale sizes by SIZE before printing them; e.g., '--block-size=M' prints sizes  in  units  of  1,048,576
 
 
+DESCRIPTION
 
-$apropos (명령어): 해당 명령어와 관련있는 명령어를 설명과 같이 보여준다
+    List  information  about the FILEs (the current directory by default).  Sort entries alphabetically if none of
 
+    -cftuvSUX nor --sort is specified.
 
 
-        _llseek (2)          - reposition read/write file offset
 
-        afs_syscall (2)      - unimplemented system calls
+    Mandatory arguments to long options are mandatory for short options too.
 
-        assert (3)           - abort the program if assertion is false
 
-        auth_destroy (3)     - library routines for remote procedure calls
 
-</pre>
-<br>
-<br>
+    -a, --all
 
-<pre>
-$ info : 명령어를 하이퍼텍스트 형식으로 관련정보를 알려준다
+            do not ignore entries starting with .
 
 
 
-        File: coreutils.info,  Node: ls invocation,  Next: dir invocation,  Up: Directory listing
+    -A, --almost-all
 
+            do not list implied . and ..
 
 
-        10.1 'ls': List directory contents
 
-        ==================================
+    --author
 
+            with -l, print the author of each file
 
 
-        The 'ls' program lists information about files (of any type, including
 
-        directories).  Options and file arguments can be intermixed arbitrarily,
+    -b, --escape
 
-        as usual.
+            print C-style escapes for nongraphic characters
 
 
 
+    --block-size=SIZE
 
-$ whatis : 해당명령어의 간단한 설명
+            scale sizes by SIZE before printing them; e.g., '--block-size=M' prints sizes  in  units  of  1,048,576
+</code></pre></div></div>
 
+<p>$apropos (명령어): 해당 명령어와 관련있는 명령어를 설명과 같이 보여준다</p>
 
-        [vagrant@host1 xxx]$ whatis ls
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    _llseek (2)          - reposition read/write file offset
 
-        ls (1)               - list directory contents
+    afs_syscall (2)      - unimplemented system calls
 
-        ls (1p)              - list directory contents
+    assert (3)           - abort the program if assertion is false
 
+    auth_destroy (3)     - library routines for remote procedure calls
+</code></pre></div></div>
 
+<p><br>
+<br></p>
 
-$ alias : 사용 가능한 단축 명령어를 확인 할 수 있다
+<p>$ info : 명령어를 하이퍼텍스트 형식으로 관련정보를 알려준다</p>
 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    File: coreutils.info,  Node: ls invocation,  Next: dir invocation,  Up: Directory listing
 
 
-        alias
 
-        alias egrep='egrep --color=auto'
+    10.1 'ls': List directory contents
 
-        alias fgrep='fgrep --color=auto'
+    ==================================
 
-        alias grep='grep --color=auto'
 
-        alias l.='ls -d .* --color=auto'
 
-        alias ll='ls -l --color=auto'
+    The 'ls' program lists information about files (of any type, including
 
-        alias ls='ls --color=auto'
+    directories).  Options and file arguments can be intermixed arbitrarily,
 
-        alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
-</pre>
+    as usual.
+</code></pre></div></div>
 
+<p>$ whatis : 해당명령어의 간단한 설명</p>
 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    [vagrant@host1 xxx]$ whatis ls
 
+    ls (1)               - list directory contents
 
+    ls (1p)              - list directory contents
+</code></pre></div></div>
 
+<p>$ alias : 사용 가능한 단축 명령어를 확인 할 수 있다</p>
 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    alias
 
+    alias egrep='egrep --color=auto'
 
- 
-</body>
-</html>
+    alias fgrep='fgrep --color=auto'
+
+    alias grep='grep --color=auto'
+
+    alias l.='ls -d .* --color=auto'
+
+    alias ll='ls -l --color=auto'
+
+    alias ls='ls --color=auto'
+
+    alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
+</code></pre></div></div>
+
+
+
+      </section>
+      <footer>
+        
+        <p><small>Hosted on GitHub Pages — Theme by <a href="https://twitter.com/mattgraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+  
+
+</body></html>
