@@ -1,5 +1,3 @@
-<style>
-
 /*! normalize.css 2012-02-07T12:37 UTC - https://github.com/necolas/normalize.css */
 article,
 aside,
@@ -445,11 +443,11 @@ table {
 
 body {
     font: 14px/22px 'Quattrocento Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #2b2b2b;
+    color: #000000;
     font-weight: 300;
     margin: 0px;
     padding: 0px 0 20px 0px;
-    background: url(../images/body-background.png) #eae6d1
+    background: url(../images/body-background) #d3cfbd;
 }
 
 h1,
@@ -613,31 +611,29 @@ dt {
 }
 
 header {
-    padding: 50px 23px 36px 345px;
+    padding: 34px 3px 21px 20px;
     margin: 0;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    width: 100%;
+    width: 70%;
     text-align: center;
-    background: url() #3c4044;
-    box-shadow: 1px 0px 2px rgb(0 0 0 / 75%);
-    z-index: 99;
+    background: url(../images/backgr) rgb(255 255 255 / 40%);
+    box-shadow: 1px 0px 2px rgb(255 255 255 / 40%);
+    z-index: 10;
     -webkit-font-smoothing: antialiased;
-    min-height: 55px;
+    min-height: 66px;
 }
 
 header h1 {
-    font: 40px/48px 'Copse', "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font: 44px/55px 'Copse', "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #f3f3f3;
-    text-shadow: 0px 2px 0px #235796;
-    margin: 0px;
+    text-shadow: 0px 2px 0px #898989;
+    margin: -9px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    -o-text-overflow: ellipsis;
-    -ms-text-overflow: ellipsis
 }
 
 header p {
@@ -650,16 +646,17 @@ header p {
 #banner {
     z-index: 100;
     left: 0;
-    right: 50%;
-    height: 50px;
-    margin-right: -382px;
+    right: 70%;
+    height: 377px;
+    margin-right: 482px;
+    x: ;
     position: fixed;
-    top: 115px;
-    background: #ffcc00;
-    border: 1px solid #f0b500;
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25);
-    border-radius: 0px 2px 2px 0px;
-    padding-right: 10px
+    top: 91px;
+    background: rgb(255 255 255 / 40%);
+    border: 12px solid rgb(255 255 255 / 40%);
+    box-shadow: 0px 1px 3px rgb(0 0 0 / 25%);
+    border-radius: 35px 35px 35px 35px;
+    padding-right: 10px;
 }
 
 #banner .button {
@@ -973,5 +970,3 @@ screen and (max-height: 480px) {
         width: auto
     }
 }
-
-</style>
