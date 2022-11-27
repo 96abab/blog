@@ -440,6 +440,14 @@ table {
 .highlight .ss {
     color: #90a959
 }
+::marker {
+    unicode-bidi: isolate;
+    font-variant-numeric: tabular-nums;
+    text-transform: none;
+    text-indent: 0px !important;
+    text-align: start !important;
+    text-align-last: start !important;
+}
 
 @keyframes rain_effect {
 0% {background-position: 0px 0px, 0px 0px, 0px 0px;}
