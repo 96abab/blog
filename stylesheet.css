@@ -441,13 +441,41 @@ table {
     color: #90a959
 }
 
+@keyframes rain_effect {
+0% {background-position: 0px 0px, 0px 0px, 0px 0px;}
+50% {background-position: 400px 800px, 300px 300px, 200px 200px; background-color: #d3cfbd}
+100% {background-position: 0px 0px, 0px 0px, 0px 0px; background-color: #d3cfbd}
+}
+
+@-moz-keyframes rain_effect {
+0% {background-position: 0px 0px, 0px 0px, 0px 0px;}
+50% {background-position: 400px 800px, 300px 300px, 200px 200px; background-color: #d3cfbd}
+100% {background-position: 0px 0px, 0px 0px, 0px 0px; background-color: #d3cfbd}
+}
+
+@-webkit-keyframes rain_effect {
+0% {background-position: 0px 0px, 0px 0px, 0px 0px;}
+50% {background-position: 400px 800px, 300px 300px, 200px 200px; background-color: #d3cfbd}
+100% {background-position: 0px 0px, 0px 0px, 0px 0px; background-color: #d3cfbd}
+}
+
+@-ms-keyframes rain_effect {
+0% {background-position: 0px 0px, 0px 0px, 0px 0px;}
+50% {background-position: 400px 800px, 300px 300px, 200px 200px; background-color: #d3cfbd}
+100% {background-position: 0px 0px, 0px 0px, 0px 0px; background-color: #d3cfbd}
+}
 body {
     font: 14px/22px 'Quattrocento Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #000000;
     font-weight: 300;
     margin: 0px;
     padding: 0px 0 20px 0px;
-    background: url(../images/body-background) #d3cfbd;
+    background:  #d3cfbd;
+    background-image: url(https://96abab.github.io/test.io/fallenleaves.png), url(https://96abab.github.io/test.io/), url(https://96abab.github.io/test.io/);
+    animation: rain_effect 40s linear infinite;
+	-webkit-animation: rain_effect 40s linear infinite;
+	-moz-animation: rain_effect 40s linear infinite;
+	-ms-animation: rain_effect 40s linear infinite;
 }
 
 h1,
