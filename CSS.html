@@ -221,10 +221,11 @@ background-size
 
 <h1>2022-11-28<h1>
 <br>
+<br>
 ##CSS(cascading style sheet)<br>
 -html element의 모양을 정의 만약 중복되는게 있다면 합친후 우선순위가 높은 
 스타일로 적용한다
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code></code>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 .b1:focus {
   background-color: blue;
   color: yellow;
@@ -241,7 +242,7 @@ text-decoration: overline;
 </code></pre></div></div>
 <br>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code></code>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 -content header > span.title:hover(selector)->스타일을 적용할 대상을 가리킨다{
                                 ㄴ> pseudo selector(대상의 상태)
   background-color:red;
@@ -263,7 +264,7 @@ text-decoration: overline;
 <br>
 <br>
 ##selector
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code></code>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 * {--}
 태그명 {--}
 태그명,태그명,태그명{--}
@@ -281,7 +282,7 @@ border-styl:--<br>
 폰트는 상속가능 
 <br>
 ##부모 태그와 자식 태그의 계층구조
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code></code>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 html
   ㄴ>body                   만약 body에 색이 빨강이고
        ㄴ>div               p 색이 검정색이라면 p는
@@ -305,7 +306,7 @@ border:  red 1px dashed;  위에있는 특성을 한번에 적용가능 위치 �
 <br>
 어떤 태그가 상속하고 상속하지 않는지 잘 알아야한다
 <br>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code></code>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 조상 자손 {--}         
 ul > li  {--}           ul의 직계자손만
 태그 + 다음태그 {--}   
@@ -333,7 +334,7 @@ input[name$="fax"]<br>
 <br>
 div:nth-child(2)    자식중 2번째자식
 <br>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code></code>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 ul >li:hover {
   text-decoration: underline;
 }
@@ -401,7 +402,7 @@ a,span 등(inline 태그)
 
 
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code></code>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 /* 같은 점수일 때 나중에 지정된 스타일이 기존 스타일을 덮어쓴다 */
     div { 
       width: 200px; 
