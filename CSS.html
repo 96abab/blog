@@ -218,14 +218,14 @@ background-size
 -요소1과 형제인 모든 요소를 선택
 
 </code></pre></div></div>
-
 <h1>2022-11-28<h1>
 <br>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code></code>
 <br>
 ##CSS(cascading style sheet)<br>
 -html element의 모양을 정의 만약 중복되는게 있다면 합친후 우선순위가 높은 
 스타일로 적용한다
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
 .b1:focus {
   background-color: blue;
   color: yellow;
@@ -239,10 +239,8 @@ background-color: blue;
 color: yellow;                  - 우선순위 순 id(#)>class().>type 
 text-decoration: overline;
 
-</code></pre></div></div>
 <br>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 -content header > span.title:hover(selector)->스타일을 적용할 대상을 가리킨다{
                                 ㄴ> pseudo selector(대상의 상태)
   background-color:red;
@@ -260,11 +258,10 @@ text-decoration: overline;
       7. block 과 inline 다루는 방법
       8. 위치 조정하는 방법
 
-</code></pre></div></div>
 <br>
 <br>
 ##selector
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
 * {--}
 태그명 {--}
 태그명,태그명,태그명{--}
@@ -272,7 +269,6 @@ text-decoration: overline;
 #태그아이디{--}
 -[속성명=값]{--}
 -:상태명(pseudo selector){--}
-</code></pre></div></div>
 <br>
 <br>
 border-styl:--<br>     
@@ -282,14 +278,13 @@ border-styl:--<br>
 폰트는 상속가능 
 <br>
 ##부모 태그와 자식 태그의 계층구조
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
 html
   ㄴ>body                   만약 body에 색이 빨강이고
        ㄴ>div               p 색이 검정색이라면 p는
            ㄴ>hi            자신의 색만 있으면 된다
            ㄴ>p 
            
-</code></pre></div></div>
 <br>
 <br>
 원하는 태그에 id를 주고 #으로 스타일을 적용해준다<br>
@@ -306,7 +301,6 @@ border:  red 1px dashed;  위에있는 특성을 한번에 적용가능 위치 �
 <br>
 어떤 태그가 상속하고 상속하지 않는지 잘 알아야한다
 <br>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 조상 자손 {--}         
 ul > li  {--}           ul의 직계자손만
 태그 + 다음태그 {--}   
@@ -315,7 +309,6 @@ ul > li  {--}           ul의 직계자손만
 div#menu li.c2 {--}             중간에 띄어쓰기가 있다면 자손에 대한것
                                 붙여쓰면 div의 아이디가 menu인것
 
-</code></pre></div></div>
 <br>
 <br>
 input[name^="office"]<br>    
@@ -334,7 +327,6 @@ input[name$="fax"]<br>
 <br>
 div:nth-child(2)    자식중 2번째자식
 <br>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 ul >li:hover {
   text-decoration: underline;
 }
@@ -362,7 +354,6 @@ a:focus {
     <li>FAQ</li>
   </ol>
 </pre>
-</code></pre></div></div>
 <li class="c2">커뮤니티
 
 
@@ -402,7 +393,7 @@ a,span 등(inline 태그)
 
 
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
 /* 같은 점수일 때 나중에 지정된 스타일이 기존 스타일을 덮어쓴다 */
     div { 
       width: 200px; 
@@ -432,7 +423,7 @@ div {
 div#d3 {  
   background-color: skyblue;
 }
-</code></pre></div></div>
+
 
 <p>##checkbox 값 보내기</p>
 <br>
@@ -462,7 +453,7 @@ id<br>
 
 <p>##과제</p>
 github 개인페이지에 css적용
-
+</code></pre></div></div>
 
 
       </section>
