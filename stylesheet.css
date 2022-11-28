@@ -309,7 +309,12 @@ table {
     font-weight: normal;
     font-style: normal
 }
-
+@import url('https://fonts.google.com/noto/specimen/Noto+Sans+KR?preview.size=14');
+pre#ddd1 {
+    font-size: 14px;
+    color: rgb(255, 255, 255);
+    
+}
 .highlight table td {
     padding: 5px
 }

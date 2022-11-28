@@ -11,7 +11,7 @@
 /* 보통 웹페이지를 퍼블리싱할 때 기본값을 0으로 글자색은 검정으로 맞추고 시작한다 */
 
 .fn-font {
-    font-family: 'Noto Sans KR', sans-serif
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 ul {
