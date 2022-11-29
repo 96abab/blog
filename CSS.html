@@ -456,6 +456,95 @@ background-size
   github 개인페이지에 css적용
 
 </code></pre></div></div>
+
+<h1>2022-11-29</h1>
+
+##테두리(border)
+
+<p>콘텐트</p>
+        
+콘텐트기준으로 top,right,bottom,left
+      
+padding: 콘텐트와 border사이에 여백 
+margin: border밖 여백 
+
+border-top(right,bottom,left)-style(width,color):solid(dashed);
+ㄴ> 적은 명령 border-top: color style width;         각방향에 따로 지정할때 사용
+ㄴ> border(테두리의 모든방향):color style width;    모든방향에 지정할때 사용 
+
+점수가 낮은건 위로 올려서 작성하는게 좋다
+텍스트는  차지하는 범위가 보이는것보다 조금 더 있다
+
+inline태그는 움직이는게 한정적이다 
+하지만 display: inline-block; 블럭으로 바꾸면 움직임이 비교적 자유롭다
+
+#footer {
+  background-color: yellow;
+  border-width: 1px;
+  box-sizing: border-box;        <-- border사이즈에 맞춘다  
+}
+
+##rester폰트(bitmap)
+
+-픽셀단위로 글자를 구성
+-출력속도가 빠르다 
+-폰트 크기에 따라 각 문자를 만든다
+-정해진 크기보다 크게 출력하면 픽셀이 커져서 계단현상이 발생한다 (픽셀이 보임)
+-이미지의 복잡도와 상관없이 파일크기가 같다
+
+예) courier
+
+
+##vector폰트
+
+-글자를 그리는 명령어를 작성
+-글자를 그리는 명령을 수행
+-출력속도가 느리다 (요즘은 cpu가 빨라 상관없다)
+-글자 크기를 늘려도 계단 현상이 없다
+-이미지가 복잡도에 따라서 파일 크기가 달라짐
+
+예)true-type 폰트
+
+*폰트크기=높이
+
+
+
+폰트크기를 지정할때는 
+font-size: 1.5em;       기존 사이즈에 기준으로 바꿔준다 30px등으로 지정하면 
+font-size: 150%;        글자가 바뀌지 않음
+
+
+float: left;
+띄워서 왼쪽이나 오른쪽으로 밀수있다
+화면이 달라지면 그에 맞게 위치가 조정
+
+@span
+-텍스트를 분리시키는 태그
+
+*background-image: url('img02.png');
+검색 엔진이 잘 검색할 수 있다
+그냥 이미지를 넣을 경우 검색X
+
+
+*object 
+객체,도구 
+    ㄴ> 여러 기능이 있다 function과 method등 으로 부른다
+
+
+*document
+태그를 다루는 기능
+
+-getElementbyid(태그아이디) -> 태그 객체 리턴
+-getElementbytagname(태그이름) -> 태그목록 리턴
+-createElement(태그이름)-> 태그객체를 생성해서 리턴 
+-setAttribute(속성명,속성값): 태그의 속성 값을 설정
+
+
+
+
+
+
+
       </section>
       <footer>
         <p><small>96abab.GitHub.com - <a href="https://github.com/96abab/test.io.git">test.io</a></small></p>
