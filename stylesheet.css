@@ -104,6 +104,7 @@ header ul > li {
 }
 
 #headling {
+    overflow: auto;
     
 }
 
