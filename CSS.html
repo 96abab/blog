@@ -1,90 +1,49 @@
-<html lang="en-US"><head>
-    <meta charset="utf-8">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-<!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>CSS | 96abab.github.io</title>
-<meta name="generator" content="Jekyll v3.9.2">
-<meta property="og:title" content="CSS">
-<meta property="og:locale" content="en_US">
-<link rel="canonical" href="https://96abab.github.io/CSS.html">
-<meta property="og:url" content="https://96abab.github.io/CSS.html">
-<meta property="og:site_name" content="96abab.github.io">
-<meta property="og:type" content="website">
-<meta name="twitter:card" content="summary">
-<meta property="twitter:title" content="CSS">
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","headline":"CSS","url":"https://96abab.github.io/CSS.html"}</script>
-<!-- End Jekyll SEO tag -->
-
-    <link rel="stylesheet" href="https://96abab.github.io/test.io/stylesheet.css">
-    <script src="https://code.jquery.com/jquery-3.3.0.min.js" integrity="sha256-RTQy8VOmNlT6b2PIRur37p6JEBZUE7o8wPgMvu18MC4=" crossorigin="anonymous"></script>
-    <script src="/assets/js/main.js"></script>
-    <!--[if lt IE 9]>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script>
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
-    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
-
-<!-- Setup Google Analytics -->
-
-
-
-<!-- You can set your favicon here -->
-<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
-
-<!-- end custom head snippets -->
-
-  </head>
-  <body>
-
-      <header>
-        <h1>CSS</h1>
-        <p></p>
-      </header>
-
-      <div id="banner">
-        <span id="logo"></span>
-
-        <a href="https://github.com/96abab/test.io.git" class="button fork"><strong>GitHub</strong></a>
-        
-      </div><!-- end banner -->
-
-    <div class="wrapper">
-      <nav>
-      
-      </nav>
-      <section style="height: auto;">
-        <h1 id="css">CSS</h1>
-
-<details>
-    <summary>
-        <code>목차</code>
-        <span></span>
-    </summary>
-    <div>
-      <a href="index.html">Home</a>
-      <br>
-      <a href="cloudOS.html">1.CloudOS(리눅스서버설치)</a>
-      <br>
-      <a href="linux.html">2.리눅스 명령어 정리</a>
-      <br>
-      <a href="HTML5.html">3.HTML수업</a>
-      <br>
-      <a href="CSS.html">4.CSS수업</a>
-      <br>
-      <a href="blogguide.html">5.blog guide</a>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <link rel="icon" href="https://96abab.github.io/test.io/ducklogo.png">
     
-    </div>
-</details>
-
+</head>
+<body>
+<div id="container">
+<header>
+  <h2>CSS</h2>
+  <nav>
+    <ul id="topMenu">
+      <li><a href="https://96abab.github.io/test.io">home</a></li>
+      <li><a href="#">menu1</a></li>
+      <li><a href="#">menu2</a></li>
+    </ul>
+  </nav>
+</header>
+</div>
+<aside>
+<ul id="sidebar">
+  <li><a href="index.html">Home</a></li>
+  <br>
+  <li><a href="cloudOS.html">1.CloudOS(리눅스서버설치)</a></li>
+  <br>
+  <li><a href="linux.html">2.리눅스 명령어 정리</a></li>
+  <br>
+  <li><a href="HTML5.html">3.HTML수업</a></li>
+  <br>
+  <li><a href="CSS.html">4.CSS수업</a></li>
+  <br>
+  <li><a href="assignment.html">5.과제</a></li>
+</ul>
+</aside>
+<main class="contents">
+<section id="headling">
 
 <hr>
-
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <p>##스타일 시트</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>브라우저 기본 스타일
+브라우저 기본 스타일
 -웹 브라우저에 웹 문서를 표시할 때 브라우저에서 기본으로 사용하는 스타일
     
 인라인 스타일
@@ -95,13 +54,13 @@
 
 외부 스타일 시트
 -문서에서 사용하는 스타일을 모아서 따로 파일로 저장한 후 연결해서 사용
-</code></pre></div></div>
+
 
 <p><br></p>
 
 <p>##CSS 기본 선택자</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>전체 선택자
+전체 선택자
 - 문서의 모든 요소에 스타일 적용
 *{ margin : 0; } 
 
@@ -121,21 +80,22 @@ id 선택자
 
 그룹 선택자
 - 여러 요소에 같은 스타일을 적용할 때 사용
-h1 , h2 { text-align: cemter; } &lt;br&gt; ##cascading &lt;br&gt; -스타일 시트는 우선 순위가 위에서 아래로 적용 된다는 의미  따라서 둘 이상의 스타일 시트가 존재 할 경우 우선순위에 따라 적용 되며 스타일이 충돌하지 않게 하는 중요한 요소 &lt;br&gt;
-</code></pre></div></div>
+h1 , h2 { text-align: cemter; } &lt;br&gt; ##cascading &lt;br&gt; -스타일 시트는 우선 순위가 위에서 아래로 적용 된다는 의미  따라서 둘 이상의 스타일 시트가 존재 할 
+경우 우선순위에 따라 적용 되며 스타일이 충돌하지 않게 하는 중요한 요소 &lt;br&gt;
+
 
 <p>##스타일 우선순위</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. 사용자 스타일
+1. 사용자 스타일
 
 2. 제작자 스타일 
 
 3. 브라우저 기본 스타일
-</code></pre></div></div>
+
 
 <p>적용 범위</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. !important
+1. !important
   - 스타일 규칙에 붙이면 다른 스타일 보다 우선으로 적용한다
 
 2. 인라인 스타일 
@@ -150,25 +110,24 @@ h1 , h2 { text-align: cemter; } &lt;br&gt; ##cascading &lt;br&gt; -스타일 시
 
 5. 타입 스타일
   - 웹 문서에 사용한 특정 태그에 스타일을 똑같이 적용
-</code></pre></div></div>
+
 
 <p>스타일 작성순서에 따라 스타일을 적용이 달라진다
    우선순위가 같다면 늦게 작성한 스타일이 적용된다</p>
 
 <p>##스타일 상속</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 웹 문서에서 사용하는 태그들은 서로 포함 관계가 있다 포함하는 태그를 부모요소 
+- 웹 문서에서 사용하는 태그들은 서로 포함 관계가 있다 포함하는 태그를 부모요소 
 포함된 태그를 자식 요소라고 부른다 스타일 시트에서는 스타일을 따로 지정하지 않으면 부모요소의 스타일을 그대로 물려 받는다
 이것을 활용하면 스타일 시트를 효과적으로 만들수있다 
 
 *배경색,배경이미지는 스타일 상속이 되지않는다 그리고 자식요소의 스타일을 바꾸고 싶다면 !important와 명시도에
 따라 적용된다
-</code></pre></div></div>
+
 <br>
 <br>
 ##배경 이미지 관련 속성
 <br>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 
   background-color
 -배경색 지정
@@ -197,13 +156,13 @@ background
 background-size
 -배경 이미지의 크기를 조절
 
-</code></pre></div></div>
+
 <br>
 <br>
 ##연결 선택자
 <br>
 <br>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
 
   하위 선택자 (h1 p)
 -상위 요소에 포함된 모든 하위 요소를 선택
@@ -217,8 +176,7 @@ background-size
 -형제 선택자 (p~p)
 -요소1과 형제인 모든 요소를 선택
 
-</code></pre></div></div>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
 
 <h1>2022-11-28<h1>
   <br>
@@ -462,70 +420,79 @@ background-size
 ##테두리(border)
 
 <p>콘텐트</p>
-        
+<br>        
 콘텐트기준으로 top,right,bottom,left
-      
-padding: 콘텐트와 border사이에 여백 
+<br>      
+padding: 콘텐트와 border사이에 여백<br> 
 margin: border밖 여백 
-
+<br>
+<pre>
 border-top(right,bottom,left)-style(width,color):solid(dashed);
 ㄴ> 적은 명령 border-top: color style width;         각방향에 따로 지정할때 사용
 ㄴ> border(테두리의 모든방향):color style width;    모든방향에 지정할때 사용 
-
-점수가 낮은건 위로 올려서 작성하는게 좋다
+</pre>
+점수가 낮은건 위로 올려서 작성하는게 좋다<br>
 텍스트는  차지하는 범위가 보이는것보다 조금 더 있다
-
-inline태그는 움직이는게 한정적이다 
+<br>
+inline태그는 움직이는게 한정적이다 <br>
 하지만 display: inline-block; 블럭으로 바꾸면 움직임이 비교적 자유롭다
-
+<br>
+<br>
+<pre>
 #footer {
   background-color: yellow;
   border-width: 1px;
   box-sizing: border-box;        <-- border사이즈에 맞춘다  
 }
-
+<pre>
+<br>
 ##rester폰트(bitmap)
-
--픽셀단위로 글자를 구성
--출력속도가 빠르다 
--폰트 크기에 따라 각 문자를 만든다
--정해진 크기보다 크게 출력하면 픽셀이 커져서 계단현상이 발생한다 (픽셀이 보임)
--이미지의 복잡도와 상관없이 파일크기가 같다
-
+<br>
+-픽셀단위로 글자를 구성<br>
+-출력속도가 빠르다 <br>
+-폰트 크기에 따라 각 문자를 만든다<br>
+-정해진 크기보다 크게 출력하면 픽셀이 커져서 계단현상이 발생한다 (픽셀이 보임) <br>
+-이미지의 복잡도와 상관없이 파일크기가 같다<br>
+<br>
 예) courier
-
-
-##vector폰트
-
--글자를 그리는 명령어를 작성
--글자를 그리는 명령을 수행
--출력속도가 느리다 (요즘은 cpu가 빨라 상관없다)
--글자 크기를 늘려도 계단 현상이 없다
--이미지가 복잡도에 따라서 파일 크기가 달라짐
-
+<br>
+<br>
+##vector폰트<br>
+<br>
+-글자를 그리는 명령어를 작성<br>
+-글자를 그리는 명령을 수행<br>
+-출력속도가 느리다 (요즘은 cpu가 빨라 상관없다) <br>
+-글자 크기를 늘려도 계단 현상이 없다<br>
+-이미지가 복잡도에 따라서 파일 크기가 달라짐<br>
+<br>
 예)true-type 폰트
-
+<br>
 *폰트크기=높이
+<br>
+<br>
 
-
-
+<pre>
 폰트크기를 지정할때는 
 font-size: 1.5em;       기존 사이즈에 기준으로 바꿔준다 30px등으로 지정하면 
 font-size: 150%;        글자가 바뀌지 않음
-
-
-float: left;
-띄워서 왼쪽이나 오른쪽으로 밀수있다
+</pre>
+<br>
+<br>
+float: left;<br>
+띄워서 왼쪽이나 오른쪽으로 밀수있다<br>
 화면이 달라지면 그에 맞게 위치가 조정
-
-@span
+<br>
+<br>
+@span <br>
 -텍스트를 분리시키는 태그
-
-*background-image: url('img02.png');
-검색 엔진이 잘 검색할 수 있다
+<br>
+<br>
+*background-image: url('img02.png');<br>
+검색 엔진이 잘 검색할 수 있다<br>
 그냥 이미지를 넣을 경우 검색X
-
-
+<br>
+<br>
+<pre>
 *object 
 객체,도구 
     ㄴ> 여러 기능이 있다 function과 method등 으로 부른다
@@ -538,19 +505,15 @@ float: left;
 -getElementbytagname(태그이름) -> 태그목록 리턴
 -createElement(태그이름)-> 태그객체를 생성해서 리턴 
 -setAttribute(속성명,속성값): 태그의 속성 값을 설정
+</pre>
 
+</code></pre></div></div>
+</section>
+</main>
+</div>
+<footer id="footer">
 
-
-
-
-
-
-      </section>
-      <footer>
-        <p><small>96abab.GitHub.com - <a href="https://github.com/96abab/test.io.git">test.io</a></small></p>
-        <p><small>Hosted on GitHub Pages — Theme by <a href="https://twitter.com/mattgraham">mattgraham</a></small></p>
-      </footer>
-    </div>
-  
-
-</body></html>
+<li><small><a href="https://github.com/96abab/test.io.git">96abab.GitHub.com - test.io</a></small></li>
+</footer>
+</body>
+</html>

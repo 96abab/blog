@@ -7,6 +7,8 @@
 	padding:0;
 	color:#000;
     box-sizing: border-box;
+    font-family: 'Noto Sans KR', sans-serif;
+   
 }
 /* 보통 웹페이지를 퍼블리싱할 때 기본값을 0으로 글자색은 검정으로 맞추고 시작한다 */
 
@@ -14,6 +16,7 @@
 body {
     background-color: navajowhite;
     background-image: url(fallenleaves.png);
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 .fn-font {
@@ -96,6 +99,7 @@ header ul > li {
     border-radius: 40px;
     padding: 25px;
     min-height: 500px;
+    overflow: auto;
     
 }
 
