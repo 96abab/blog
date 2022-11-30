@@ -507,6 +507,153 @@ float: left;<br>
 -setAttribute(속성명,속성값): 태그의 속성 값을 설정
 </pre>
 
+<h1>2022-11-30</h1>
+<br>
+<br>
+border 스타일
+<br>
+#d1  border-style: inset; <br>
+#d2  border-style: outset; <br>
+#d3  border-style: groove; <br>
+#d4  border-style: ridge; <br>
+#d5  border-style: solid; <br>
+#d6  border-style: dashed; <br>
+#d7  border-style: dotted; <br>
+#d8  border-style: double; <br>
+<br>
+<br>
+border 색상적용
+<br>
+<br>
+<pre>
+#d2 {
+  border-color: red green blue yellow; /* 시계 방향 */
+}
+
+#d3 {
+  border-color: red blue; /* 위/아래 왼쪽/오른쪽 */
+}
+
+#d4 {
+  border-color: red; /* 모든 테두리 */
+
+
+  #d1 {
+    /* 기본이 콘텐츠의 너비, 높이 이다.*/
+  }
+</pre>
+<br>
+<br>
+테두리 여백
+<br>
+<br>
+<pre>
+  #d2 {
+    /* width, height의 값이 콘텐츠의 너비, 높이로 설정한다. */
+    box-sizing: content-box;
+  }
+
+  #d3 {
+    /* width, height의 값이 태그의 너비, 높이로 설정한다. */
+    box-sizing: border-box; /* = 내용물 너비/높이 + padding 너비/높이 + 테두리 너비/높이 */
+  }
+</pre>
+<br>
+<br>
+*부모태그의 콘텐트 크기를 지정하지 않으면 
+자식의 크기가 적용
+<br>
+<br>
+*블럭태그의 너비는 부모태그의 너비를 적용한다
+<br>
+<br>
+적용한 padding과 margin을 다른 디자인과 겹치지 않게 적용하고 싶을때
+display: inline-block;
+<br>
+<br>
+<pre>
+#content ul {
+  xvisibility: hidden;    <- 눈에만 안보인다 자리는 차지
+  ㅌdisplay: none;        <- 자리까지 사라짐
+} 
+</pre>
+<br>
+<br>
+float<br>
+-사용할때 텍스트가 차지하는 자리를 고려하여 사용해야한다
+<br>
+<br>
+*콘텐트의 너비와 높이
+<br>
+너비= 부모태그의 콘텐트 너비<br>
+높이= 자식태그 높이의 합<br>
+- 자식을 float시키면 계산에 포함시키지 않음 자식들이 전부 float라면<br>
+부모의 높이가 사라진다 그래서 min-height로 최소 높이를 지정해준다
+<br>
+float 시키기전에는 margni이 곂쳣지만 적용시키면 margin이 각각 적용
+이를 이용하여 자식의 위치를 조정할 수 있다
+<br>
+<br>
+<pre>
+position: absolute
+=> 가장 가까운 조상 중에 absolute나 relative, fixed 타입 조상이 있으면 
+  그 조상을 기준으로 자신의 위치를 조정한다.
+  테두리 안쪽을 기준으로 위치를 계산한다.
+=> 만약 조상 중에 absolute나 relative, fixed가 없다면,
+  문서 가장자리를 기준으로 자신의 위치를 조정한다.
+=> absolute 태그는 width, height를 지정하지 않으면 콘텐츠의 크기에 맞춘다.
+=> 기준이 되는 태그가 움직이면 자신도 같이 움직인다.
+</pre>
+- position: absolute 
+를 사용할때 기준은 조상중 position: relative 한 대상 기준으로 움직인다
+<br>
+<br>
+이미지가 없을때는 더미이미지를 지정해 둔다
+<br>
+<br>
+<pre>
+position: fixed
+=> 웹브라우저의 클라이언트 영역을 기준으로 위치를 지정한다.
+=> 클라이언트 영역?
+   웹브라우저의 툴바 아래에 내용이 출력되는 영역이다.
+=> 내용을 위,아래로 스크롤하더라도 fixed 타입의 태그는 움직이지 않는다.
+=> 화면 스크롤과 상관없이 웹브라우저의 특정 영역에
+   내용을 띄우고 싶을 때 사용한다.
+</pre>
+cursor: pointer; 커서 모양 변경
+<br>
+<br>
+<pre>
+<script>
+  var btn = document.getElementById("closeBtn");
+  btn.addEventListener('click', function() {
+    var adDiv = document.getElementById("ad");
+    //adDiv.style.display = "none";
+    adDiv.style["display"] = "none";
+  });
+  </script>
+</pre>
+<br>
+<br>
+https://sweetalert2.github.io/
+버튼 알림창 링크
+https://pixijs.io/
+자바 2d
+https://threejs.org/
+자바 3d
+https://www.chartjs.org/
+자바 차트
+
+<pre>
+main을 중앙정렬
+  
+#main {
+  position: relative;
+  border: 3px solid green;
+  width: 720px;
+  xmargin: 0px auto;
+}
+</pre>
 </code></pre></div></div>
 </section>
 </main>
