@@ -1,0 +1,179 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAVAscript</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <link rel="icon" href="https://96abab.github.io/test.io/ducklogo.png">
+    
+</head>
+<body>
+<div id="container">
+<header>
+  <h2>JAVAscript</h2>
+  <nav>
+    <ul id="topMenu">
+      <li><a href="https://96abab.github.io/test.io">home</a></li>
+      <li><a href="#">menu1</a></li>
+      <li><a href="#">menu2</a></li>
+    </ul>
+  </nav>
+</header>
+</div>
+<aside>
+<ul id="sidebar">
+  <li><a href="index.html">Home</a></li>
+  <br>
+  <li><a href="assignment.html">과제</a></li>
+  <br>
+  <li><a href="cloudOS.html">1.CloudOS(리눅스서버설치)</a></li>
+  <br>
+  <li><a href="linux.html">2.리눅스 명령어 정리</a></li>
+  <br>
+  <li><a href="HTML5.html">3.HTML수업</a></li>
+  <br>
+  <li><a href="CSS.html">4.CSS수업</a></li>
+  <br>
+  <li><a href="JAVAscript.html">5.JAVAscript</a></li>
+</ul>
+</aside>
+<main class="contents">
+<section id="headling">
+<h1>2022-12-01</h1>
+<br>
+<br>
+<strong>##프로그램 실행과 프로그래밍</strong>
+<br>
+<br>
+app (컴퓨터가 할 일을 순서대로 기록한 것 = programming)을 읽기OS에 (loading)저장<br>
+ram에 저장한 기록을 cpu에 전달하고 명령어 실행하고 다시 ram으로 전달 하면 결과를<br>
+OP에서 다시 APP로 전달해 출력한다
+<br>
+- 위 과정을 프로그램 실행이라고 한다 이때 ram에 저장한 데이터를 읽는 방법이 각각cpu<br>
+명령어가 다르기 때문에 주의해야한다 
+<br>
+<br>
+<strong>##CPU 와 RAM , bit</strong>
+<br>
+<br>
+cpu와 ram이  테이터를 주고 받는 선 개수가 bit이다 나머지 선들은 전원과
+다른기능들을 담당하고 제조사는 cpu를 통해 명령을 실행시키는 방법을 명
+세서로 제공한다
+<br>
+신호를 보내는 비트 규칙을 instruction set 이라고 부른다
+예) 64개=64bit
+-cpu 버전이 높아지면 명령규칙 추가된다
+-cpu 마다 명령어가 다르다
+예) i계열vs제온계열
+-cpu 제조사마다 규칙(전기신호)이 다르다
+<br>
+<br>
+<strong>##명령어 작성</strong>
+<br>
+<br>
+1. cpuinstruxtionset 명세서를 보고 직접 명령어(기계어) 작성
+<br>
+<br>
+- cpu bit가 적은 8bit 시절에는 개발자가 직접 작성하기도 했다
+<br>
+- 보통 2진수를 짧게 표현한 16진수를 사용해서 작성
+<br>
+- 인간의 문자와 많이 다르기 때문에 작성이 까다롭고 힘들다
+<br>
+- cpu bit가 36,64 로 늘어나면서 더욱 어려워 졋다
+<br>
+- cpu마다 명령어(전기신호,비트규칙)가 다르기 때문에 다양한 cpu에서<br>
+실행할 수 있는 명령어를 작성하기 매우 힘들다
+<br>
+<br>
+2. 직접 기계어로 작성하는 대신 간결한 영어로 이루어진 명령어 사용 (assembly) <br>
+- assembly언어를 기계어로 바꿔주는 프로그램을 compiler 라고 한다
+<br>
+<br>
+- 명령어가 영어단어와 비슷해서 작성이 편하다
+<br>
+- compiler가 각각의 기계어로 번역해주기 때문에 cpu마다 명령어를<br> 
+다르게 작성 할 필요가없다
+<br>
+<br>
+3. C 인간 친화적인 프로그래밍 언어로 명령어 작성하기
+<br>
+<br>
+-명령어를 만들고 각각 compiler 로 기계어로 바꾼후 각 cpu와<br>
+ 운영 체제에 알맞게 맞춰야한다
+ <br>
+-예전 프로그램 공유 문화 명령어 소스코드를 그대로 공유하여<br>
+ 각 cpu에 맞게 컴파일 했다
+<br>
+-linux는 컴파일러가 기본 내장
+<br>
+-c컴파일 +OS 적용 명령 사용<br>
+DirextX 명령은 windows 전용 따라서 다른 운영체제를 사용하면<br> 
+컴파일할 수 없다 
+<br>
+<br>
+<strong>프로그래밍 언어 와  컴파일러</strong>
+-언어선택
+<br>
+프로그래밍언어마다 특장점이 있다<br>
+->프로젝트 성격에 따라 언어 선택<br>
+-인공지능,머신러닝,딥러닝 : python <br>
+web app : haba,php,go <br>
+web ui : JAVAscript,typescript
+<br>
+<br>
+<strong>컴파일 방식과 인터프리트 방식</strong>
+<br>
+컴파일 방식 : c언어를 컴파일러로 os에 맞춰 기계어로 바꿔주고 OS에 저장 cpu에서 명령처리
+- 실행할때 기계어 파일만 있으면 된다
+- 소스파일 필요없다 -> 소스파일을보호(자산)
+- 실행할때 컴파일러 불필요
+- 기계어 바로실행 -> 실행속도 빠름
+<br>
+<br>
+인터프리트방식 (viewe) : js를 JAVAscriptinterpreter (컴파일 하지 않음)  
+- 실행할때마다 소스 파일 필요 -> 소스파일 공개 -> 자산으로 보호하기 힘들다
+- 실행하려면 인터프리트 필요
+- 명령어를 해석해서 실행 -> 실행속도 느리다
+예) 
+<br>
+<br>
+<strong>JAVAscript (interpreter)Engine</strong>
+<br>
+chrome에는 webkit html,css렌더링엔진 과 v8 javascript엔진 이 있다 <br>
+v8을 이용해 node.js 를 만들엇다 웹 브라우저 없이 JAVAscript실행
+<br>
+<br>
+<strong>JIT compile 과 AOT compile</strong>
+<br>
+1. plain 인터프리터: 매번 소스를 검사하고 해석하기 때문에 속도가 느리다
+<br>
+2. JIT (just in time) 컴파일: 실행하려는 일부 코드를 컴파일 -> 컴파일 <br>
+할 때 잠깐 느려지지만 이후 실행할때 빨라진다
+<br>
+3. AOT (ahead of time) 컴파일: 설치 시점에 미리 전체 소스를 컴파일 해둔다 <br>
+-> 설치시간이 좀 더 걸린다 -> 실행은 컴파일방식과 같다
+<br>
+- bytecode ="중간코드" = p-code : 진짜  기계어가 아니라 흡사한 코드
+<br>
+- 안드로이드를 자바로 개발하면 bytecode로 play store 에 올린다<br> 
+다운 받을시 사용자의 cpu에 맞춰 컴파일 한다 
+<br>
+<br>
+<strong>Web browser와 JAVAscript</strong>
+<br>
+<br>
+html,css 
+
+
+
+</section>
+</main>
+</div>
+<footer id="footer">
+
+<li><small><a href="https://github.com/96abab/test.io.git">96abab.GitHub.com - test.io</a></small></li>
+</footer>
+</body>
+</html>
