@@ -196,6 +196,124 @@ aside
 <br>
 <h3>GITHUB 개인 페이지에 CSS를 적용하시오</h3>
 <a href="https://96abab.github.io/test.io">https://96abab.github.io/test.io</a>
+<br>
+<br>
+<h3>팀 과제: 네이버 메인 페이지를 그대로 복제하기</h3>
+<br>
+<br>
+<pre>
+과제 목표
+과제 내용:
+
+1) www.naver.com 의 메인 화면을 그대로 복제한다.
+
+2) 외부 CSS나 JavaScript 라이브러리는 사용하지 않는다.
+
+3) 이미지나 텍스트는 네이버 메인 화면에서 가져와서 사용한다.
+
+ 
+
+제출 내용:
+
+1) 작성한 HTML, CSS, 이미지 파일을 한 개의 파일로 압축하여 제출하시오.
+
+2) 압축 파일의 내부 디렉토리는 다음과 같이 구성한다.
+
+압축파일:
+
+     index.html
+
+     /css/*.css
+
+     /image/*.png, *.jpg, *.gif
+</pre>
+<br>
+<a href=" https://darktemi.github.io/html2/">naver_copy</a>  
+<br>
+<br>
+<h3>틱택토 게임 만들기</h3>
+<br>
+<br>
+<pre>
+과제 목표
+
+내용:
+
+- HTML, CSS, JavaScript를 사용하여 웹 브라우저에서 실행할 수 있는 TicTacToe 게임을 만드시오.
+
+- 외부 라이브러리는 사용할 수 없습니다.
+
+- HTML, CSS, JavaScript는 각각 별도의 파일로 분리하시오.
+
+ 
+
+제출:
+
+- HTML, CSS, JavaScript 파일
+</pre>
+<br>
+<br>
+<strong>CSS</strong>
+<br>
+border-collapse: collapse; <br>
+collapse : 표(table)의 테두리와 셀(td)의 테두리 사이의 간격을 없앱니다. 겹치는 부분은 한 줄로 한다
+<br>
+<br>
+<strong>JavaScript</strong>
+<br>
+const g_table = document.createElement('table');
+<br>
+const <br>
+-변하지않는 변수를 선언 재정의 불가<br>
+-블럭수준의 범위 즉 선언한 변수 내에서만 작동가능하게할 수 있다
+<br>
+<br>
+<pre>
+==
+표준 동등 연산자(standard equality operator)
+-형변환 및 비교 과정을 함께 수행한다
+  
+
+  1. 타입이 같고 값도 같으면 / true
+  
+  2. 타입이 같고 값이 틀리면 / false
+
+  3. undefined,null 은 같은 것으로 한다 (undefined == null) / true
+  
+  4. 문자열,수가 같이 있다면 수로 형변환 한다음 비교한다
+  예) 1== '1'  /  true
+
+  5. 논리값일 때 true 수치는 1 false 는 0 으로 형변환 한다음 비교한다
+
+  6. 객체 타입과 원시 타입이 같이 있으면 객체를 toString(),valueOf()
+  메소드로 형변환 한다음 비교한다
+</pre>
+<br>
+<br>
+<pre>
+===
+완전 일치 연산자 (strict equality operator) 
+-형변환을 수행하지 않고 엄격한 비교 과정을 수행한다
+
+  
+  == 표준동등연산자에서 true 여도 === 완전일치연산자에서는 대부분
+  false 로 평가된다
+
+  예) 1 === '1'  /  false, 1 === 1 / true
+</pre>
+<br>
+<br>
+<pre>
+&&
+비교대상이 둘다 true라면 true
+예) 1 && 1  /  true
+    1 && 0  /  false
+    0 && 1  /  false
+    0 && 0  /  false
+
+</pre>
+
+
 </section>
 </main>
 </div>
