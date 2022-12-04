@@ -1,6 +1,7 @@
 table {
   border-collapse: collapse;
   margin: 150px auto 0 auto;
+  float: none;
 }
 td {
   border: 3px solid rgb(0, 0, 0);
