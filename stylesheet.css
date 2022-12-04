@@ -36,7 +36,7 @@ a {
 
 #container {
     width:1440px;
-    margin:0 auto;    
+    margin:0 auto; 
     
     
 }
@@ -98,7 +98,7 @@ header ul > li {
     margin: 100px auto;
     border-radius: 40px;
     padding: 25px;
-    min-height: 500px;
+    min-height: 700px;
     overflow: auto;
     
 }
