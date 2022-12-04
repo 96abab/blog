@@ -1,0 +1,18 @@
+table {
+  border-collapse: collapse;
+  margin: 150px auto 0 auto;
+}
+td {
+  border: 3px solid rgb(0, 0, 0);
+  width: 150px;
+  height: 150px;
+  text-align: center;
+  font-size: 60px;
+  color: rgb(0, 0, 0);
+}
+div {
+  text-align: center;
+  font-size: 60px;
+  color: green;
+
+}
