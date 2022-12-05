@@ -316,9 +316,14 @@ const <br>
     1 && 0  /  false
     0 && 1  /  false
     0 && 0  /  false
-
-
 </pre>
+<br>
+<br>
+let rowIndex = _td.parentNode.rowIndex; <br>
+let colIndex = _td.cellIndex;<br>
+<br>
+rowIndex의 경우 부모 노드인 tr의 index에 해당하므로 parentNode로 부모 노드를 <br>
+가져와서 index를 찾도록 한다
 <br>
 <br>
 <pre>
