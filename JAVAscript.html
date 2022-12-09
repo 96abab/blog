@@ -1766,6 +1766,459 @@ console.log(((a, b) => a + b)(111, 222));
   arr.forEach((value, index) => console.log("-->", value, index));
   
 </pre>
+<br>
+<br>
+<h1>2022-12-09</h1>
+<br>
+<br>
+<strong>closure 리턴</strong>
+<br>
+<br>
+함수를 호출하고 함수를 정의한다 그러면 따로 메모리안에 code segment와 <br>
+data segment가 저장된다 이 함수를 부를 때는 이 주소를 보내준다 
+<br>
+<br>
+<strong>함수 - 함수도 객체다</strong>
+<br>
+<br>
+<pre>
+  // 함수도 객체이기 때문에 프로퍼티를 추가할 수 있다.
+  //
+  function f1() {
+      console.log("f1().....");
+  }
+  
+  // 함수 = 객체 + 함수코드(파라미터, 리턴 값, 함수 몸체)
+  f1(); // "f1 함수 객체에 저장된 함수 코드를 실행하라!"는 의미다.
+  
+  // 함수는 객체이기 때문에 일반 객체처럼 사용할 수 있다.
+  f1.v1 = "홍길동";
+  f1.v2 = 100;
+  f1.v3 = true;
+  f1.hello = function() {
+    console.log("Hello!");
+  };
+  f1.hello2 = () => console.log("Hello2!");
+  
+  console.log(f1.v1);
+  console.log(f1.v2);
+  console.log(f1.v3);
+  f1.hello();
+  f1.hello2();
+</pre>
+<br>
+<br>
+함수명 ();<br>
+-함수호출(function call)
+<br>
+f1. 프로퍼티(); <br>
+- 앞에는 함수 주소를 주고 () 를 하면 안에 내용을 실행시킨다<br>
+예) f1.hello();
+<br>
+<br>
+<strong>자바스크립트 주요 함수 - setTimeout()</strong>
+<br>
+<br>
+<pre>
+  // 일정 시간이 경과한 후 특정 함수를 호출하게 할 수 있다.
+  // => window.setTimeout(함수, 경과시간);
+
+  // 사용법 1) 일반함수 외부에 호출될 함수를 정의하고 함수를 호출해 사용
+  function f1() {
+      console.log("f1().....")
+  }
+  
+  console.log("-------------------");
+  
+  // f1() 함수를 5초 후에 호출해 달라고 등록한다.
+  window.setTimeout(f1, 5000);
+  
+  // 사용법 2) 익명함수 사용
+  // 실무에서는 함수를 파라미터로 전달할 때
+  // 다음과 같이 익명 함수를 직접 파라미터 자리에 정의하는 방식을 사용한다.
+  // window.setTimeout(function() {
+  //     console.log("익명함수 호출...")
+  // }, 10000);
+  
+  // 사용법 3) 에로우 함수 사용
+  // window.setTimeout(() => console.log("애로우 함수 호출..."), 15000);
+  console.log("일단 실행 끝!");
+</pre>
+<br>
+<br>
+<pre>
+동기실행(synchronize)
+-문장에 순서대로 실행이 끝나야 다음문장 실행
+  
+비동기실행(Asynchronize)
+-문장을 실행 하고 다른 문장으로 바로 넘어간다 여기서 문제가 발생할 수 있다
+window.setTimeout으로 시간이 걸리는 작업이 있는경우 이 함수작업이 끝난후 
+적용을 시키켜야할 함수가 존재한다면  promise 사용으로 생성시점에 적용하지
+않는 값들을위한 대리자이다
+
+</pre>
+<br>
+<br>
+<strong>자바스크립트 주요 함수 - setInterval()</strong>
+<br>
+<br>
+<pre>
+  // 일정 시간이 경과할 때마다 특정 함수를 반복적으로 호출할 수 있다.
+  // => window.setInterval(함수, 경과시간);
+  
+  // => setInterval() 로 가동시킨 타이머를 멈추기
+  // => window.clearInterval(타이머아이디);
+  var count = 0;
+  function f1() {
+      console.log("f1()....." + (++count));
+      if (count >= 10) {
+       window.clearInterval(timerId); // 지정한 interval 타이머를 멈추게 한다.
+      }
+  }
+  
+  // f1() 함수를 2초 마다 호출하라!
+  // => setInterval()을 통해 함수를 등록하면 리턴 값으로 등록 번호를 알려준다.
+  // => 이 등록번호를 보관해 두었다가, 타이머를 멈추고 싶을 때 사용하면 된다.
+  var timerId = window.setInterval(f1, 2000);
+</pre>
+<br>
+<br>
+<strong>자바스크립트 주요 함수 - eval()</strong>
+<br>
+<br>
+<pre>
+  // 자바스크립트 코드를 실행해주는 코드
+
+
+  // 텍스트로 된 자바스크립트를 실행하는 함수
+  //
+  // => "실행" 버튼을 누르면 textarea 상자에 입력한 자바스트립트를 실행시키기
+  //
+  var ta = document.getElementById("ta");
+  
+  document.getElementById("btn1").onclick = () => {
+    // input, textarea, select 등 입력폼 항목의 값을 꺼낼 때는
+    // innerHTML이 아니라 value 프로퍼티를 사용해야 한다.
+    var str = ta.value;
+  
+    // eval(자바스크립트코드)
+    // => 이 함수는 파라미터로 주어진 자바스크립트 코드를 실행한다.
+    eval(str);
+  
+    // eval()로 실행한 결과는 그래도 유지된다.
+    // 따라서 eval()에서 자바스크립트 코드를 실행할 때
+    // window 객체에 name 값을 넣으면
+    // eval() 실행이 끝난 다음에도 그대로 유지된다.
+    console.log("v1=", window.v1);
+  };
+</pre>
+<br>
+<br>
+<strong>onclick 함수</strong>
+<br>
+<br>
+태그객체.onclick = 함수주소;
+-사용자가 마우스로 태그를 클릭하면 저장된 함수를 호출한다 callback = 이벤트리스너 = 핸들러
+<br>
+<br>
+<strong>자바스크립트 주요 함수 - eval() II</strong>
+<br>
+<br>
+<pre>
+  // 객체를 생성하여 리턴 받기
+  //
+  // => "실행" 버튼을 누르면 textarea 상자에 입력한 자바스트립트를 실행하여
+  //    객체를 리턴 받는다.
+  // => 물론 입력 값은 자바스크립트 객체 생성 코드여야 한다.
+  //
+  var ta = document.getElementById("ta");
+  
+  document.getElementById("btn1").onclick = () => {
+    var str = ta.value;
+    var obj = eval(str); // JavaScript 객체 생성 코드를 실행한다. JSON과 다르다.
+    //var obj = JSON.parse(str); // JSON 형식으로 된 자바스크립트 객체 생성 코드를 실행한다.
+    console.log(obj);
+  
+    // 1) 단일 객체 생성
+    // => 주의! 괄호 () 안에 객체 생성 문법인 중괄호{} 를 넣어야 한다.
+    //    안 그러면 실행 오류이다!
+    /* 입력 값 예)
+    ({
+    "name": "홍길동",
+    "age": 20,
+    "tel": "1111-1111"
+    })
+      */
+  
+      // 2) 배열 객체 생성
+      // => 배열 코드는 괄호 안에 넣을 필요가 없다.
+      /* 입력 값 예)
+      ["홍길동", "임꺽정",100,true,null]
+      */
+  };
+</pre>
+<br>
+<br>
+<strong>자바스크립트 주요 함수 - JSON.parse(JSON형식문자열)</strong>
+<br>
+<br>
+<pre>
+  // 객체를 생성하여 리턴 받기
+  //
+  // => "실행" 버튼을 누르면 textarea 상자에 입력한 자바스트립트를 실행하여
+  //    객체를 리턴 받는다.
+  // => 물론 입력 값은 자바스크립트 객체 생성 코드여야 한다.
+  //
+  var ta = document.getElementById("ta");
+  
+  document.getElementById("btn1").onclick = () => {
+    var str = ta.value;
+    var obj = eval(str); // JavaScript 객체 생성 코드를 실행한다. JSON과 다르다.
+    //var obj = JSON.parse(str); // JSON 형식으로 된 자바스크립트 객체 생성 코드를 실행한다.
+    console.log(obj);
+  
+    // 1) 단일 객체 생성
+    // => 주의! 괄호 () 안에 객체 생성 문법인 중괄호{} 를 넣어야 한다.
+    //    안 그러면 실행 오류이다!
+    /* 입력 값 예)
+    ({
+    "name": "홍길동",
+    "age": 20,
+    "tel": "1111-1111"
+    })
+      */
+  
+      // 2) 배열 객체 생성
+      // => 배열 코드는 괄호 안에 넣을 필요가 없다.
+      /* 입력 값 예)
+      ["홍길동", "임꺽정",100,true,null]
+      */
+  };
+</pre>
+<br>
+<br>
+<strong>JSON.parse()</strong>
+<br>
+<br>
+JSON형식의 문자를 javascript 객체를 생성하고 주소를 리턴한다 
+<br>
+1. javascript 객체리터럴 문법과 유사 => 이 문법을 참고해서 만든 포맷
+2. 문자열은 "" 으로 표현
+3. 프로퍼티면은 문자열로 표현
+4. 함수 표현 안됨 => 값만 표현가능하고 다른객체 표현가능하다 
+<br>
+<br>
+<strong>data 포맷 : binaty vs text</strong>
+<br>
+<br>
+<pre>
+  binary
+  -바이트 단위로 규칙에 따라 저장한다
+  읽을 때 바이트 규칙에 따라 읽는다
+  특징
+  1. 파일크기가 가장 작은 포맷이다
+    - 데이터에 대한 부연 설명(meta data)이 없다
+    - 바이트 저장 규칙을 모른다면 데이터를 제대로 읽을 수 없다
+  2. 텍스트 편집기로 데이터를 제대로 볼 수 없다
+</pre>
+<br>
+<br>
+<pre>
+  text
+  특징
+  1. 텍스트 에디터로 읽고 편집이 가능하다
+  2. binary형식에 비해 파일 크기는 커진다
+
+  -csv 방식
+  예) 홍길동,20,true
+
+    1. 간결하다
+    2. 한줄에 한데이터
+    3. 각항목의 정보가 없다 따라서 직접적으로 이해하기 어렵다
+    4. 계층구조로 데이터를 다룰수 없다
+  -텍스트 표현 규칙에 따라 저장한다
+
+  -XML(extensible markup lenguage)
+  예) <name>홍길동</name>
+
+    1. 계층구조의 데이터 표현가능
+    2. 각 항목의 의미를 표현가능 하여 특정 조건의 항목을 찾기 쉽다
+    3. data보다 metadata가 더 클수있다 따라서 파일 크기가 크다
+
+  -JSON(JAVAscript Object Notation)
+  예) ({
+    "name": 홍길동,
+    "age": 20,
+    "working": true
+  })
+
+    1. XML보다 더 간결한 metadata
+    2. javascript와 유사 포맷이 익숙하다
+  
+  -YAML(yet another markup lenguage)
+  예) name: 홍길동
+      age: 20
+      working: true
+        -school:
+          name: 비트초등
+          state: 졸업
+    
+    1. JSON보다 더 간결
+    2. 들여쓰기로 계층구조 표현
+    
+</pre>
+<br>
+<br>
+<strong>자바스크립트 주요 함수 - JSON.stringify(자바스크립트객체)</strong>
+<br>
+<br>
+<pre>
+  // 자바스크립트 객체를 JSON 문자열로 바꾸로 싶을 때 사용한다.
+  //      자바스크립트 객체  ===변환===> JSON 형식의 문자열
+  // 용도:
+  // => 웹브라우저에서 단순한 형식(name=aaa&age=20&tel=1111-1111)이 아닌
+  //    데이터가 다른 데이터를 포함하는 복잡한 구조의 데이터를 서버에 보내고 싶을 때
+  //    JSON 형식의 문자열로 만들어 보낸다.
+  // => 서버는 클라이언트가 보낸 JSON 형식의 문자열을 자바 객체로 만들어 사용한다.
+  //    물론 JSON 형식의 문자열을 다루는 자바 라이브러리가 많이 있다.
+  //    자세한 것은 www.json.org 사이트를 보라!
+  //
+  var ta = document.getElementById("ta");
+  
+  document.getElementById("btn1").onclick = () => {
+    let obj = new Object();
+    obj.name = "홍길동";
+    obj["age"] = 20;
+    obj['tel'] = '111-2222';
+    obj.plus = function(a, b) {return a + b;}; // 함수는 JSON 포맷으로 만들 때 제외된다.
+  
+    ta.value = JSON.stringify(obj);
+  
+  
+  
+  };
+</pre>
+<br>
+<br>
+<strong>함수 - 익명 함수와 호출</strong>
+<br>
+<br>
+<pre>
+  // 익명 함수를 정의하는 즉시 바로 호출할 수 있다.
+  //
+  //1) 일반적인 방법
+  //=> 함수를 정의한 후 변수에 저장한다.
+  //=> 그리고 그 변수 이름으로 호출한다.
+  var f1 = function() {
+      console.log("방법1....");
+  };
+  
+  f1(); // 함수 호출
+  f1(); // 함수를 별도로 정의하면 여러 번 호출할 수 있다.
+  f1();
+  console.log("------------------------");
+  //2) 함수 정의 즉시 호출하기
+  //=> (익명함수정의)(파라미터 값);
+  //=> (익명함수정의(파라미터 값));
+  //=> 딱 한 번만 호출할 때 유용하다.
+  (function() {
+    console.log("방법2....");
+  })();
+  
+  (function() {
+    console.log("방법3....");
+  }());
+  
+  // 괄호를 생략하면 문법 오류이다.
+  // function() {
+  //   console.log("방법2....");
+  // }();
+  
+</pre>
+<br>
+<br>
+<strong>함수 - 익명 함수와 호출 II : 파라미터 전달하기</strong>
+<br>
+<br>
+<pre>
+  // 파라미터가 있는 익명 함수를 정의하고 즉시 호출해 보자! 
+  //
+  //1) 일반적인 방법
+  //=> 함수를 정의한 후 변수에 저장한다. 
+  //=> 그리고 그 변수 이름으로 호출한다.
+  var f1 = function(a, b) {
+      console.log("결과=", (a + b));
+  };
+  
+  f1(100, 200); // 함수 호출
+  f1(20, 30); // 함수 호출
+  f1(15, 16); // 함수 호출
+  console.log("--------------------------------------");
+  //2) 함수 정의 즉시 호출하기
+  //=> (익명함수정의)(파라미터 값);
+  (function(a, b) {
+      console.log("결과=", (a + b));
+  })(200, 300);
+  
+  (function(a, b) {
+      console.log("결과=", (a + b));
+  }(200, 300));
+</pre>
+<br>
+<br>
+<strong>설계도 방식 과 프로토타이핑 방식</strong>
+<pre>
+1. 설계도 방식으로 객체 생성 (예: java,c++,,)
+-추가못하는 방식
+class Student {
+  String name;
+  int age;
+  boolean working;
+}
+
+객체를 생성 
+
+Student obj = new Student();   (stack type dinding)
+메모리를 준비하고 주소를 저장
+String name;
+int age;
+boolean working;
+만 가능 
+
+2. 프로토타이핑 방식으로 객체 만들기
+-객체 원리들을 기반으로 프로퍼티를 추가하는 방법
+-설계도 없음
+var obj = new Object();
+1. 빈객체 생성
+2 기본프로퍼티추가 -> 객체라면 반드시 있어야 할 변수나 함수
+obj.name = "홍길동"
+obj.age = 20;
+obj.working = true;
+</pre>
+<br>
+<br>
+<strong>객체 - 정의</strong>
+<pre>
+  //4) 위의 코드보다 더 간결한 방법.
+  // => 객체 리터럴 문법을 사용하여 만들기
+  var obj4 = {}; 
+  console.log(obj4);
+</pre>
+<strong>과제</strong>
+<br>
+<br>
+todo list 만들기
+<br>
+디렉토리 구조 
+todo.html<br>
+js/*.js<br>
+css/*.css<br>
+images/*.jpg,*.png,*.gif
+<br>
+<br>
+참고해볼 자료
+https://woojong92.tistory.com/entry/JS-%EB%B0%94%EB%8B%90%EB%9D%BC-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8%EB%A1%9C-ToDo-List-%EB%A7%8C%EB%93%A4%EA%B8%B0-1-%EA%B8%B0%EB%8A%A5%EC%A0%95%EC%9D%98-%EB%B0%8F-HTMLCSS
+
 </section>
 </main>
 </div>
