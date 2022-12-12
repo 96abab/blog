@@ -42,6 +42,7 @@
 </aside>
 <main class="contents">
 <section id="headling">
+<hr>
 <h1>2022-12-01</h1>
 <br>
 <br>
@@ -165,6 +166,7 @@ v8을 이용해 node.js 를 만들엇다 웹 브라우저 없이 JAVAscript실�
 <br>
 <strong>Web browser와 JAVAscript</strong>
 <br>
+<hr>
 <br>
 <h1>2022-12-02</h1>
 <br>
@@ -540,9 +542,6 @@ alert<br>
 // 즉시 script 태그의 실행을 중단하고 다음 태그로 간다. <br>
 <br>
 <br>
-<strong></strong>
-<br>
-<br>
 <pre>
 예전에는 script 태그를 head 태그 안에 두었다.
 그 시절에는 실행할 자바스크립트 코드의 양이 많지 않았기 때문에
@@ -693,6 +692,7 @@ var arr = ["aaa", "bbb", true, 100, new Object(), function() {}];
 const로 지정한 값을 바꾸고 싶다면 let을 사용하여 바꾸고 변수들 끼리 공유를 하고싶다면 <br>
 var를 사용하여 순서대로 이용하여야 한다
 <br>
+<hr>
 <br>
 <h1>2022-12-06</h1>
 <br>
@@ -936,6 +936,7 @@ new HTMLButtonElement()
 instanceof<br>
 객체를 초기화 시키는지 확인한다
 <br>
+<hr>
 <br>
 <h1>2022-12-07</h1>
 <br>
@@ -1211,6 +1212,7 @@ console.log(window.v4); // const 변수는 window 객체에 보관되지 않는�
   console.log("==>", x);
 </pre>
 <br>
+<hr>
 <br>
 <h1>2022-12-08</h1>
 <br>
@@ -1767,6 +1769,7 @@ console.log(((a, b) => a + b)(111, 222));
   
 </pre>
 <br>
+<hr>
 <br>
 <h1>2022-12-09</h1>
 <br>
@@ -2218,7 +2221,600 @@ images/*.jpg,*.png,*.gif
 <br>
 참고해볼 자료
 https://woojong92.tistory.com/entry/JS-%EB%B0%94%EB%8B%90%EB%9D%BC-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8%EB%A1%9C-ToDo-List-%EB%A7%8C%EB%93%A4%EA%B8%B0-1-%EA%B8%B0%EB%8A%A5%EC%A0%95%EC%9D%98-%EB%B0%8F-HTMLCSS
+<br>
+<hr>
+<br>
+<h1>2022-12-12</h1>
+<br>
+<br>
+<strong>객체 생성</strong>
+<br>
+<br>
+Object.create(null) -> 빈객체  =  new
+<br>
+Object.create(Object.protortype) = new Object() <br>
+<br>
+-> 1.빈객체 생성 <br>
+2. protortype으로 지정된 생성자를 통행 기본 프로퍼티 추가 
+<br>
+<br>
+<strong>생성자 (constructor)</strong>
+<br>
+<br>
+new Object();
+<br>
+빈객체에 프로퍼티를 준비시키는 것
+<br>
+<br>
+new: 빈객체 생성
+Object(): 프로퍼티 추가
+<br>
+<br>
+<strong>hasOwnProperty</strong>
+<br>
+개발자가 추가시킨 프로퍼티인지 검사
+console.log(obj.hasOwnProperty("toString")); -> false
+<br>
+obj.title = "---";
+obj.["content"] = "---";
+obj.plus1 = f1;
+obj.plus2 = () => {--};
+<br>
+console.log(obj.hasOwnProperty("title")); -> true
+<br>
+<br>
+<strong>객체가 다른 객체를 포함하는 경우</strong>
+<br>
+<br>
+let obj = new Object();
+<br>
+var obj2 = new Object();
+obj2.v1 = 100;
+obj2.v2 = true;
+obj2.v3 = "문자열";
+obj2.v4 = () => console.log("v4()....");
+<br>
+obj.other = obj2;
+<br>
+console.log(obj.other.v1); = 100
+<br>
+<br>
+<strong>객체 - 객체에 소속된 함수가 같은 객체에 소속된 다른 멤버 사용하기</strong>
+<br>
+<pre>
+this
+함수가 소속된 객체의 주소를 나타낸다
+여기서
+this = obj 를 가리킨다
+var obj = new Object();
 
+obj.name = "홍길동";
+obj.kor = 100;
+obj.eng = 90;
+obj.math = 80;
+
+// toString()은 이미 객체에 들어 있는 함수이다.
+// 다음은 기존 함수를 덮어 쓴다.
+obj.toString = function() {
+	// 자바와 달리 객체의 프로퍼티 변수를 사용할 때는 반드시 this를 붙여야 한다.생략하면 안된다.
+	return name + "," + this.kor + "," + this.eng + "," + this.math;
+};
+
+*name은 window 등록된 객체이기때문에 this가 없어도 상관없다 다른 kor등은 window에 없어서 this가 있어야 한다
+</pre>
+<br>
+<br>
+<strong>객체 - {}을 이용하여 객체 생성하기 (객체리터럴 문법 object literal)</strong>
+<br>
+<pre>
+  // {}은 기본 객체를 생성하는 단축 문법이다.
+  // 즉 new Object()와 같다. 
+  
+  var obj = {}; //new Object();  
+</pre>
+<br>
+<br>
+<strong>객체 - {}을 이용하여 기본 객체에 프로퍼티 추가하기</strong>
+<br>
+<pre>
+  // {}은 기본 객체를 생성할 뿐만 아니라 프로퍼티도 바로 추가할 수 있다.
+  //실무에서는 이런 방식 
+  var obj = {
+    "name": "홍길동",   // json은 "" 을 꼭 사용
+    'kor': 100,
+    eng: 90,
+    math:80,           
+    sum: function() {
+        return this.kor + this.eng + this.math;
+    },
+    aver: function() {
+        return this.sum() / 3;
+    }
+  };
+  
+  console.log(obj.sum(), obj.aver());
+  console.log(obj);
+  
+</pre>
+<br>
+<br>
+<strong>객체 - {}을 이용하여 기본 객체에 함수를 추가하는 또 다른 방법</strong>
+<br>
+<pre>
+  var obj = {
+    name: "홍길동",
+    kor: 100,
+    eng: 90,
+    math:80,
+    /*
+    sum: function() {                   // 예전문법
+      return this.kor + this.eng + this.math;
+    },
+    */
+    sum() {                            // 요즘문법
+        return this.kor + this.eng + this.math;
+    },
+    aver() {
+        return this.sum() / 3;
+    }
+  };
+  
+  console.log(obj.sum(), obj.aver());
+  console.log(obj);
+</pre>
+<br>
+<br>
+<strong>객체 - {} 문법과 arrow function</strong>
+<br>
+<pre>
+  // arrow fuction을 객체의 프로퍼티로 등록할 때,
+  // => arrow function에서 this는 소속된 객체가 아니라 window 객체를 가리킨다.
+  // => 그에 비해 일반 함수나 익명 함수에서 사용하는 this는 자신이 소속된 객체를 가리킨다.
+  //
+  var obj = {
+    name: "홍길동",
+    kor: 100,
+    eng: 90,
+    math:80,
+    sum: () => this.kor + this.eng + this.math,
+    aver: () => this.sum() / 3,
+    test1: function() {console.log(this);},
+    test2() {console.log(this);},
+    test3: () => console.log(this)
+  };
+  
+  // console.log(obj.sum()); // this 즉 window 객체에 kor, eng, math라는 변수가 없기 때문에
+                           // 리턴 값은 NaN이다.
+  // console.log(obj.aver()); // 마찬가지로 this 즉 window 객체에 sum() 함수가 없기 때문에
+                           // 함수 실행 중에 오류가 발생한다.
+  
+  
+  obj.test1();
+  obj.test2();
+  obj.test3();
+  
+  // 결론!
+  // => 객체의 멤버 함수로 등록할 때는 arrow function을 사용하지 말라!
+  // => 물론 객체의 다른 멤버를 사용하지 않는다면 arrow function을 사용해도 된다.
+  
+</pre>
+<br>
+<br>
+<strong>객체 - 객체 생성과 초기화 I</strong>
+<br>
+<pre>
+  // 1) 낱개의 레퍼런스 변수 선언
+
+  // 자바스크립트는 객체를 생성할 때 기본 객체를 준비한 후
+  // 기본 객체에 프로퍼티를 추가하는 방식으로 객체를 초기화시킨다.
+  var s1 = new Object();
+  s1.name = "홍길동";
+  s1.kor = 100;
+  s1.eng = 100;
+  s1.math = 100;
+  s1.sum = s1.kor + s1.eng + s1.math;
+  s1.aver = s1.sum / 3;
+  
+  var s2 = new Object();
+  s2.name = "임꺽정";
+  s2.kor = 90;
+  s2.eng = 90;
+  s2.math = 90;
+  s2.sum = s2.kor + s2.eng + s2.math;
+  s2.aver = s2.sum / 3;
+  
+  var s3 = new Object();
+  s3.name = "유관순";
+  s3.kor = 80;
+  s3.eng = 80;
+  s3.math = 80;
+  s3.sum = s3.kor + s3.eng + s3.math;
+  s3.aver = s3.sum / 3;
+  
+  console.log(s1.name, s1.kor, s1.eng, s1.math, s1.sum, s1.aver);
+  console.log(s2.name, s2.kor, s2.eng, s2.math, s2.sum, s2.aver);
+  console.log(s3.name, s3.kor, s3.eng, s3.math, s3.sum, s3.aver);
+</pre>
+<br>
+<br>
+<strong>객체 - 객체 생성과 초기화 II</strong>
+<br>
+<pre>
+  // 2) 레퍼런스 배열 사용
+
+  // 배열을 이용하여 여러 개의 객체를 다루기
+  var scores = []; //new Array();
+  scores[0] = new Object();
+  scores[0].name = "홍길동";
+  scores[0].kor = 100;
+  scores[0].eng = 100;
+  scores[0].math = 100;
+  scores[0].sum = scores[0].kor + scores[0].eng + scores[0].math;
+  scores[0].aver = scores[0].sum / 3;
+  
+  scores[1] = {}; // new Object();
+  scores[1].name = "임꺽정";
+  scores[1].kor = 90;
+  scores[1].eng = 90;
+  scores[1].math = 90;
+  scores[1].sum = scores[1].kor + scores[1].eng + scores[1].math;
+  scores[1].aver = scores[1].sum / 3;
+  
+  scores[2] = {}; // new Object();
+  scores[2].name = "임꺽정";
+  scores[2].kor = 80;
+  scores[2].eng = 80;
+  scores[2].math = 80;
+  scores[2].sum = scores[2].kor + scores[2].eng + scores[2].math;
+  scores[2].aver = scores[2].sum / 3;
+  
+  for (var score of scores) {
+      console.log(score.name, score.kor, score.eng, score.math, score.sum, score.aver);
+  }
+  
+  // 배열을 쓰면 for 문을 통해 더욱 쉽게 자료를 관리할 수 있다
+</pre>
+<br>
+<br>
+<strong>객체 - 객체 생성과 초기화 III</strong>
+<br>
+<pre>
+  // 3) 함수를 이용해 객체 생성
+
+  // 함수를 이용하여 객체를 초기화시키기
+  // 참고 
+  // 팩토리 메서드 패턴(Factory Method): 이렇게 함수를 통해 객체를 생성하는 기법
+  // => 객체 생성 과정이 복잡할 경우 직접 객체를 생성하고 초기화 시키기 보다 
+  // 함수를 통해 객체를 생성하고 초기화 시키는것이 코드를 더 간결하게 한다
+  function createScore(name, kor, eng, math) {
+    const obj = new Object();
+    obj.name = name;
+    obj.kor = kor;
+    obj.eng = eng;
+    obj.math = math;
+    obj.sum = kor + eng + math;
+    obj.aver = obj.sum / 3;
+    return obj;
+  }
+  
+  var scores = []; // new Array();
+  scores[0] = createScore("홍길동", 100, 100, 100);
+  scores[1] = createScore("임꺽정", 90, 90, 90);
+  scores[2] = createScore("유관순", 80, 80, 80);
+  
+  for (var score of scores) {
+      console.log(score.name, score.kor, score.eng, score.math, score.sum, score.aver);
+  }
+  
+  console.log("---------------------------------------------");
+  
+  // 아직 부족한 점!
+  // => 특정 과목의 점수가 바뀌면 다시 합계와 평균을 계산해야 한다.
+  scores[2].kor = 100;
+  scores[2].sum = scores[2].kor + scores[2].eng + scores[2].math;
+  scores[2].aver = scores[2].sum / 3;
+  
+  for (var score of scores) {
+      console.log(score.name, score.kor, score.eng, score.math, score.sum, score.aver);
+  }
+</pre>
+<br>
+<br>
+<strong>옵져버 패턴</strong> 
+이벤트 리스너와,핸들러를 사용해 설계한것
+<br>
+<br>
+<strong>객체 생성과 초기화 VI</strong>
+<br>
+<pre>
+  // 6) 함수 외부에서 객체를 생성한 후 즉시 초기화시키기
+
+  // new 명령 다음에 바로 함수를 호출한다.
+  function createScore(name, kor, eng, math) {
+    // new 명령을 실행한 후에 이 함수를 호출하면
+    // this 내장 변수에 그 생성된 객체 주소가 저장된다.
+    // 이렇게 되면 이 함수 내부에서 객체를 생성할 필요가 없다.
+    // this 내장 변수를 사용하여 객체를 사용하면 된다.
+    this.name = name;
+    this.kor = kor;
+    this.eng = eng;
+    this.math = math;
+    this.sum = function() {
+      return this.kor + this.eng + this.math;
+    };
+    this.aver = function() {
+      return this.sum() / 3;
+    };
+  
+    // 이 함수에서 객체를 생성하지 않았기 때문에
+    // 객체를 리턴할 필요가 없다.
+  }
+  
+  var scores = []; //new Array();
+  scores[0] = new createScore("홍길동", 100, 100, 100);
+  scores[1] = new createScore("임꺽정", 90, 90, 90);
+  scores[2] = new createScore("유관순", 80, 80, 80);
+  
+  // 이렇게 new 명령을 통해 생성된
+  // 기본 객체를 초기화시키는 함수를 "생성자(constructor)" 라고 부른다.
+  
+  
+  for (var score of scores) {
+      console.log(score.name, score.kor, score.eng, score.math,
+              score.sum(), score.aver());
+  }
+  
+  // 다음과 같이 생성된 객체를 초기화시키는 것이 아니라
+  // 객체를 생성하는 함수는
+  // "팩토리 함수(factory)"라 부른다.
+  function createScore2(name, kor, eng, math) {
+    var obj = new Object();
+    obj.name = name;
+    obj.kor = kor;
+    obj.eng = eng;
+    obj.math = math;
+    obj.sum = function() {
+      return this.kor + this.eng + this.math;
+    };
+    obj.aver = function() {
+      return this.sum() / 3;
+    };
+    return obj;
+  }
+  var obj = createScore2("홍길동", 100, 90, 80);
+  console.log(obj);
+</pre>
+<br>
+<br>
+<strong>객체 - 객체 생성과 초기화 VIII</strong>
+<br>
+<pre>
+  // 8) 객체에 대해 공통으로 사용하는 함수를 공유하기
+
+  function Score(name, kor, eng, math) {
+    this.name = name;
+    this.kor = kor;
+    this.eng = eng;
+    this.math = math;
+  
+    // sum(), aver() 함수는 객체의 데이터(국어,영어,수학 점수)를 다루는 함수다.
+    // 즉 객체에 대해 사용하는 함수다.
+    // 그런데 객체를 생성할 때 마다 함수를 만들어 저장한다면 메모리가 낭비된다.
+    // 해결 방안?
+    // => 객체에 대해 공통으로 사용하는 함수는 별도의 보관소에 저장한다.
+    /*
+    this.sum = function() {
+      return this.kor + this.eng + this.math;
+    };
+    this.aver = function() {
+      return this.sum() / 3;
+    };
+    */
+  }
+  
+  // 객체에 대해 공통으로 사용하는 함수는 생성자 객체에 보관한다.
+  // => 생성자 객체에 prototype 객체가 들어 있는데 여기에 보관해야 한다.
+  
+  // 1) 자바스크립트 함수는 객체이다. 즉 "함수 = 객체 + 함수코드" 이다.
+  // 2) 각각의 함수 객체는 prototype 이라는 공용 저장소를 갖고 있다.
+  // 3) prototype에 저장된 프로퍼티는 그 함수를 통해 초기화된 모든 객체가 공통으로 사용할 수 있다.
+  Score.prototype.sum = function() {
+    return this.kor + this.eng + this.math;
+  };
+  
+  Score.prototype.aver = function() {
+    return this.sum() / 3;
+  };
+  
+  var scores = []; //new Array();
+  scores[0] = new Score("홍길동", 100, 100, 100);
+  scores[1] = new Score("임꺽정", 90, 90, 90);
+  scores[2] = new Score("유관순", 80, 80, 80);
+  
+  for (var score of scores) {
+      console.log(score);
+      console.log(score.name, score.kor, score.eng, score.math,
+              score.sum(), score.aver());
+      // 객체에서 sum(), aver() 함수를 찾는다.
+      // 없으면, 그 객체를 초기화시킨 생성자의 prototype 보관소에서 찾는다.
+      // 따라서 위의 sum(), aver() 함수는
+      // Score.prototype 보관소에 들어 있는 함수를 호출하는 것이다.
+  }
+</pre>
+<br>
+<br>
+<strong>생성자1 - 정의하는 방법</strong>
+<br>
+<br>
+<pre>
+  // 생성자는 그냥 일반 함수이다.
+  // new 명령 다음에 즉시 함수를 호출하면 생성자로서 역할을 한다.
+  
+  function f1() {
+    // 자바스크립트는 생성자를 정의하는 문법이 따로 없다.
+    // 일반 함수를 생성자처럼 사용한다.
+    // => new 명령을 사용하여 외부에서 빈 객체를 생성한 후,
+    // => 일반 함수를 호출하면 생성자가 된다.
+  }
+  
+  // => new 명령 다음에 함수를 호출하면 생성자로서 역할한다.
+  var obj1 = new f1();  // 빈객체생성 
+  console.log(obj1);
+  console.log("-----------------------");
+  
+  // new 명령없이 호출하면 일반 함수로 취급된다.
+  var obj2 = f1();            // undefined 
+  console.log(obj2);
+</pre>
+<br>
+<br>
+<strong>생성자와 ocject</strong>
+<br>
+<br>
+new f1();
+-> 1. new: 빈객체 생성
+2. f1() 의 수퍼 생성자 호출 (object)
+3. f1() 호출
+<br>
+obj.toString()
+1. 객체에서 찾는다
+2. 생성자 f1.protortype에서 찾는다
+3. super 생성자 object.protortype에서 찾는다
+<pre>
+  function f1() {
+    // 생성자에 상관없이 모든 객체는 Object() 생성자의 prototype 보관소를 공유한다.
+  }
+  function f2() {}
+  function f3() {}
+  
+  var obj1 = new f1();
+  var obj2 = new f2();
+  var obj3 = new f3();
+  
+  // f1(), f2(), f3() 생성자로 초기화시킨 객체 모두
+  // Object.prototype 보관소에 저장된 변수나 함수를 사용할 수 있다.
+  console.log(obj1);
+  console.log(obj2);
+  console.log(obj3);
+  console.log("-------------------------------");
+  console.log(obj1.toString());  // Object.prototype.toString()
+  console.log(obj2.toString());  // Object.prototype.toString();
+  console.log(obj3.toString());  // Object.prototype.toString();
+  
+</pre>
+<br>
+<br>
+<strong>생성자5 - 생성자 상속</strong>
+<br>
+<br>
+<pre>
+  function Engine(v, c, cc) {
+    // 호출할 상위 생성자를 지정하지 않으면
+    // 기본으로 object() 생성자를 호출한다
+    // object.call(this);
+    this.valve = va;
+    this.cylinder = cy;
+    this.cc = cc;
+  }
+  
+  var e1 = new Engine(16, 4, 2000);
+  console.log(e1);
+  
+  function Car(va, cy, cc, ca, au) {
+    // f1(n); // 일반함수 호출 방법으로는 f2()가 this로 받은 객체 주소를 전달할 방법이 없다
+    // 상위 생성자를 명시적으로 호출한다.
+    Engine.call(this, va, cy, cc);
+  
+    this.capacity = ca;  // 수용인원
+    this.auto = au; // 미션
+  }
+  
+  var c1 = new Car(16, 4, 2000, 5, true);
+  console.log(c1);
+  
+</pre>
+<br>
+<br>
+<strong>생성자를 체인으로 연결 하듯이 super-sub로  반드는 이유</strong>
+<br>
+<br>
+생성자를 체인 방식으로 연결
+- 생성자 재사용 가능
+- 기능확장 용이
+<br>
+<br>
+<strong>수퍼 생성자의 protortype 사용하기</strong>
+<br>
+<br>
+object() 
+생성자를 통해 만든 객체들이 공동으로 사용할 프로퍼티가 들어있다
+<br>
+Engine() 
+생성자를 통행 만든 객체들이 공동으로 이용할 프로퍼티가 들어있다
+<br>
+<br>
+<strong>수퍼 생성자의 protortype 연결하기</strong>
+<br>
+<br>
+<strong>생성자6 - 생성자 상속과 prototype 연결</strong>
+<br>
+<br>
+<pre>
+  // 생성자 정의
+  function Engine(valve, cylinder, cc) {
+    //Object.call(this);
+    this.valve = valve;
+    this.cylinder = cylinder;
+    this.cc = cc;
+  }
+  
+  function Car(valve, cylinder, cc, capacity, auto) {
+    Engine.call(this, valve, cylinder, cc);
+  
+    this.light = false;
+    this.capacity = capacity;
+    this.auto = auto;
+  }
+  // Car.prototype을 상위 생성자인 Engine.prototype과 연결한다.
+  Object.setPrototypeOf(Car.prototype, Engine.prototype);
+  
+  // prototype에 프로퍼티 추가
+  Object.prototype.test = function() {
+    console.log("Object.test() 호출됨!");
+  }; 
+  Engine.prototype.print = function() {
+    console.log("Engine.prototype.print():");
+    console.log("  밸브: " + this.valve);
+    console.log("  실린더: " + this.cylinder);
+    console.log("  cc: " + this.cc);
+  };
+  Car.prototype.setLight = function(light) {
+    console.log("Car.prototype.setLight():");
+    this.light = light;
+  };
+  
+  // Car 객체 생성
+  var c1 = new Car(16, 4, 2000, 5, true);
+  
+  c1.setLight(true);
+  // c1.setLight();
+  // --> Car.prototype.setLight()
+  
+  c1.print();
+  // c1.print();
+  // --> Car.prototype.print()
+  //     --> Engine.prototype.print()
+  
+  c1.test();
+  // c1.test();
+  // --> Car.prototype.test()
+  //     --> Object.prototype.test() 
+  
+  console.log(c1);
+  
+</pre>
+<br>
+<br>
 </section>
 </main>
 </div>
