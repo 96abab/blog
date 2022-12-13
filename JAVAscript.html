@@ -2246,18 +2246,18 @@ new Object();
 빈객체에 프로퍼티를 준비시키는 것
 <br>
 <br>
-new: 빈객체 생성
+new: 빈객체 생성 <br>
 Object(): 프로퍼티 추가
 <br>
 <br>
 <strong>hasOwnProperty</strong>
 <br>
-개발자가 추가시킨 프로퍼티인지 검사
+개발자가 추가시킨 프로퍼티인지 검사<br>
 console.log(obj.hasOwnProperty("toString")); -> false
 <br>
-obj.title = "---";
-obj.["content"] = "---";
-obj.plus1 = f1;
+obj.title = "---";<br>
+obj.["content"] = "---";<br>
+obj.plus1 = f1;<br>
 obj.plus2 = () => {--};
 <br>
 console.log(obj.hasOwnProperty("title")); -> true
@@ -2268,10 +2268,10 @@ console.log(obj.hasOwnProperty("title")); -> true
 <br>
 let obj = new Object();
 <br>
-var obj2 = new Object();
-obj2.v1 = 100;
-obj2.v2 = true;
-obj2.v3 = "문자열";
+var obj2 = new Object();<br>
+obj2.v1 = 100;<br>
+obj2.v2 = true;<br>
+obj2.v3 = "문자열";<br>
 obj2.v4 = () => console.log("v4()....");
 <br>
 obj.other = obj2;
@@ -2676,9 +2676,9 @@ new f1();
 2. f1() 의 수퍼 생성자 호출 (object)
 3. f1() 호출
 <br>
-obj.toString()
-1. 객체에서 찾는다
-2. 생성자 f1.protortype에서 찾는다
+obj.toString()<br>
+1. 객체에서 찾는다<br>
+2. 생성자 f1.protortype에서 찾는다<br>
 3. super 생성자 object.protortype에서 찾는다
 <pre>
   function f1() {
@@ -2738,18 +2738,18 @@ obj.toString()
 <strong>생성자를 체인으로 연결 하듯이 super-sub로  반드는 이유</strong>
 <br>
 <br>
-생성자를 체인 방식으로 연결
-- 생성자 재사용 가능
+생성자를 체인 방식으로 연결<br>
+- 생성자 재사용 가능<br>
 - 기능확장 용이
 <br>
 <br>
 <strong>수퍼 생성자의 protortype 사용하기</strong>
 <br>
 <br>
-object() 
+object() <br>
 생성자를 통해 만든 객체들이 공동으로 사용할 프로퍼티가 들어있다
 <br>
-Engine() 
+Engine() <br>
 생성자를 통행 만든 객체들이 공동으로 이용할 프로퍼티가 들어있다
 <br>
 <br>
@@ -2814,7 +2814,622 @@ Engine()
   
 </pre>
 <br>
+<hr>
 <br>
+<h1>2022-12-13</h1>
+<br>
+<br>
+<strong>객체 - constructor와 생성자</strong>
+<br>
+<br>
+<pre>
+  // 자바스크립트 객체는 자신을 초기화시킨 생성자 정보를 갖고 있다.
+
+  function Score(name, kor, eng, math) {
+    this.name = name;
+    this.kor = kor;
+    this.eng = eng;
+    this.math = math;
+  }
+  
+  function Member(id, pwd) {
+    this.id = id;
+    this.pwd = pwd;
+  } 
+  
+  function Board(title, content) {
+    this.title = title;
+    this.content = content;
+  }
+  
+  var obj1 = new Score("홍길동", 100, 100, 100);
+  var obj2 = new Member("hong", "1111");
+  var obj3 = new Board("제목", "내용");
+  
+  console.log(obj1);
+  console.log(obj2);
+  console.log(obj3);
+  console.log("----------------------------");
+  
+  // 객체를 초기화시킨 생성자를 알아내기
+  // => constructor 프로퍼티를 사용하라!
+  console.log(obj1.constructor)
+  console.log(obj2.constructor)
+  console.log(obj3.constructor)
+  console.log("----------------------------");
+  // 생성자의 이름?
+  console.log(obj1.constructor.name)
+  console.log(obj2.constructor.name)
+  console.log(obj3.constructor.name)
+  console.log("----------------------------");
+</pre>
+<br>
+<br>
+<strong>객체 - 캡슐화와 클로저 복제 변수</strong>
+<br>
+<br>
+<pre>
+  // 자바스크립트는 접근 범위를 제어하는 문법(private, protected, public, (default))이 없다.
+  // 다만 클로저 메모리를 이용하여 흉내 낼 수 있다.
+  // 클로저를 이용하는 경우에는 prototype 저장소에 함수를 저장하면 안 된다.
+  // 객체가 아닌 클로저에 값을 저장해야 하기 때문에
+  // 객체마다 함수를 추가함으로 메모리 낭비가 있다. 
+  function Score(name, kor, eng, math) {
+      // 외부에서 name, kor, eng, math 값에 접근하지 못하도록 
+      // 객체에 저장하지 않는다.
+      
+      // 함수에서 사용하는 kor, eng, math 변수는 
+      // 바깥 함수의 로컬 변수이다. 
+      // 바깥 함수의 호출이 끝나더라도 해당 변수를 사용해야 하기 때문에 
+      // 클로저는 별도의 메모리에 복제해 둔다.
+      // 함수 호출이 있을때 마다 다른 클로저 메모리를 복제
+      
+      this.getName = function() {return name}
+      this.setName = function(n) {name = n}
+      
+      this.getKor = function() {return kor}
+      this.setKor = function(k) {kor = k} 
+      
+      this.getEng = function() {return eng}
+      this.setEng = function(e) {eng = e}
+      
+      this.getMath = function() {return math}
+      this.setMath = function(m) {math = m}
+      
+      this.sum = function() {
+          return kor + eng + math
+      }
+      this.aver = function() { 
+          return this.sum() / 3
+      }
+  }
+  
+  var s1 = new Score("홍길동", 100, 100, 100);
+  
+  console.log(s1);
+  console.log(s1.name) // s1 객체에 name이라는 프로퍼티가 없다. undefined
+  console.log(s1.getName(), s1.sum(), s1.aver())
+  
+  
+  s1.setName("임꺽정")
+  s1.setKor(90)
+  console.log(s1.getName(), s1.sum(), s1.aver())
+  // setName()에서 사용한 name 변수와 getName()에서 사용한 name 변수가 같다.
+  // 결론!
+  // 바깥 함수를 한 번 호출할 때 생성한 모든 클로저(closure)들은
+  // 바깥 함수의 로컬 변수 복제본을 공유한다.
+  // 
+  // 객체에 저장된 값을 직접 접근하지 못하도록 막는 방법
+  // -> 클로저 메모리에 저장하도록 유도한다 클로저를 통해서만 조회 및 변경하도록 만든다
+</pre>
+<br>
+<br>
+<strong>객체 - 프로퍼티의 소속과 사용법</strong>
+<br>
+<br>
+<pre>
+  // 생성자 정의
+  function Score(name, kor, eng, math) {
+    this.name = name;
+    this.kor = kor;
+    this.eng = eng;
+    this.math = math;
+  }
+  
+  // 1) 객체 소속 프로퍼티
+  var score1 = new Score("홍길동", 100, 100, 100);
+  score1.sum = function() {
+    return this.kor + this.eng + this.math;
+  };
+  score1.aver = function() {
+    return this.sum() / 3;
+  };
+  console.log(score1.sum(), score1.aver());
+  // 다음 sum()과 aver() 함수는 score1 객체에만 소속된다.
+  
+  var score2 = new Score("임꺽정", 90, 90, 90);
+  console.log(score2.sum(), score2.aver());
+  // score2에 소속된 함수 중에 sum()과 aver()가 없기 때문에 오류가 발생한다.
+</pre>
+<br>
+<br>
+<strong>객체 - 프로퍼티의 소속과 사용법</strong>
+<br>
+<br>
+<pre>
+  // 생성자 정의
+  function Score(name, kor, eng, math) {
+    this.name = name;
+    this.kor = kor;
+    this.eng = eng;
+    this.math = math;
+  }
+  
+  // 2) 함수의 prototype 소속 프로퍼티
+  Score.prototype.sum = function() {
+    return this.kor + this.eng + this.math;
+  };
+  Score.prototype.aver = function() {
+    return this.sum() / 3;
+  };
+  
+  // 함수의 prototype 소속 프로퍼티는
+  // 그 함수가 초기화시킨 객체에 대해 사용할 수 있다.
+  
+  var score1 = new Score("홍길동", 100, 100, 100);
+  console.log(score1.sum(), score1.aver());
+  //1. score1.sum()
+  //2.-> score.prototype.sum()
+  
+  var score2 = new Score("임꺽정", 90, 90, 90);
+  console.log(score2.sum(), score2.aver());
+  //1. score2.sum()
+  //2.-> score.prototype.sum()
+</pre>
+<br>
+<br>
+<pre>함수 프로퍼티와 prototype 프로퍼티</pre>
+<br>
+특정 객체에 대해 작업하지 않는 함수를
+묶을 때는 객체에 바로 저장한다
+사용법) math.random()   // 객체명.함수명() //변경되지 않는다
+<br>
+math{
+  random()
+  min()
+  max()
+  sin()
+}
+<br>
+특정 객체의 값을 사용해서 작업을 수행하는 함수를 묶을 때는 
+생성자의 prototype에 저장한다
+사용법) S1.sum() // 객체명.함수명() // 대상 객체에 따라 변경
+Score.prototype {
+  sum()
+  aver()
+}
+<br>
+<br>
+<strong>객체 - 프로퍼티의 소속과 사용법</strong>
+<br>
+<br>
+<pre>
+  // 생성자 정의
+  function Score(name, kor, eng, math) {
+    this.name = name;
+    this.kor = kor;
+    this.eng = eng;
+    this.math = math;
+  }
+  
+  // 2) 함수의 prototype 소속 프로퍼티
+  Score.prototype.sum = function() {
+    return this.kor + this.eng + this.math;
+  };
+  Score.prototype.aver = function() {
+    return this.sum() / 3;
+  };
+  
+  // 함수의 prototype 소속 프로퍼티는
+  // 그 함수가 초기화시킨 객체에 대해 사용할 수 있다.
+  
+  var score1 = new Score("홍길동", 100, 100, 100);
+  console.log(score1.sum(), score1.aver());
+  //1. score1.sum()
+  //2.-> score.prototype.sum()
+  
+  var score2 = new Score("임꺽정", 90, 90, 90);
+  console.log(score2.sum(), score2.aver());
+  //1. score2.sum()
+  //2.-> score.prototype.sum()
+</pre>
+<br>
+<br>
+<strong>함수의 소속</strong>
+<br>
+<br>
+<pre>
+1. 객체에 직접 소속
+예) Math.random();
+사용법) 객체.함수명(); // 그룹으로서역할
+
+2. 생성자의 prototype에 소속
+예)s1.sum();
+사용법) var obj = new 생성자();
+obj.함수명(); // 함수가 사용하는 데이터
+</pre>
+<br>
+<br>
+<strong>생성자와 인스턴스(instance)</strong>
+ Score()
+ -> 객체 생성 
+ new Score() = Score의 인스턴스 즉 Score() 생성자를 통해 초기화된 객체
+
+ * 자바 "Score 클래스(설계도)"
+ <br>
+ <br>
+ <strong>HTMLDocument(Document())와 Document</strong>
+ <br>
+ <br>
+ <pre>
+Document()
+-> HTMLDocument() 생성
+-> DOMTree 
+-태그정보 -> 객체 -> 부모자식관계로 맺고 트리구조로 관리
+
+
+// 자바스크립트는 태그를 다루는 도구를 제공한다.
+// 그 도구를 "DOM(Document Object Model) API"라 부른다.
+//
+// document 객체
+// => 웹브라우저에서 기본으로 제공하는 객체이다.
+// => 태그를 찾고, 생성하고, 제어하는 함수를 갖고 있다.
+// => var document = new HTMLDocument();
+//
+
+// document의 타입은?
+// => 즉 document 객체를 초기화시킨 생성자는?
+console.log(document.constructor.name);
+
+// document 객체를 통해 사용할 수 있는 함수나 변수는?
+// => HTMLDocument 생성자가 추가한 함수나 변수이다.
+// => 어떤 함수와 변수가 있는지 알고 싶다면 문서 보세요.
+// => HTMLDocument 생성자의 문서를 보라!
+// => 상속 관계
+//    Document() --> Node() ---> EventTarget() ---> Object()
+
+console.log(document);
+
+console.log(Document.prototype);
+
+// Document()의 함수
+console.log(document.createElement); // document ---> Document.prototype
+
+// Node()의 함수
+console.log(document.appendChild); // document ---> Document.prototype ---> Node.prototype
+
+// EventTarget()의 함수
+console.log(document.addEventListener); // document ---> Document.prototype ---> Node.prototype ---> EventTarget.prototype
+
+// Object()의 함수
+console.log(document.toString); // document ---> Document.prototype ---> Node.prototype ---> EventTarget.prototype ---> Object.prototype
+
+ </pre>
+ <br>
+ <br>
+ <br>
+<br>
+<strong>DOM API - id 값으로 태그 찾기</strong>
+<br>
+<br>
+<pre>
+  // 생성자 정의
+  function Score(name, kor, eng, math) {
+    this.name = name;
+    this.kor = kor;
+    this.eng = eng;
+    this.math = math;
+  }
+  
+  // 2) 함수의 prototype 소속 프로퍼티
+  Score.prototype.sum = function() {
+    return this.kor + this.eng + this.math;
+  };
+  Score.prototype.aver = function() {
+    return this.sum() / 3;
+  };
+  
+  // 함수의 prototype 소속 프로퍼티는
+  // 그 함수가 초기화시킨 객체에 대해 사용할 수 있다.
+  
+  var score1 = new Score("홍길동", 100, 100, 100);
+  console.log(score1.sum(), score1.aver());
+  //1. score1.sum()
+  //2.-> score.prototype.sum()
+  
+  var score2 = new Score("임꺽정", 90, 90, 90);
+  console.log(score2.sum(), score2.aver());
+  //1. score2.sum()
+  //2.-> score.prototype.sum()
+</pre>
+<br>
+<br>
+<pre>DOM API</pre>
+<br>
+<br>
+<pre>
+DOM API 명세서
+프로그램에 상관없이 사용법이 같다
+
+ -JAVA
+ -> 구현 (implements)
+ 자바언어로 DOM API 규격에 따라 클래스와 메서드를 만들엇다
+
+ -javascript
+ -> javascript 언어로 DOMAPI규격에 따라 메서드와 객체을 만들엇다
+
+</pre>
+<br>
+<br>
+<strong>Document.prototype.getElementById()</strong>
+<br>
+<br>
+<pre>
+  document.getElementById("header4")
+  = <h1 id="header4" class="g2">제목2</h1>
+  h1 -> HTMLHeadingElement
+
+  생성자로 초기화시킨 객체 = "인스턴스"
+</pre>
+<br>
+<br>
+<strong>HTMLHeadingElement() 생성과 체인과 객체의 관계</strong>
+<br>
+<br>
+<pre>
+ 1. object() + (생성자들의 prototype)
+ - 프로퍼티 주가
+ 2. EventTarget() +         
+ 3. Node() +
+ 4. Element() +
+ 5. HTMLElement() +
+ 6. HTMLHeadingElement() +
+
+ document.getElementById("header4")
+ = e1 상위 생성자들의 protortype을 call할 수 있다
+</pre>
+<br>
+<br>
+<strong>DOM API - CSS selector 문법으로 태그 찾기</strong>
+<br>
+<br>
+<pre>
+  
+  <!-- <h1>DOM API - CSS selector 문법으로 태그 찾기</h1>
+  <h1 id="header1" class="g1">제목1</h1>
+  <h2 id="header2" class="g1">제목1.1</h2>
+  <h2 id="header3" class="g1 g3">제목1.2</h2>
+  
+  <h1 id="header4" class="g2">제목2</h1>
+  <h2 id="header5" class="g2 g3 g1">제목2.1</h2>
+  <h2 id="header6" class="g2 g3">제목2.2</h2> -->
+  
+  ///////////////////////////////////
+  // querySelector("CSS selector 문법")
+  // => Element 객체 리턴
+  // => 만약 여러 개를 찾았다 할 지라도 그 중 첫 번째 것만 리턴한다.
+  //
+  // 1) 아이디로 찾기
+  var e = document.querySelector("#header3"); // $("#header3")
+  console.log(e);
+  console.log("---------------------");
+  
+  // 2) 태그 이름으로 찾기
+  // => 조건에 해당하는 태그가 여러 개일지라도 그 중 첫 번째 것만 리터한다.
+  e = document.querySelector("h2"); // $("h2")
+  console.log(e);
+  console.log("---------------------");
+  
+  //3) 분류명으로 찾기
+  //=> 조건에 해당하는 태그가 여러 개일지라도 그 중 첫 번째 것만 리터한다.
+  e = document.querySelector(".g2"); // $(".g2")
+  console.log(e);
+  console.log("---------------------");
+  
+  //4) CSS selector 문법을 사용하기 때문에 복잡한 조건을 기술할 수 있다.
+  //=> 조건에 해당하는 태그가 여러 개일지라도 그 중 첫 번째 것만 리터한다.
+  e = document.querySelector(".g2.g3"); // $(".g2.g3")
+  console.log(e);
+  console.log("---------------------");
+  
+  //5) 조건에 해당하는 태그를 찾지 못했다면?
+  // => 리턴 값은 null이다.
+  e = document.querySelector(".g2.g3.g1"); // $(".g2.g3.g1")
+  console.log(e);
+</pre>
+<br>
+<br>
+<strong>DOM API -  HTMLCollection과 NodeList</strong>
+<br>
+<br>
+<pre>
+
+  var list1 = document.getElementsByTagName("li"); // 수정 내용을 반영한다
+var list2 = document.querySelectorAll("li");  // 태그를 수정하더라도 처음 받은 값 그대로 리턴한다
+
+</pre>
+<br>
+<br>
+<strong>DOM API -  HTMLCollection과 NodeList</strong>
+<br>
+<br>
+<pre>
+  // Element.innerHTML : DOMString
+  // => Element() 생성자가 추가한 프로퍼티이다.
+  // => 태그의 콘텐트를 HTML 코드 그대로 리턴한다.
+  //
+  var e = document.querySelector("article:first-child > p");
+  console.log(e)
+  console.log(e.innerHTML)
+  console.log("----------------------")
+  // 결과: 자바스크립트는 b>프론트-엔드/b>를 개발할 때 사용하는 프로그래밍 언어입니다
+
+  // Node.textContent
+  // => Node() 생성자가 추가한 프로퍼티이다.
+  // => 태그의 콘텐트에서 HTML 코드를 제거한 후 텍스트만 리턴한다.
+  console.log(e.textContent)
+  console.log("----------------------")
+  // 결과: 자바스크립트는 프론트-엔드를 개발할 때 사용하는 프로그래밍 언어입니다.
+</pre>
+<br>
+<br>
+<strong>DOM API - 태그의 콘텐트 설정하기 I</strong>
+<br>
+<br>
+<pre>
+  document.querySelector('#btn1').onclick = function() {
+    // Element.innerHTML : DOMString // HTML문법을 그래도 쓰고싶을 때
+    // => Element() 생성자가 추가한 프로퍼티이다.
+    // => HTML 코드로 태그의 콘텐트를 설정할 수 있다.
+    // => HTML 태그가 그대로 렌더링 된다.
+    //// HTML문법을 그래도 쓰고싶을 때
+    var e = document.querySelector("article:first-child > p");
+    e.innerHTML = "오호라 <b>비트캠프</b>입니다.<br> 반갑습니다.";
+  
+    // Node.textContent
+    // => Node() 생성자가 추가한 프로퍼티이다.
+    // => 텍스트를 설정할 때 사용한다. 텍스트 안에 HTML 코드는 그냥 일반 텍스트로 취급한다.
+    //    즉 텍스트 안에 있는 HTML 코드는 웹브라우저가 인식하지 않는다.
+    //// 전부 텍스트로 하고싶을 때
+    e = document.querySelector("article:last-child > p");
+    e.textContent = "우헤헤 <b>비트캠프</b>입니다.<br> 반갑습니다.";
+  
+    // HTMLElement.innerText
+    // => Node() 생성자가 추가한 프로퍼티이다.
+    // => 텍스트를 설정할 때 사용한다. 텍스트 안에 HTML 코드는 그냥 일반 텍스트로 취급한다.
+    //    즉 텍스트 안에 있는 HTML 코드는 웹브라우저가 인식하지 않는다.
+    //// 전부 텍스트로 쓰고싶을때
+    e = document.querySelector("article:last-child > p");
+    e.innerText = "우헤헤 <b>비트캠프</b>입니다.<br> 반갑습니다.";
+  };
+</pre>
+<br>
+<br>
+<strong>DOM API - 태그의 속성(attribute) 변경하기</strong>
+<br>
+<br>
+<pre>
+  // 태그의 속성 바꾸기
+  //
+  var e = document.querySelector("article:nth-child(2) a");
+  console.log(e.href)
+  
+  document.querySelector('#btn1').onclick = function() {
+    // 1) 방법1
+    // => 원래 태그에 있던 속성 값을 바꿀 때!
+    //      태그객체.속성명 = "값"
+    // e.href = "http://www.daum.net";
+  
+    // 2) 방법2
+    // => 원래 태그에 있던 속성 값을 바꿀 때
+    //      태그객체.setAttribute("속성명", "값")
+    // => 이 메서드를 사용하면 개발자가 임의로 추가한 프로퍼티 값도 바꿀 수 있다.
+    //    즉 원래 태그 객체에 없던 프로퍼티 값도 설정할 수 있다.
+    e.setAttribute("href", "http://www.google.com");
+  };
+</pre>
+<br>
+<br>
+<strong>DOM API - 태그에 속성(attribute)을 추가하기</strong>
+<br>
+<br>
+<pre>
+
+  // 2) 방법2
+  // "data-xxxx" 형식으로 이름을 짓는 것이 관례다.
+  e.setAttribute("data-no2", 300);
+  console.log(e.getAttribute("data-no2"));
+
+</pre>
+<br>
+<br>
+<strong>DOM API - 태그 추가하기</strong>
+<br>
+<br>
+<pre>
+
+  // 2) 방법2
+  // "data-xxxx" 형식으로 이름을 짓는 것이 관례다.
+  e.setAttribute("data-no2", 300);
+  console.log(e.getAttribute("data-no2"));
+
+</pre>
+<br>
+<br>
+<strong>DOM API - 태그 삭제하기</strong>
+<br>
+<br>
+<pre>
+
+  // 태그를 삭제하기
+  //
+  document.querySelector('#btn1').onclick = function() {
+    // 방법1) 부모 태그를 알고 있다면 removeChild()를 이용하여 삭제한다.
+    // => 삭제할 태그를 찾는다.
+    var e = document.querySelector("article:first-child");
+  
+    // => 부모 태그를 찾는다.
+    var parent = document.querySelector("section");
+  
+    // => 부모 태그에서 자식 태그를 제거한다.
+    parent.removeChild(e);
+  }
+</pre>
+<br>
+<br>
+<strong>DOM API - 태그 삭제하기</strong>
+<br>
+<br>
+<pre>
+
+// 태그를 삭제하기
+//
+document.querySelector('#btn1').onclick = function() {
+  // 방법1) 부모 태그를 알고 있다면 removeChild()를 이용하여 삭제한다.
+  // => 삭제할 태그를 찾는다.
+  var e = document.querySelector("article:first-child");
+
+  // => 부모 태그를 찾는다.
+  var parent = document.querySelector("section");
+
+  // => 부모 태그에서 자식 태그를 제거한다.
+  parent.removeChild(e);
+}
+
+
+  // 태그를 삭제하기 II
+// 
+document.querySelector('#btn1').onclick = function() {
+// 방법2) 부모 태그를 모른다면 찾은 태그에서 부모 태그를 알아낸다.
+// => 삭제할 태그를 찾는다.
+var e = document.querySelector("article:first-child");
+
+// => 부모 태그를 알아낸다.
+// => Node.parentElement 또는 Node.parentNode를 사용한다.
+var parent = e.parentElement;
+
+// => 부모 태그에서 자식 태그를 제거한다.
+parent.removeChild(e);
+};
+</pre>
+<br>
+<br>
+<strong>과제</strong>
+15퍼즐 만들기 
+4*4 에서 1칸을 비워서 움직일 수 있게 
+섞기버튼 구현
+
+2022-12-15-09:00 까지 
 </section>
 </main>
 </div>
