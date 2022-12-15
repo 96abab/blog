@@ -3972,7 +3972,193 @@ event 발생
           });
 </pre>
 <br>
+<hr>
 <br>
+<h1>2022-12-15</h1>
+<br>
+<br>
+<strong>웹페이지 와 어플리케이션</strong>
+<br>
+<br>
+<pre>
+client(web browser)가 server(wbe server)에 요청을 하면
+HTML파일,CSS파일,JS파일등 필요한 파일들을 다운 받는다
+그후 HTML 문서에 연결된 자원들을 추가로 가져온다
+</pre>
+<br>
+<br>
+<strong>웹페이지 바꾸기</strong>
+<br>
+<br>
+<pre>
+client가 URL을 요청하면 각각의 URL에 관한 모든 정보를 받아오고
+URL이 바뀔때마다 전부 다시 받아와야한다 그렇기 때문에 동일한 U
+RL 이라도 다시 받는다
+</pre>
+<br>
+<br>
+<strong>AJAX(Asynchronous JavaScript And XML)</strong>
+<br>
+<br>
+<pre>
+현재 APP 의 실행을 유지한 상태에서 서버에 자원을 요청하는 기술
+
+cross-domain 제약 
+-다른 URL과 공유할 수 없는 기술
+->
+해결방법
+-CORS(Cross-Origin Resource Sharing) - 교차 출처 리소스 공유
+*Access-Control-Allow-Origin
+
+
+let xhr = new XMLHttpRequest();
+xhr.open("GET", "a.html", false);
+
+html요청메서드
+-post,head,put,delete...
+
+요청하는 자원의 URL
+-a.html
+
+비동기 여부
+-false
+
+xhr.send();
+
+HTTP서버에 요청 정보 보낸다
+-서버가 응답하면 리턴 한다 (synchronus)
+-서버응답과 상관없이 즉시 리턴한다(Asynchronous)
+
+</pre>
+<br>
+<br>
+<strong>nodeJS 와 Express</strong>
+<br>
+<br>
+<pre>
+1.nodeJS 실행 
+2.app.js생성및 실행
+3.미니 웹서버
+Express
+
+APP에 Express라이브러리 장착하는법
+app 폴더에 nodeJS용 라이브러리 다운로드 
+
+->$npm install express --save
+
+ 노드 app 디렉토리 
+
+app.js 는 진입점(entry point)
+
+package.json 
+-nodeJS App 설정파일
+app설명,제작자,라이센스등
+
+node.
+
+</pre>
+<br>
+<br>
+<strong>npm intall</strong>
+<br>
+<br>
+<pre>
+$npm install 
+
+1. 작업폴더에서 package.json 파일을 찾는다
+
+2. package.json 파일에 등록된 라이브러리들을 모두 다운
+
+-node_modules폴더가 없으면 생성
+-라이브러리가 없으면 다운
+  설정된 조건에 따라 버전을 검사해서 적절한 
+  버전을 다운
+
+패키지명이 없다면 
+
+
+있다면 
+-node_modules폴더가 없으면 생성
+-라이브러리가 없으면 다운
+  설정된 조건에 따라 버전을 검사해서 적절한 
+  버전을 다운
+
+npm 사용
+
+1.npm init
+2.npm install 라이브러리 -- save
+--> 처음 한번 수행 하며 필요할때마다 여러번 반복
+3.npm install
+git repo. 에서 프로젝트를 가져온후 한번만 실행
+
+
+req(요청) 및 res(응답)는 Node가 제공하는 동일한 오브젝트이며,
+따라서 req.pipe(), req.on('data', callback) 그리고 Express의 
+관여가 필요 없는 다른 모든 항목을 호출할 수 있습니다.
+</pre>
+<br>
+<br>
+<strong>npm intall</strong>
+<br>
+<br>
+<pre>
+  // XMLHttpRequest()
+  // => 동기/비동기 HTTP 요청을 할 때 사용한다.
+  // => 전체 페이지를 갱신하지 않고 페이지의 일부만 갱신하는 용도로 쓴다.
+  // => 서버는 요청에 대한 응답으로 HTML 일부 코드나 XML, JSON 데이터를 전송한다.
+  // => 이런 기법을 AJAX(Asynchronous JavaScript And XML)이라 부른다.
+  
+  // 버튼을 클릭할 때 서버에 HTTP 요청하여 응답 결과를 textarea 태그에 출력한다.
+  var ta = document.querySelector("#ta");
+  
+  document.querySelector("#btn1").onclick = () => {
+  
+      //1) AJAX 객체 준비 
+      var xhr = new XMLHttpRequest();
+      
+      //2) 서버에 소켓 연결(동기 방식으로 요청)
+      // => 1번 파라미터: HTTP 요청 method. ex) GET, POST, HEAD ...
+      // => 2번 파라미터: 요청 URL
+      // => 3번 파라미터: 비동기 여부
+      xhr.open("GET", "http://127.0.0.1:3000/exam01-1", false);
+      
+      //3) 서버에 HTTP(규칙에 따라) 요청을 보낸다.
+      // => 동기 방식으로 연결되었을 경우 서버에서 응답할 때까지 리턴하지 않는다.
+      xhr.send();
+      
+      //4) 서버가 응답한 콘텐트를 꺼낸다.
+      ta.value = xhr.responseText;
+  };
+
+  //app.js
+
+
+  //express 라이브러리 로딩하기
+  const express = require('express');
+  const port = 3000; // 웹서버 포트 번호
+  //express() 를 호출하여 웹서버를 준비한다
+  const app = express();
+  
+  // 클라이언트 요천에 대해 호출될 메서드를 등록
+  app.get(                // get요청이 들어왔을 때 호출될 메서드 지정
+    '/exam01-1',          // 요청 URL
+    (req, res) => {       // 핸들러:요청이 들어왔을때 호출
+     
+      res.set('Access-Control-Allow-Origin', '*');
+      res.set('Content-Type', 'text/plain;charset=UTF-8');
+      res.send("Hello");
+    }
+  ); 
+  
+  // 웹서버 실행하기 
+  app.listen(
+    3000,           // 포트 번호 지정
+    () => {         // 서버가 시작되었을 때 호출될 함수 = 리스너 = 핸들러
+      console.log(`${port}번 포트에서 서버 시작`);
+    } 
+  );
+
+</pre>
 </section>
 </main>
 </div>
