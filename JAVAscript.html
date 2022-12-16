@@ -4098,7 +4098,7 @@ req(요청) 및 res(응답)는 Node가 제공하는 동일한 오브젝트이며
 </pre>
 <br>
 <br>
-<strong>npm intall</strong>
+<strong>AJAX - XMLHttpRequest()</strong>
 <br>
 <br>
 <pre>
@@ -4109,24 +4109,24 @@ req(요청) 및 res(응답)는 Node가 제공하는 동일한 오브젝트이며
   // => 이런 기법을 AJAX(Asynchronous JavaScript And XML)이라 부른다.
   
   // 버튼을 클릭할 때 서버에 HTTP 요청하여 응답 결과를 textarea 태그에 출력한다.
-  var ta = document.querySelector("#ta");
+  var ta = document.querySelector("#ta");     // 공통으로 사용하므로 미리 선언
   
   document.querySelector("#btn1").onclick = () => {
   
       //1) AJAX 객체 준비 
-      var xhr = new XMLHttpRequest();
+      var xhr = new XMLHttpRequest();        // 사용할 때 용도가 달라지므로 다시 생성
       
       //2) 서버에 소켓 연결(동기 방식으로 요청)
       // => 1번 파라미터: HTTP 요청 method. ex) GET, POST, HEAD ...
       // => 2번 파라미터: 요청 URL
       // => 3번 파라미터: 비동기 여부
-      xhr.open("GET", "http://127.0.0.1:3000/exam01-1", false);
+      xhr.open("GET", "http://127.0.0.1:3000/exam01-1", false); // false 로 동기방식
       
       //3) 서버에 HTTP(규칙에 따라) 요청을 보낸다.
       // => 동기 방식으로 연결되었을 경우 서버에서 응답할 때까지 리턴하지 않는다.
       xhr.send();
       
-      //4) 서버가 응답한 콘텐트를 꺼낸다.
+      //4) 서버가 응답한 콘텐트(pay load = message-body)를 꺼낸다.
       ta.value = xhr.responseText;
   };
 
@@ -4159,6 +4159,90 @@ req(요청) 및 res(응답)는 Node가 제공하는 동일한 오브젝트이며
   );
 
 </pre>
+<br>
+<hr>
+<br>
+<h1>2022-12-16</h1>
+<br>
+<br>
+<strong></strong>
+<br>
+<br>
+<pre>
+UI component
+제목
+버튼등 
+
+UI component 생성명령코드 (HTML) 
+h1
+button
+
+serialization
+데이터를 문자,바이트,배열로 변환하는것
+
+객체 -> JSON.stringify(obj) -> JSON문자열
+
+
+deserialization
+문자,바이트,배열을 데이터로 변환하는것
+</pre>
+<br>
+<br>
+<strong>CORS(origin을 건너서 자원 공유) Policy 을 우회하는 방법</strong>
+<br>
+<br>
+<pre>
+해결방안
+1. origin서버에 AJAX요청 (origin이 proxy역할)
+2. origin이 cross server 에 요청 (CORS정책과 상관없다)
+3. client에 전달
+
+
+<strong>Query String 값 꺼내기</strong>
+
+
+client ->  http://localhost:3000/proxy?url=http://www.naver.com
+
+server -> app.get('/proxy', (req, res) => {
+
+}
+
+</pre>
+<br>
+<br>
+<strong>AJAX 활용</strong>
+<br>
+<br>
+1. 화면의 일부를 가져오기 
+  1) AJAX요청
+  2) 서버가 응답
+  3) HTML코드를 화면에 삽입(일부 화면 갱신)
+
+2. 데이터 가져오기 
+  1) AJAX요청
+  2) 서버가 응답
+  3) JSON또는 XML 로 HTML 생성
+  4) 화면 일부 갱신
+
+<strong>AJAX의 응답 결과가 JSON또는 XML 데이터인 이유?</strong>
+
+
+1. HTML코드를 응답할 때 문제점
+  1) AJAX요청
+  2) 서버가 응답
+  3) HTML코드 삽입
+
+* 안드로이드에 같은 과정으로 실행시 HTML코드 삽입 불가
+-> JAVA,KOTLIN으로 만든 앱화면에 HTML코드로 변경 불가
+android UI component로 변환하여 삽입
+
+* 아이폰도 같은 과정시 HTML코드 삽입 불가
+-> Object,swift HTML 코드 변경 불가
+
+
+멀티 디바이스에 대응할 수 있다 는 장점이 있다 
+
+
 </section>
 </main>
 </div>
