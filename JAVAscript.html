@@ -4139,7 +4139,7 @@ req(요청) 및 res(응답)는 Node가 제공하는 동일한 오브젝트이며
   //express() 를 호출하여 웹서버를 준비한다
   const app = express();
   
-  // 클라이언트 요천에 대해 호출될 메서드를 등록
+  // 클라이언트 요청에 대해 호출될 메서드를 등록
   app.get(                // get요청이 들어왔을 때 호출될 메서드 지정
     '/exam01-1',          // 요청 URL
     (req, res) => {       // 핸들러:요청이 들어왔을때 호출
@@ -4165,7 +4165,23 @@ req(요청) 및 res(응답)는 Node가 제공하는 동일한 오브젝트이며
 <h1>2022-12-16</h1>
 <br>
 <br>
-<strong></strong>
+<strong>일반요청</strong>
+<br>
+<br>
+<pre>
+<!-- <button id="btn">요청</button><br>
+<textarea id="nomal" cols="30" rows="10"></textarea>
+
+<script>
+  "use strict"
+
+  document.querySelector("#btn").onclick = () => {
+
+    // 웹브라우저가 지정한 URL로 요청 수행
+    window.location.href = "http://www.naver.com";
+  };
+</script> -->
+</pre>
 <br>
 <br>
 <pre>
@@ -4213,6 +4229,7 @@ server -> app.get('/proxy', (req, res) => {
 <strong>AJAX 활용</strong>
 <br>
 <br>
+<pre>
 1. 화면의 일부를 가져오기 
   1) AJAX요청
   2) 서버가 응답
@@ -4225,6 +4242,21 @@ server -> app.get('/proxy', (req, res) => {
   4) 화면 일부 갱신
 
 <strong>AJAX의 응답 결과가 JSON또는 XML 데이터인 이유?</strong>
+
+
+  "use srtict"
+  var nomal1 = document.querySelector("#nomal1"); // 요청 결과를 textarea에 출력
+  document.querySelector("#btn2").onclick = () => { 
+    var xhr = new XMLHttpRequest(); // AJAX 객체 준비
+    xhr.open("GET", "btn2", false); // 서버 소켓연결 ("HTTP요청", "URL", "비동기여부 (false = 비동기)")
+    xhr.send();  // 서버에 HTTP요청을 보낸다
+    nomal.value = xhr.responseText; // 서버가 응답한 콘텐트를 꺼낸다
+  };
+  // XMLHttpRequest()
+// => 동기/비동기 HTTP 요청을 할 때 사용한다.
+// => 전체 페이지를 갱신하지 않고 페이지의 일부만 갱신하는 용도로 쓴다.
+// => 서버는 요청에 대한 응답으로 HTML 일부 코드나 XML, JSON 데이터를 전송한다.
+// => 이런 기법을 AJAX(Asynchronous JavaScript And XML)이라 부른다.
 
 
 1. HTML코드를 응답할 때 문제점
@@ -4241,8 +4273,408 @@ android UI component로 변환하여 삽입
 
 
 멀티 디바이스에 대응할 수 있다 는 장점이 있다 
+</pre>
+<strong>AJAX - AJAX의 제약</strong>
+<br>
+<br>
+<pre>
+  // AJAX 요청의 제약
+  // => HTML을 다운로드 받은 서버로만 AJAX로 HTTP 요청을 할 수 있다.
+  // => 이유? 보안 때문이다.
+  //    - 웹브라우저는 서버로부터 HTML을 다운로드 받으면 HTML에 들어있는 JavaScript를 자동으로 실행한다.
+  //    - HTML페이지는 반드시 신뢰할 수 있는 것은 아니다.
+  //      페이지의 링크를 이리저리 따라가다 보면 임의의 사용자가 만든 페이지에 방문할 수 있고,
+  //      그 사용자가 신뢰할 수 있는 사용자인지 알 수 없다. 
+  //    - 이런 상황에서 누군가 게시글 속에 다른 사이트에 AJAX 요청을 하는 자바스크립트 코드를 넣었다고 가정해 보자.
+  //      그 게시글을 보는 사용자는 자신의 의도와 상관없이 특정 사이트에 대해 AJAX 요청을 할 것이다.
+  //      이 요청이 동시에 많은 사람들에 의해 수행된다면 요청 받는 서버는 느려질 것이다.
+  //      이것이 DDOS 공격이다.
+  //    - 즉 본인의 의사와 상관없이 DDOS 공격에 참여자가 될 수 있다.
+  //    - 이런 상황을 방지하고자 HTML을 보낸 서버로만 AJAX 요청을 하도록 제한하고 있다.
+  //    - 실제는 요청을 하고 응답까지 받는데 다만 응답헤더에 허락한다는 키워드가 없으면 
+  //      웹브라우저는 응답 결과를 리턴하지 않는다.
+  //    - 현재는 요청을 제한하기 위함이 아니라, 
+  //      허락하지 않은 응답 결과에 대해 가져가지 말도록 제한하는데 의미를 둔다.    
+  //
+  // 버튼을 클릭할 때 서버에 HTTP 요청하여 응답 결과를 textarea 태그에 출력한다.
+  var ta = document.querySelector("#ta");
+  
+  document.querySelector("#btn1").onclick = () => {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "http://www.zdnet.co.kr", false);
+      xhr.send();
+      ta.value = xhr.responseText;
+      
+      // 이 HTML 문서는 www.zdnet.co.kr 에서 다운로드 받은 것이 아니기 때문에
+      // 웹브라우저는 응답받은 결과를 리턴하지 않는다.
+      // => 실행하면 다음과 같은 오류가 뜬다.
+      // No 'Access-Control-Allow-Origin' header is present on the requested resource.
+</pre>
+<br>
+<br>
+<strong>AJAX - AJAX의 제약 해소</strong>
+<br>
+<br>
+<pre>
+// AJAX 요청에 대해 응답을 하는 서버 쪽에서 다음과 같은 응답 헤더를 포함한다면 
+// 웹브라우저는 응답결과를 리턴해 줄 것이다.
+//      Access-Control-Allow-Origin: 허락할 도메인
+//
+// 버튼을 클릭할 때 서버에 HTTP 요청하여 응답 결과를 textarea 태그에 출력한다.
+var url = document.querySelector("#url");
+var ta = document.querySelector("#ta");
+
+document.querySelector("#btn1").onclick = () => {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url.value, false);
+    xhr.send();
+    ta.value = xhr.responseText;
+};
+</pre>
+<br>
+<br>
+<strong>AJAX - 프록시 기법으로 AJAX의 제약 해소</strong>
+<br>
+<br>
+<pre>
+  // AJAX로 요청하는 서버를 자신이 통제할 수 있다면,
+  // 언제든 응답 헤더에 "Access-Control-Allow-Origin"을 붙여 
+  // 다른 사이트에서 AJAX 요청을 할 수 있도록 허락할 수 있다.
+  // 문제는 자신이 통제할 수 없는 서버는 어떻게 처리할 것인가?
+  // => 프록시 기법을 사용한다.
+  // => 웹브라우저는 HTML을 다운로드 받은 서버에 AJAX 요청을 하고,
+  //    그 서버는 중간에서 실제 목적지 서버로 요청을 대행한다.
+  //    목적지 서버로부터 받은 응답을 그대로 AJAX 요청자에게 전달한다.
+  //
+  // 버튼을 클릭할 때 서버에 HTTP 요청하여 응답 결과를 textarea 태그에 출력한다.
+  var url = document.querySelector("#url");
+  var ta = document.querySelector("#ta");
+  
+  document.querySelector("#btn1").onclick = () => {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "test3?url=" + url.value, false);
+      xhr.send();
+      ta.value = xhr.responseText;
+  };
+</pre>
+<br>
+<br>
+<strong>AJAX - 동기 요청의 한계</strong>
+<br>
+<br>
+<pre>
+  // 동기 요청의 문제점
+  // => 서버에서 응답을 할 때까지 send() 메서드는 리턴하지 않는다.
+  // => 따라서 작업 시간이 오래 걸리는 경우 send() 메서드가 리턴하지 않아서  
+  //    다른 작업을 수행하지 못하는 상황이 발생한다.
+  
+  var ta = document.querySelector("#ta");
+  
+  document.querySelector("#btn1").onclick = () => {
+      var xhr = new XMLHttpRequest();
+  
+      // 클라이언트 쪽의 반응을 확인해 보기 위해 
+      // test3.jsp는 일부로 응답시간을 지연시킬 것이다. 
+      xhr.open("GET", "test5", false);
+      xhr.send();
+      // 서버에서 응답할 때 까지 send()는 리턴하지 않기 때문에 
+      // 다음 라인을 실행할 수 없다. 
+      // 즉 그 이후의 사용자 행위에 응답하지 못하는 상황이 발생한다.
+      // 일종의 "벽돌" 화면이 된다. 
+      // 해결 방법? 다음 예제를 보라!
+      ta.value = xhr.responseText;
+  };
+</pre>
+<br>
+<br>
+<strong>AJAX - 동기 요청의 한계를 해결하자!</strong>
+<br>
+<br>
+<pre>
+// 동기 요청의 문제점 해결
+// => 웹브라우저는 서버에 요청을 별도의 스레드에서 실행하게 하고,
+//    서버 응답에 상관없이 즉시 다음 작업을 수행한다.
+// => 이것을 "비동기(asynchronous) 요청"이라 부른다.
+//
+var ta = document.querySelector("#ta");
+
+document.querySelector("#btn1").onclick = () => {
+    var xhr = new XMLHttpRequest();
+    
+    // 비동기 요청을 하려면 3번 파라미터를 true로 설정해야 한다.
+    xhr.open("GET", "test5", true);
+    xhr.send();
+    console.log("send() 리턴함.");
+    // 별도의 스레드를 통해 요청을 수행시키고 
+    // 다음 작업을 즉시 실행한다.
+    // 따라서 다음과 같은 코드를 조심해야 한다.
+    // 왜? 
+    // 서버가 응답하기 전에 다음 코드를 실행한다면,
+    // responseText 변수에는 아직 서버가 응답한 결과가 들어있지 않기 때문에 
+    // 결과를 제대로 출력할 수 없을 것이다.
+    ta.value = xhr.responseText;
+    
+    // 해결책?
+    // => 서버에서 응답을 완료했을 때 결과를 꺼내라!
+    // => 다음 예제를 보라!
+ 
+};
 
 
+// 동기 요청의 문제점 해결 2
+// => 웹브라우저는 서버에 요청을 별도의 스레드에서 실행하게 하고,
+//    서버의 응답에 상관없이 즉시 다음 작업을 수행한다.
+// => 이것을 "비동기(asynchronous) 요청"이라 부른다.
+//
+var ta = document.querySelector("#ta");
+
+document.querySelector("#btn1").onclick = () => {
+    var xhr = new XMLHttpRequest();
+    
+    // 비동기 요청을 하려면 3번 파라미터를 true로 설정해야 한다.
+    xhr.open("GET", "test5", true);
+    xhr.send();
+    console.log("send() 리턴함.");
+    
+    // 지금 바로 responseText 변수의 값을 꺼내봐야 소용없다. 
+    // 서버에서 아직 응답하지 않았기 때문이다.
+    // => 서버에서 일부로 10초 정도 응답을 지연시켰다.
+    // 
+    // 해결책?
+    // => 서버에서 응답하는데 걸리는 시간(예: 10초)이 지난 후에
+    //    (넉넉하게 잡아서 13초 후에) responseText 변수의 값을 꺼낸다.
+    // => 타임아웃에 함수를 등록해서 13초가 지난 후에 호출되면 
+    //    responseText 변수의 값을 꺼내게 한다.
+    window.setTimeout(() => {
+      console.log("13초가 지났다.")
+      console.log("xhr.responseText 변수의 값을 꺼내 보자!")
+      ta.value = xhr.responseText;
+    }, 13000);
+    
+    // 이 해결 방식의 문제점은
+    // 서버의 응답 시간이 13초보다 늦어지면 
+    // 이전과 같이 응답 데이터를 가져올 수 없다. 
+    // 또는 응답시간이 빨라지더라도 
+    // 무조건 13초를 기다렸다가 값을 꺼낸다는 것이다.
+    // 
+    // 해결책!
+    // => 다음 예제에서...
+    // 
+};
+</pre>
+<br>
+<br>
+<strong>AJAX - onreadystatechange</strong>
+<br>
+<br>
+<pre>
+// onreadystatechange
+// => 비동기로 AJAX 요청을 하게 되면 
+//    작업 상태가 바뀔 때 마다 onreadystatechange로 등록한 
+//    메서드가 호출된다.
+// => 작업 상태는 메서드가 호출될 때 마다 readyState 값을 검사해 보면 알 수 있다. 
+// => readyState의 값:
+//    0 : XMLHttpRequest 준비
+//    1 : open() 호출됨 => 서버에 연결됨. 
+//    2 : send() 호출됨 => 서버에 요청을 보낸 후 응답 상태와 헤더 값을 받음.
+//    3 : 서버에서 콘텐트를 받고 있는 중. 
+//        아직 responseText에는 완전한 데이터가 들어 있지 않음.
+//        서버에서 받은 일부 데이터가 들어 있을 수는 있음.
+//    4 : 서버에서 콘텐트를 모두 받음. 즉 응답이 완료됨.
+//       
+//
+var ta = document.querySelector("#ta");
+
+document.querySelector("#btn1").onclick = () => {
+    var xhr = new XMLHttpRequest();
+
+    // 서버에서 응답이 왔을 때 호출될 메서드를 등록한다.
+    // 서버에 연결하기 전에 등록해야 한다.
+    // 즉 open()을 호출하기 전에 등록해야 한다.
+    xhr.onreadystatechange = () => {
+        console.log("현재 요청 상태: ", xhr.readyState);
+    };
+    
+    xhr.open("GET", "test5", true);
+    console.log("open() 리턴함.");
+    
+    xhr.send();
+    console.log("send() 리턴함.");
+    
+    // 비동기로 요청할 때는 서버에서 응답이 왔을 때 값을 꺼내도록 한다.
+    // 서버에서 응답이 왔는지 알아내는 방법은?
+    // => 현재의 요청 상태를 보고 받는 것이다.
+    // => 위의 onreadystatechange() 함수 등록을 참고하라!
+};
+
+//////////////////////////////////////
+
+var ta = document.querySelector("#ta");
+
+document.querySelector("#btn1").onclick = () => {
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = () => {
+        console.log("readyState=", xhr.readyState);
+        // 실제 우리가 관심을 두는 것은 서버가 응답을 완료했는지 여부이다.
+        // 응답이 완료되었을 때 우리는 서버가 보낸 값을 꺼내 사용한다.
+        if (xhr.readyState == 4) {
+        	ta.value = xhr.responseText;
+        }
+    };
+    
+    xhr.open("GET", "test5", true);
+    xhr.send();
+    console.log("send() 리턴함.");
+</pre>
+<br>
+<br>
+<strong>AJAX - 이벤트 발생시키기</strong>
+<br>
+<br>
+<pre>
+// 서버에서 실행 오류가 발생했을 때 
+// 입력 폼을 초기화시키기
+// => 프로그램에서 리셋 버튼에 대해 click 이벤트를 발생시킨다. 
+//
+var a = document.querySelector("#a");
+var b = document.querySelector("#b");
+var r = document.querySelector("#r");
+
+document.querySelector("#btn1").onclick = () => {
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState == 4) {
+        	// 서버의 실행이 정상적인지 여부에 따라 처리를 분리하기
+        	if (xhr.status == 200) {
+        	  // a와 b 값을 정상적으로 입력했을 때 서버는 정상적으로 실행한다. 
+        	  r.value = xhr.responseText;
+        	  
+        	} else {
+        	  // a 또는 b 값이 숫자가 아닐 때 서버는 오류를 응답한다.
+        	  // HTTP 응답 상태코드 값은 500이 될 것이다.
+        	  // 
+        	  alert("실행 오류 입니다!");
+        	  
+        	  // 오류 안내창을 닫으면 reset 버튼을 자동으로 누르게 해보자!
+        	  // => reset 버튼에 대해 click 이벤트를 프로그램에서 발생시킨다.
+        	  
+        	  // 먼저 클릭 이벤트 객체를 만든다.
+        	  var e = new MouseEvent("click");
+        	  
+        	  // 그리고 클릭 이벤트 객체를 reset 버튼에 보낸다.
+        	  // => 그러면 reset 버튼에 대해 click 이벤트가 발생된다.
+        	  document.querySelector("#btn2").dispatchEvent(e);
+        	}
+        }
+    };
+    
+    xhr.open("GET", "test6?a=" + a.value + "&b=" + b.value, true);
+    xhr.send();
+    console.log("send() 리턴함.");
+};
+</pre>
+<br>
+<br>
+<strong>AJAX - 응용 I : HTML 일부분 가져오기 + 익명함수 즉시 호출</strong>
+<br>
+<br>
+<pre>
+<!-- <div id="footer"></div>
+<script>
+"use strict"
+// 웹페이지를 만들 때 AJAX를 이용하여 여러 조각을 붙여서 만들 수 있다.
+//       
+var header = document.querySelector("#header"),
+    footer = document.querySelector("#footer");
+
+(function() { // 머리말 가져오기
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = () => {
+      if (xhr.readyState == 4) {
+          if (xhr.status == 200) {
+              header.innerHTML = xhr.responseText;
+          }
+      }
+  };
+  xhr.open("GET", "test5.jsp", true);
+  xhr.send();
+})();
+
+(function() { // 꼬리말 가져오기
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = () => {
+      if (xhr.readyState == 4) {
+          if (xhr.status == 200) {
+              footer.innerHTML = xhr.responseText;
+          }
+      }
+  };
+  xhr.open("GET", "footer.html", true);
+  xhr.send();
+}()); -->
+</pre>
+<br>
+<br>
+<strong>AJAX - 응용 II : 서버에서 JSON 데이터 받아오기</strong>
+<br>
+<br>
+<pre>
+  // 웹페이지를 만들 때 AJAX를 이용하여 여러 조각을 붙여서 만들 수 있다.
+  //       
+  var tbody = document.querySelector("tbody");
+  
+  document.querySelector("#btn1").onclick = () => {
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = () => {
+          if (xhr.readyState == 4) {
+              if (xhr.status == 200) {
+  
+                  console.log(xhr.responseText);
+  
+                  // 서버에서 받은 JSON 문자열을 자바스크립트 객체로 변환한다.
+                  var arr = JSON.parse(xhr.responseText);
+                  console.log(arr);
+                  
+                  // 배열을 반복하여 값을 꺼낸다.
+                  for (var b of arr) {
+                    // tr 태그를 만든다.
+                    var tr = document.createElement("tr");
+                    
+                    // tr 태그에 게시물 데이터를 넣는다.
+                    tr.innerHTML = "<td>" + b.no + "</td>" + 
+                       "<td>" + b.title + "</td>" + 
+                       "<td>" + b.writer + "</td>" +
+                       "<td>" + b.viewCnt + "</td>";
+                    
+                    // tr 태그를 tbody의 자식 태그로 붙인다.
+                    tbody.appendChild(tr);
+                  }
+              }
+          }
+      };
+      xhr.open("GET", "test6.jsp", true);
+      xhr.send();
+  };
+
+/////////////
+"test6.jsp"
+
+<%@ page language="java" contentType="text/plain; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<% response.setHeader("Access-Control-Allow-Origin", "*");%>
+[
+  {"no":1, "title":"제목입니다1", "writer":"홍길동", "viewCnt":100},
+  {"no":2, "title":"제목입니다2", "writer":"임꺽정", "viewCnt":200},
+  {"no":3, "title":"제목입니다3", "writer":"유관순", "viewCnt":300},
+  {"no":4, "title":"제목입니다4", "writer":"안중근", "viewCnt":400},
+  {"no":5, "title":"제목입니다5", "writer":"윤봉길", "viewCnt":500}
+]
+
+</pre>
+<br>
+<br>
 </section>
 </main>
 </div>
