@@ -4726,6 +4726,7 @@ method chaining
  이러한 프로그래밍 패턴을 메서드 체이닝(Method Chaining) 이라 부릅니다.
 
 -> 함수가 끝날때 마다 return this로 다시 리턴을 해줘서 반복해서 사용할 수 있게 만든다
+직관성이 좋고 간단하다 하지만 디버깅 하기 어렵다
 </pre>
 <br>
 <br>
@@ -5184,6 +5185,178 @@ function jQuery(selector) {
 }
 
 var $ = jQuery;
+</pre>
+<br>
+<hr>
+<br>
+<h1>2022-12-20</h1>
+<br>
+<br>
+<strong>메서드와 파라미터</strong>
+<br>
+<br>
+<pre>
+  function hello(name) {
+    console.log(name + "님 환영합니다");
+
+};
+
+hello("홍길동");
+ㄴ> 메서드(파라미터)
+예) ++a;
+연산자
+hello,++
+
+함수정의 = 연산정의
+
+
+<strong>메서드와 객체</strong>
+
+
+function Greeting(n) {
+  this.name = n;  // 여기서 this는 
+}
+  Greeting.prototype.hello = function (type) {
+    if (type == '높임말'){  
+    console.log(this.name+"님 환영합니다/");
+    }else {
+      console.log(this.name+"반갑다");
+    }
+  }
+}
+
+new를 통해 생성된 객체는 해당 함수의 주소를 리턴한다
+
+obj.hello("평어");
+주데이터(피연산자)
+-obj: 사용할 데이터
+연산자
+-hello: 메서드 ->작업수행
+보조데이터(피연산자)
+-("평어"): 메서드가 작업을 수행하기위한 보조 데이터
+
+jQuery
+-cross-browser를 지원 해서 다른 브라우저에서도 똑같은 
+기능을 구현할 수 있도록 해준다
+
+min
+-js파일을 주석,함수이름등, 줄일수 있는것을 전부 줄여 파일 용량을 줄여준다
+한번 min한 파일은 함수 이름이 a 등으로 한글자로 바뀌므로 다시 원본처럼 되
+돌릴수 없다 google에 (javascript minify) 를 검색하면 줄여주는 사이트가 나
+온다 하지만 보통 기업들에서 min파일과 원본 파일을 따로 올려두므로 필요한
+목적에 맞게 사용하면 된다
+</pre>
+<br>
+<br>
+<pre>jQuery 만들기</pre>
+<br>
+<br>
+<pre>
+
+function jQuery(selector) {      // jQuery생성하여 ElementBox로 초기화
+  return new ElementBox(selector);    
+}
+
+
+function ElementBox(selector) {
+  this.el = []; 
+
+  if (selector.startsWith("<")) {     // this에 첫번째에 엘리먼트를 생성해 추가 
+    this.el[0] = document.createElement(selector.substring(1, selector.length - 1));
+
+  } else {
+    let nodeList = document.querySelectorAll(selector);  
+    for (let e of nodeList) {
+      this.el.push(e);
+    }
+  }
+}
+
+variable
+-각 반복에 서로 다른 속성값이 variable에 할당됩니다.
+
+*for... in
+
+쉽게 객체의 속성을 확인(콘솔이나 다른 방법으로 출력)할 수 있기 때문에실질적으로
+디버깅을 위해 사용될 수 있다. 배열이 데이터의 저장에 있어서는 더 실용적이지만, 
+키-값 쌍이 선호되는 데이터의 경우(속성이 "key"의 역할을 함)특정 값을 가진 키
+가 있는지 확인하려는 경우에 for...in을 사용할 수 있습니다.
+
+
+
+iterable
+-반복되는 열거가능(enumerable)한 속성이 있는 객체.
+
+*for... of
+
+명령문은 반복가능한 객체 (Array, Map (en-US), Set, String, TypedArray, 
+arguments 객체 등을 포함)에 대해서 반복하고 각 개별 속성값에 대해 실행
+되는 문이 있는 사용자 정의 반복 후크를 호출하는 루프를 생성합니다.
+
+
+
+
+startsWith()
+-메서드는 어떤 문자열이 특정 문자로 시작하는지 확인하여
+ 결과를 true 혹은 false로 반환합니다
+
+
+
+
+1. jQuery생성
+  
+1) ajax()
+2) getJSON()
+3) post()
+
+  예) {
+    jQuery.post = function(url, data,success) {
+      jQuery.ajax({
+        data: data,
+        url: url,
+        method: "POST",
+        success: success
+      });
+    };
+  }
+
+  위와 같은 함수는 jQuery에 등록된 함수이고 prototype에
+  등록된 함수를 사용가능 
+  
+  
+
+  
+2. jQuery안에 ElementBox.prototype에 함수를 등록
+
+1) append
+2) appendTo
+3) html
+
+  예) {
+    ElementBox.prototype.append = function(childBox) {
+      for (let parent of this.el) {
+    
+        for (let child of childBox.el) {
+          parent.appendChild(child.cloneNode(true));
+        }
+      }
+    
+      for (let child of childBox.el) {
+        if (child.parentElement != null || child.parentElement != undefined) {
+          child.parentElement.removeChild(child);
+        }
+      }
+    
+      return this;
+    };
+  }
+
+
+  jQuery를 생성하고 그 안에서 사용할 수 있는 함수를 정의
+
+
+
+
 </pre>
 <br>
 <br>
