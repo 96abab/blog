@@ -5354,12 +5354,115 @@ startsWith()
 
   jQuery를 생성하고 그 안에서 사용할 수 있는 함수를 정의
 
+</pre>
+<br>
+<hr>
+<br>
+<h1>2022-12-21</h1>
+<br>
+<br>
+<pre>
+<strong>CSS다루는법</strong>
+1. HTML에 style 태그로 입력해주는 방법
+2. css파일에 설정후 HTML에 link 태그로 연결시켜주는 방법 
+3. 부트스트랩에서 스타일을 가져와 활용한다 
+4. jQuery에서 css와 jquery메소드를 가져와서 적용
 
 
+
+
+*CDN 방식으로 라이브러리 파일 지정
+
+방법
+1. 브라우저에서 서버1로 요청을 하면 1.html을 받아 cache에 일시적으로 저장한다
+2. google에 요청하면 jquery.js를 받아 동일하게 저장
+3. 서버2로 요청하여 2.html 을 동일하게 저장
+
+
+장점
+위 과정에서 동일한 파일이 있을 경우 다시 저장하지 않아 페이지 로딩 시간이 단축된다   
+
+단점
+의존 라이브러리가 외부에 있어 통제가 불가능하여 해킹방지 코드 삽입 할수 없다 그리고
+서버가 다운 되었을때 대비가 부족하다 그렇기 때문에 정부기관이나 금융기업들은 CDN방식
+사용하지 않는다 
+
+
+
+*외부 라이브러리 관리 
+
+방법
+웹페이지 루트 폴더로 접근해서 
+npm init
+npm install 라이브러리 --save 등록
+npm install 라이브러리-ui --save
+
+npm install bootstrap@5.2.3 --save
+
+
+각 서버마다 html과 관련된 jquery파일을 같이 보관한다 만약 브라우저에서 요청을 하면
+이미 있는 파일 이라해도 서버마다 파일을 따로 받아 저장
+
+
+장점
+관리와 보안을 쉽게할 수 있다
+
+단점
+네트워크 오버헤드발생 
+
+
+
+
+<!-- 
+  <script>
+    // 최근 방식: recommanded
+  $(() => {
+    console.log("ready 호출됨11");
+  });
+
+    // 예전 방식: deprecated
+  $(document).ready(() => {
+    console.log("ready 호출됨22");
+  });
+
+  $(() => {
+    console.log("ready 호출됨33");
+  });
+
+  window.onload = function() {
+    console.log("load 이벤트 발생");
+  };
+
+  
+  // ready()와 onload로 등록한 함수는 jquery의 버전에 따라 실행 순서가 다르다
+  // 따라서 한가지 방법을 사용하는것을 추천한다
+  // 또한 요즘은 script를 아래 두는 방식을 많이 쓴다 이렇게 쓰면 문제가 발생하지 않는다
+
+</script>
+</head>
+<body>
+<h1>load 이벤트- $(document).ready()</h1>
+
+<script>
+  console.log("11111");
+</script>
+
+<script src="exam08.js"></script>
+
+<script>
+  console.log("2222");
+</script> 
+-->
 
 </pre>
 <br>
 <br>
+<strong>*해커톤</strong>
+주제: 공공데이터를 이용한 웹서비스 개발
+기간: 2022-12-21 16:30 ~ 2022-12-22 16:00 
+발표: 2022-12-22-16:00~18:00
+발표내용: 프로젝트 소개 및 시연
+
 </section>
 </main>
 </div>
