@@ -5462,7 +5462,406 @@ npm install bootstrap@5.2.3 --save
 기간: 2022-12-21 16:30 ~ 2022-12-22 16:00 <br>
 발표: 2022-12-22-16:00~18:00  <br>
 발표내용: 프로젝트 소개 및 시연 <br>
+<br>
+<hr>
+<br>
+<h1>2022-12-23</h1>
+<br>
+<br>
+<strong>Promise</strong>
+<br>
+<br>
+<pre>
 
+비동기 작업을 편리하게 다루는 문법
+비동기 작업이 여러개 있을 때 효과가 좋다
+
+
+<strong>실행 흐름</strong> 
+
+
+new Promise(executor)
+
+
+1. executor 실행
+
+2. 비동기작업실행(ajax)
+  - ajax 프로그래밍
+    -XMLHttpRequest()
+    -$.ajax
+
+3. 리턴
+
+4. promise 생성
+
+5. promise에게 작업상태 통지
+
+6. 정상이라면 resolve(정상처리) onFulfilled 함수 를
+   아니라면 reject(처리실패) onrejected
+
+   
+
+
+ then(onFulfilled, onRejected)
+
+new Promise(executor)
+
+1. resolve()
+2. promise1 -> onFulfilled() call
+3. Promise2 -> 
+
+
+<strong>요청과 node.js 처리 과정</strong>
+
+
+1. webbrowser가 nodejs에 요청
+2. nodejs가 app.js에 등록된 함수를 호출
+3. app.js가 함수를 return 한다 
+
+
+<strong>Promise - 생성자와 작업 함수(executor)</strong>
+
+
+HTML
+
+///////////////////////////////////
+
+// new Promise(executor)
+// - executor: 생성자가 실행시킬 함수다. 
+// - executor의 호출이 완료되어야만 Promise 객체를 리턴한다.
+//
+// Promise 객체
+// - executor가 실행한 비동기 작업 결과를 통지 받는다.  
+// - 통지 결과에 따라 약속된 다음 작업을 실행한다.
+// - 정상적으로 이행(fulfill)했다고 통지 받으면, 
+//   funfill 상태일 때 호출하기로 약속한 함수를 실행한다.
+// - 어떤 이유로 작업 수행을 거절(reject)했다는 통지를 받으면, 
+//   reject 상태일 때 호출하기로 약속한 함수를 실행한다.
+//
+let executor = (resolve, reject) => {
+  (resolve, reject) => {                // resolve() 작업결과를 처리하는 함수
+  // 시간이 오래 걸리는 동기 작업 수행  // reject() 예외처리하는 함수 
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "http://localhost:3000/hello", false); 
+  xhr.send();
+  console.log(xhr.responseText);
+};
+}
+const promise = new Promise();
+// Promise 생성자의 executor 호출이 끝날 때까지 리턴하지 않는다.
+
+console.log("끝!");
+
+// 결론!
+// - Promise 생성자에 전달한 executor의 호출이 끝날 때까지 Promise 객체를 리턴하지 않는다.
+// - 따라서 executor 에서 작업 시간이 올래 걸리는 동기 작업을 수행하는 것은 바람직하지 않다. 
+// - 즉 executor에 비동기 작업이 없다면 Promise를 사용하는 이점이 없다.
+// 
+
+///////////////////////
+app.js
+
+
+app.get('/hello', (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Content-Type', 'text/plain; charset=UTF-8');
+
+  setTimeout(()=> {
+    res.send("Hello!");
+  }, 3000);
+}); 
+
+
+<strong>Promise - 비동기 작업을 완료한 후 다음 작업 실행하기</strong>
+
+
+function onFulfilled() {      // on 뒤에 함수를 붙이는이유 이벤트 함수에 붙인다 
+  console.log("fulfilled!")   //  fulfilled : 이행하다,완수하다
+}
+
+const promise = new Promise((resolve, reject) => {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4) {
+      console.log(xhr.responseText);
+      resolve(); // 약속된 작업을 처리했다고 통지한다.
+    }
+  };
+  xhr.open("GET", "http://localhost:3000/hello", true); 
+  xhr.send();
+});
+
+// 작업 완료를 통보 받았을 때 호출될 함수를 등록한다.
+// resolve로 통지했을 때 호출
+promise.then(onFulfilled);
+
+console.log("끝!");
+
+
+<strong>Promise - then()의 리턴 값</strong>
+
+
+const promise1 = new Promise((resolve, reject) => {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4) {
+      console.log(xhr.responseText);
+      
+      resolve();
+    }
+  };
+  xhr.open("GET", "http://localhost:3000/hello", true); 
+  xhr.send();
+});
+
+console.log("1111");
+
+// then()
+// - 작업을 정상적으로 수행했다는 통보가 왔을 때 호출될 함수를 등록한다.
+// - 새로운 Promise 객체를 리턴한다.
+// - then()에 등록된 함수의 실행이 정상적으로 끝나면 새로 리턴한 Promise 객체에 통보할 것이다. 
+var promise2 = promise1.then(() => console.log("fulfilled...1"));
+
+console.log("2222");
+
+// 다음과 같이 promise2.then()을 사용하여 작업 함수를 등록해두면,
+// promise2의 작업(executor)이 끝나면 자동으로 호출될 것이다. 
+// 즉, promise.then()으로 등록한 작업 함수의 실행이 끝난 후 다음 순서로 호출될 것이다.
+promise2.then(() => console.log("fulfilled...2"));
+
+console.log("끝!");
+
+
+<strong>romise - Method Chaining</strong> 
+
+
+new Promise((resolve, reject) => {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4) {
+      console.log(xhr.responseText);
+      
+      resolve(); // 작업이 완료되었다고 통지한다.
+    }
+  };
+  xhr.open("GET", "http://localhost:3000/hello", true); 
+  xhr.send();
+})
+.then(() => console.log("fulfilled...1"))
+.then(() => console.log("fulfilled...2")) 
+.then(() => console.log("fulfilled...3"))
+.then(() => console.log("fulfilled...4"));
+
+console.log("끝!");
+
+
+// 비동기 작업이 끝난후 연결된 순서대로 호출된가 (chain of Responsibility)
+// ajax요청 결과가 오면 실행될 함수를 순서대로 대기시켜 놓는다
+
+
+<strong>Promise - 예외처리: catch(onRejection)</strong>
+
+
+const promise = new Promise((resolve, reject) => {
+  throw '오류 발생!!!';
+})
+.catch(() => console.log("rejected!"));
+// ==> then(undefined, onRejection) 과 동일하다.
+
+console.log("끝!");
+
+
+// 중복 발생시
+// promise 오류에 대해 여러 개의 reject 핸들러가 등록되어 있으면 
+// 순차적으로 모두 호출된다.
+promise.then(undefined, 
+             () => console.log("rejected!"));
+promise.catch(() => console.log("catched!"));
+
+
+/////////////////
+
+
+비동기 방식중 예외처리법
+
+const promise = new Promise((resolve, reject) => {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4) {
+      try {
+        // 비동기 함수에서 코드를 실행할 때
+        // 예외가 발생할 수 있는 코드는 try 블록 안에 둬라
+        // 
+        console.log(xhr.responseText);
+        document.getElementById("#btn").onclick = () => {};
+        
+        // throw '오류 발생!';
+
+      } catch(err) {
+        // 예외가 발생했을 때 reject()를 호출하여
+        // 오류가 났음을 통지하라
+        reject(err);
+      }
+    }
+  };
+  xhr.open("GET", "http://localhost:3000/hello", true); 
+  xhr.send();
+})
+.catch((reason) => console.log("catched!" + reason));
+
+console.log("끝!");
+
+// executor에서 비동기 작업을 실행하는 중에 오류가 발생했을 때,
+// 명시적으로 reject() 호출하여 오류가 발생했음을 통지해야 한다.
+
+
+
+////////////////////
+
+
+<strong>Promise - then() 핸들러에서 일반 값을 리턴할 때</strong>
+
+
+const promise = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('{"title": "test..ok!", "content": "내용입니다!"}');
+  }, 3000);
+})
+.then((text) => {
+  console.log(text)
+  // 핸들러에서 리턴한 값은 
+  // 다음 핸들러에게 그대로 전달된다.
+  return JSON.parse(text); 
+})
+.then((obj) => console.log(obj));
+
+console.log("끝!");
+
+
+
+<strong>Promise - then() 핸들러에서 Promise 객체를 리턴할 때</strong>
+
+
+const promise = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('{"title": "test..ok!", "content": "내용입니다!"}');
+  }, 3000);
+})
+.then((text) => {
+  console.log(text)
+  // Promise 객체를 리턴하면,
+  // Promise의 executor를 실행한 후
+  // executor에서 resolve()로 넘겨준 값이
+  // 다음 핸들러에게 전달된다.
+  return new Promise((resolve, reject) => {
+    console.log("Deserialization: ");
+    resolve(JSON.parse(text));
+  }); 
+})
+.then((obj) => console.log(obj));
+
+console.log("끝!");
+
+
+<strong>XMLHttpRequest 사용하기</strong>
+
+
+*기본적인 사용법
+
+
+var tbody = document.querySelector("tbody");
+
+document.querySelector("#btn1").onclick = () => {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+                var arr = JSON.parse(xhr.responseText);
+                console.log(arr);
+                for (var b of arr) {
+                	var tr = document.createElement("tr");
+                	tr.innerHTML = "<td>" + b.no + "</td>" + 
+                	   "<td>" + b.title + "</td>" + 
+                	   "<td>" + b.writer + "</td>" +
+                	   "<td>" + b.viewCnt + "</td>";
+                	tbody.appendChild(tr);
+            }
+        }
+    }
+    xhr.open("GET", "http://localhost:3000/boards", true);
+    xhr.send();
+};
+
+
+////////////////////////
+
+promise 활용 text 데이터를 넘겨줌
+
+
+var tbody = document.querySelector("tbody");
+
+let promise = fetch("http://localhost:3000/boards");
+let promise2 = promise.then((response) => {
+    return response.text();  // 서버에서 받은 정보를 text로 변환( 다른 데이터로도 변환 가능 (ex: json))
+});
+promise2.then((text) => {
+    var arr = JSON.parse(text);
+     for (var b of arr) {
+                	var tr = document.createElement("tr");
+                	tr.innerHTML = "<td>" + b.no + "</td>" + 
+                	   "<td>" + b.title + "</td>" + 
+                	   "<td>" + b.writer + "</td>" +
+                	   "<td>" + b.viewCnt + "</td>";
+                	tbody.appendChild(tr);
+            }
+});
+
+//////////////////////
+
+promise사용하여 json 데이터를 넘겨줌 
+
+
+var tbody = document.querySelector("tbody");
+
+let promise = fetch("http://localhost:3000/boards");
+let promise2 = promise.then((response) => {
+    return response.json();  // 서버에서 받은 정보를 text로 변환( 다른 데이터로도 변환 가능 (ex: json))
+});
+promise2.then((arr) => {
+     for (var b of arr) {
+                	var tr = document.createElement("tr");
+                	tr.innerHTML = "<td>" + b.no + "</td>" + 
+                	   "<td>" + b.title + "</td>" + 
+                	   "<td>" + b.writer + "</td>" +
+                	   "<td>" + b.viewCnt + "</td>";
+                	tbody.appendChild(tr);
+            }
+});
+
+
+/////////////////////////
+
+promise chaining 을 이용한 비동기 처리 
+
+
+var tbody = document.querySelector("tbody");
+
+fetch("http://localhost:3000/boards")
+.then((response) => {
+    return response.json(); 
+})
+.then((arr) => {
+     for (var b of arr) {
+                	var tr = document.createElement("tr");
+                	tr.innerHTML = "<td>" + b.no + "</td>" + 
+                	   "<td>" + b.title + "</td>" + 
+                	   "<td>" + b.writer + "</td>" +
+                	   "<td>" + b.viewCnt + "</td>";
+                	tbody.appendChild(tr);
+            }
+});
+
+
+</pre>
 </section>
 </main>
 </div>
