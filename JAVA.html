@@ -49,6 +49,266 @@
 <br>
 <br>
 <pre>
+<strong>web Application Architecture</strong>
+
+
+client (web browser)
+HTML
+CSS
+JAVAscript
++
+jquery
+bootstrap
++
+react
+
+-서버에 있는 자원을 받아 실행
+
+
+web server 
+
+HTML,CSS,javascript등 읽는다
+-정적자원 :실행하지 않고 그대로 읽어 리턴해 주는것(static resource)
+
+
+<strong>springboot 기술스택</strong>
+
+
+java로 만들어졋다 (JVM - interpreter,player,runtime Engine) -> tomcat server -> jakartaEE API(javaEEApi) -> spring Framework -> java APP , mybatis , JSP , thymeleaf
+
+JDK
+
+<strong>java설치 준비</strong>
+
+1. java.oracle에서  x64 MSI Installer 다운
+2. 환경변수 설정
+JAVA_HOME -> JDK 설치 폴더
+PATH -> JDK/bin 폴더경로 추가
+
+
+setx JAVA_HOME JDK설치폴더 /m
+setx PATH "JDK/bin;%PATH%"
+
+/usr/libexec/java_home -V
+
+
+gradle.org
+
+
+
+*JAVA_HOME
+1. JDK가 설치된 폴더 경로
+2. java App 이 JDK를 찾을떄 이 환경변수를 이용한다
+
+
+*PATH
+-> 실행프로그램이 있는 폴더 경로
+-> CLI에서 프로그램 이름으로 
+바로 실행하고 싶을 때  
+
+빌드 도구 설치 및 설정
+1. 프로잭트폴더를 준비
+2. JDK 를 이용하여 컴파일 신청, 테스트 수행
+3. 아카이브 (archive) 파일을 생성 
+배포파일 (.jar,)
+
+
+*인터프리터 방식 
+
+node hello.js
+
+
+*컴파일 방식
+
+gcc -o hello.exe hello.c
+
+실행 hello.exe or hello
+
+
+*하이브리드 방식 
+
+
+컴파일 방식보다 나은 이유
+
+1. 동일한 바이트코드를 생성하여 OS마다 컴파일 할 필요가 없다
+
+2. OS용 JVM이 설치되어 있다면 실행할 수 있다
+
+3. 컴파일 과정에서 문법의 오류를 모두 찾아낸다 
+(실행마다 문법검사를 하는 순수 인터프리터방식 보다 실행속도가 빠르다)
+
+4. 완전 기계어는 아니지만 기계어에 가까운 언어로 
+   변환된 명령을 실행하기 때문에 소스에 작성된 
+   명령을 실행하는 것보다 빠르다
+
+
+
+Hello.java
+
+-컴파일
+
+문법검사 수행 -> 문법오류를 모두 찾아냄
+최적화 -> 실행 성능 향상
+
+
+<strong>LLVM 컴파일</strong>
+low level virtural Machine
+
+1. LLVM 이전
+
+ 
+hello.c -> C compiler -> 기계어 -> windows or macOS or Linux
+
+컴파일러를 만드는 입장에서 c 언어를 해석하는 부분은 동일하다
+=> 중복개발 
+
+
+서로 다른언어 일때 컴파일러가 windows 에 맞는 기계어로 바꾸는
+부분은 동일
+=> 중복개발
+
+
+*기존방식의 문제점
+
+compiler제작자는 변환시킬 언어들과 변환후 적용할 기계어 또한
+알아야한다는 부담
+
+
+2. LLVM 이후 
+LLVM 방식을 사용하는 이유
+새 프로그래밍 언어와 컴파일러를 만들기 쉽다
+다양한 언어를 쉽게 중간어로 바꾸고 다시 기계어로 변환시킬 수 있다
+
+
+1단계 컴파일
+
+-각 언어들을 중간어로 바꾸면 된다 컴파일러 제작자는 
+한개의 가상기계어만 다루면 된다 
+
+
+2단계 컴파일
+
+-중간어를 기계어로 바꾸기만 하면 된다 
+
+
+<strong>JAVA 와 LLVM</strong>
+
+
+java -> .java
+kotlin -> .kt
+scala -> .scala  
+groovy -> groovy.
+자바 호환 언어
+
+=> .class (bytcode)
+
+=> 기계어
+
+
+
+<strong>JDK,JRE,JVM</strong>
+
+.class -> JVM -> 실행
+
+
+JRE (java Runtime Environment)
+javalibrary
+
+
+JDK (java development kit)
+개발도구(컴파일러,디버거등)
+
+
+<strong>java EE, java SE, java ME</strong>
+
+
+java EE (Enterprise Edition) -> 기업용 Applucation 제작에 필요한 도구
+
+java SE (Standard Edition) -> java.app 제작 필수 도구
+-JDK, JRE, server 용 JRE
+
+java ME (Micri Edition) -> 임베디드 app 제작에 필요한 도구
+
+
+<strong>Eclipse IDE</strong>
+
+
+개발 플랫폼 + plug-in => 개발도구확장
+
+
+
+<strong>java project 폴더 준비</strong>
+
+
+1. 프로젝트 폴더 생성
+
+c:/users/bitcamp/git/bitcamp-ncp/boot-project
+
+
+2. 'boot-project/' 폴더를 java프로젝트 폴더로 초기화 
+
+$gradle init
+
+패키지는 보통 회사.프로잭트명 으로한다
+
+kr.co.bitcamp.bootapp
+
+
+3. 기본 예제 프로그램 실행
+
+gradle -q run  (설명 빼고 결과만 실행)
+
+
+프로젝트 폴더 boot-app
+
+
+app 하위 프로젝트. 메인프로젝트
+src/main/java   -> java소스파일을 두는 폴더
+src/main/resources -> 기타 파일을 두는 폴더
+src/test/java -> 단위테스트를 수행하는 자바소스파일
+src/test/resources -> 단위테스트 관련 기타 파일
+
+app
+build.gradle -> build script파일 (빌드설정정보)
+build -> 빌드로 생성한 파일 및 디렉토리를 두는 폴더 
+
+
+boot-app
+setting.gradle -> 프로그램 설정정보
+gradlew,gradlew.bat -> gradle 도구 설치 명령 파일 
+                      (gradle 도구가 설치되지 않았을때 사용)
+gradle/ -> gradlew,gradlew.bat 가 사용하는 파일이 들어있다
+.gradle/ -> gradle 도구들  
+
+
+<strong>springboot 프로젝트 만들기</strong>
+
+
+spring.io방문 -> project -> springboot 메뉴 -> spring initializr 클릭 
+add dependencies
+
+1. spring boot dev tool     -> 자동 로딩
+2. spring configuration processor  -> project
+3. spring web
+
+
+<strong>JAVA에서 Spring Boot 까지</strong>
+
+
+Spring Boot -> Tomcat server (networking API, thrend prog.) 
++ spring framework(spring webVMC,spring IOC)+ mybatis+(JSBC API) + SQL)
+
+
+-> servlet/JSP, JSBC API
+
+-> java I/O API, collection API
+
+-> java 기본 문법 (built-in class)
+
+-객체지향문법
+-메서드/클레스
+-연산자/제어문/반복문
+-변수/리터럴
 
 </pre>
 </section>
