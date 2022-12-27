@@ -311,6 +311,160 @@ Spring Boot -> Tomcat server (networking API, thrend prog.)
 -변수/리터럴
 
 </pre>
+<br>
+<hr>
+<br>
+<h1>2022-12-27</h1>
+<br>
+<br>
+<pre>
+<strong>Maven 빌드 도구의 표준 프로젝트 디렉토리 구조</strong>
+
+~/git/bitcamp-ncp/      //git repo.
+~/git/bitcamp-ncp/boot-app/ // project 폴더
+
+
+settings.gradle       // gradle 빌드 보조그크립트 파일
+gradle/       // gradle 프로그램을 local에 설치해주는 도우미 프로그램
+gradlew.bat     // gradle/ 폴더에 들어있는 설치프로그램을 실행하여 gradle을 설치하고
+                // 설치한 gradle을 사용해 gradle 명령어를 실행하는 shell 프로그램
+gradlew     // unix/linux/winOS 용
+.gradle/ gradle 도구가 작업하는 동안 사용하는 임시 폴더
+
+
+/app/     // sub project 
+/app/src/     //소스폴더
+/app/build.gradle/      gradle 빌드 스크립트 파일
+
+
+/////////
+
+<strong>App.java 에서 @명령어 로 import 가 자동 완성 안됬을 때</strong>
+
+
+1. boot-app (프로젝트 파일에 .gradle 이 repo. 등 다른 곳에 있는지
+확인 하여야한다)
+
+2. .gradle이 잘못된 경로에 있을 경우 지웟다가 gradle -q run 을 
+정확한 경로에 지정해줘야 한다
+
+3. 이게 경우가 아닐시에는 해당 기능을 하는 서포트 프로그램이 작동하는지 확인
+(java일 경우 language support of java(TM) by Red Hat  있는지 확인)
+
+
+<strong>Eclipse IDE 와 프로젝트</strong>
+
+
+
+<strong>Gradle 빌드 도구</strong>
+
+Gradle
+default tasks (기본 실행작업)
+
+.init
+.project
+.wrapper
+.tasks
+
+gradle tasks --all
+현재할 수 있는 모든 작업
+
+
+build.gradle
+plug-in {           //  build script 빌드도구의 설정정보
+  id '플러그인 ID'
+
+}
+
+
+eclipse 
+
+.eclipse 로 아래 있는 모든것을 한번에 생성 
+
+.eclipseProject -> .project 파일 생성
+.eclipseClasspath -> .classpath 생성
+.eclipseJdt -> .settings 생성 (지울시 파일 껍때기가 남음)
+
+
+*eclipse 에러날시에  clean으로 지우고 다시 설치하는게 빠를수도 있다
+
+
+
+<strong>.java 와.class 컴파일</strong>
+
+
+Test1.java  (source)
+
+class A {}  
+class B {}
+class C {}
+
+javac Test1.java 컴파일시 class 만큼 bytcode 생성 
+위상황에는 3개의 클래스 생성
+
+
+A.java
+class A {}  
+
+B.java
+class B {}
+
+유지보수가 쉽도록 하나에 하나씩만 생성
+
+
+<strong>소스파일과 .class파일 분리</strong>
+배포 파일을 추출하는 등 관리가 쉽도록 분리
+
+
+src/A.java
+/B.java
+/C.java
+
+bin//A.java
+/B.java
+/C.java
+
+
+javac -d bin src/A.java src/B.java  //  해당 자바파일 컴파일
+javac -d bin src/*.java    // 모든 자바 컴파일
+// 파일이 없으면 만들어서 생성 (bin)
+// src는 파일 경로 안에 있는 A.java 를 컴파일 해서 bin에 넣는다
+
+
+<strong>소스파일과 디렉토리</strong>
+여러개의 소스파일을 관리하기 쉽하기 위해 하위디렉토리에 분류
+-하지만 src파일에 여러개의 파일안에 소스가 존재해도 bin폴더에 한번에 컴파일한다
+
+
+<strong>소스파일과 패키지</strong>  
+클래스 블록을 유지 보수를 쉽게 하기 위해 만든 문법
+
+src/A.java
+
+src/B.java
+package p1;
+class B {}
+
+src/p1/*.java
+
+package 하면 컴파일시 p1 파일안에 B.class가 생긴다
+소스파일을 찾기 쉽도록 소스파일도 package 이름과 같
+은 폴더에 둔다
+
+
+package는 여러개를 안에 넣을 수 있다
+
+예)
+package p1.px;   // package 를 안에 생성시 . 을 붙여준다
+class B {}
+
+src/p1/px/*.java 
+
+와같이 소스파일과 package파일의 경로를 똑같이 맞춰준다  
+
+<strong></strong>
+
+</pre>
 </section>
 </main>
 </div>
