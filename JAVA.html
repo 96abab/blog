@@ -352,9 +352,6 @@ gradlew     // unix/linux/winOS 용
 (java일 경우 language support of java(TM) by Red Hat  있는지 확인)
 
 
-<strong>Eclipse IDE 와 프로젝트</strong>
-
-
 
 <strong>Gradle 빌드 도구</strong>
 
@@ -699,12 +696,516 @@ true(1) false(0)
 
 부동소수점 -> IEEE-754 명세서 
 
+
 12.375 -> 2진수 -> 전기신호 -> 메모리저장
 
 2진수 
 -> 1100.011
 -> 1.100011 X 10**3
 -.100011(가수부), 3(지수부)
+
+
+</pre>
+<br>
+<hr>
+<br>
+<h1>2022-12-29</h1>
+<br>
+<br>
+<pre>
+<strong>변수선언(delaration)</strong>
+값을 담는 메모리를 준비시키는 문법
+
+
+자바기본데이터타입 (primitive Data Type)
+데이터타입 변수명;
+
+정수 
+-byte(1byte)
+-short(2byte)
+-int(4byte)
+-long(8byte)
+
+부동소수점
+-float(4byte)
+-double(8byte)
+
+논리
+-boolean (4/1)
+
+문자
+-char(2byte)
+
+
+reference type
+
+그외
+-클래스
+
+
+*활용*
+
+
+int a(storage location);
+
+a = 100;
+
+=
+-> assignment operator(할당연산자,배당연산자,대입연산자)
+
+
+<strong>정수 변수</strong>
+int a(4byte 정수 메모리) = 100(4byte 정수 리터럴);
+long b(8byte 정수 메모리) = 100(4byte 정수 리터럴);
+
+// 예외조건: 리터럴 값이 메모리보다 크기가 크더라도 담을 수
+있다면 허용한다! 
+->
+short c(2byte 정수 메모리) = 100(4byte 정수 리터럴); 
+byte d(1byte 정수 메모리) = 100(4byte 정수 리터럴);
+
+
+<strong>char 변수</strong>
+
+
+char c;
+
+c (범위: 0~65535)
+=> 문자코드(ucs2=UTF-16) 를 저장하는 2byte 메모리
+c = 65;
+
+
+System.out.println(c);
+
+1. 현재 프로그램에서 사용하는 폰트 파일을 찾는다 => D2coding
+2. D2coding 폰트 파일에서 65에 해당하는 문자를 찾는다
+3. 폰트파일에서 읽은 A문자그림을 출력한다 
+
+결과 
+=> A
+
+
+
+short s;
+
+s (범위: -32768~ +32767)
+s = 65;
+System.out.println(c);
+결과 
+=> 65
+
+
+<strong> '' 연산자</strong>
+
+
+'A' -> return -> 65 
+A문자에 대한 ucs2 코드값
+
+char c = 'A';
+
+
+
+
+/////////////////////////
+
+public static void main(String[] args) {
+  // 한 번에 한 개씩 변수를 선언할 수 있고,
+  int i1;
+  int i2;
+  int i3;
+  
+  // 콤마(,)를 사용하여 여러 개의 변수를 한 번에 선언할 수 있다.
+  int j1, j2, j3;
+}
+
+
+<strong>변수에 값 할당</strong>
+
+
+- 변수가 가리키는 메모리에 값을 저장하는 것
+- 문법
+    변수명 = 변수 또는 리터럴;
+- 용어 
+    = : 할당 연산자(assignment operator)
+    l-value : = 왼쪽에 있는 변수를 가리킨다. l-value는 리터럴이 될 수 없다.
+    r-value : = 오른쪽에 있는 변수나 리터럴을 가리킨다.
+- 의미
+    = 오른쪽에 지정된 값을 왼쪽 변수가 가리키는 메모리에 저장.
+
+
+<strong>변수 선언과 값 할당을 동시에 하기</strong> 
+
+
+- 변수과 동시에 값을 즉시 저장할 수 있다.
+- 문법
+    데이터타입 변수명 = 값;
+
+
+public class Exam0140 {
+  public static void main(String[] args) {
+    
+    //변수 선언 + 값 저장
+    //- 이렇게 변수 선언과 값 저장을 한 번에 하는 것을 '변수 초기화 문장'이라 부른다.
+    int age = 20; 
+  }
+}
+
+
+<strong># 여러 개의 변수를 한 번에 선언하고 초기화도 함께 수행하기 II</strong>
+
+
+public class Exam0160 {
+  
+  public static void main(String[] args) {
+    //모든 변수를 다 초기화시킬 필요는 없다.
+    int a1, a2 = 200, a3, a4 = 400, a5;
+  }
+}
+
+
+<strong>변수 사용</strong>
+
+다른 도구(메서드; 함수라고도 부른다)에 값을 전달 할 수 있다.
+
+
+int age = 20;
+
+println() 메서드(도구)
+- 콘솔(console)로 값을 출력할 때 사용하는 도구이다.
+- 즉 JVM의 표준 출력 장치로 값을 출력한다.
+- 사용법
+    System.out.println(리터럴 또는 변수, 결과가 생성되는 명령문)
+
+System.out.println(age); 
+ println()을 실행할 때 age 변수를 넘기는 것이 아니라
+ age 변수에 들어있는 값을 넘기는 것이다!!!!
+
+
+<strong>레퍼런스 변수</strong>
+
+
+public class Exam0451 {
+  public static void main(String[] args) {
+
+    java.util.Date d1 = new java.util.Date();
+    java.util.Date d2 = d1;
+    
+    System.out.printf("%d, %d\n", d1.getDate(), d2.getDate());
+    
+    d1.setDate(22);
+    
+    System.out.printf("%d, %d\n", d1.getDate(), d2.getDate());
+    // d1에 저장된 일자 값을 변경한 후 
+    // d2에 저장된 일자 값을 출력해 보면 d1과 똑같이 변경되어 있다.
+    // 이유는?
+    // d1과 d2에 저장되는 것은 값이 아니라 (날짜 정보가 저장되어 있는 메모리의) 주소이다.
+    // 이렇게 값을 저장하지 않고 값이 저장된 위치(주소)를 저장하는 변수를 
+    // "레퍼런스 (변수)"라 부른다.
+    // 자바 기본 데이터 타입(byte, short, int, long, float, double, boolean, char)을
+    // 제외한 모든 타입의 변수는 레퍼런스이다.
+  }
+}
+
+
+<strong>배열</strong>
+같은 종류의 메모리를 여러개 생성할 때 사용하는 문법
+
+데이터타입[] 변수명;  <- 권장
+데이터타입 변수명[];  <- c style
+
+변수명
+=> 주소를 담는 변수 = reference 변수
+
+변수명 = new 
+
+
+<strong>배열선언</strong>
+
+
+int a1, a2, a3, a4;
+-변수들이 개별적이기 때문에 연속된 메모리가 아니다
+
+a 
+다른 메모리의 주소를 담을 만큼 적절한 크기
+
+
+int[] a;
+
+a = new int[4];
+-연속된 메모리다
+
+new
+JVM은 Heap 영역이 연속된 int 타입의 메모리를 준비
+리턴값은 준비한 메모리의 시작주소이다
+
+
+<strong>RAM과 메모리 주소</strong>
+
+
+app을 실행하면 OS가 사용할 메모리를 제공하고 app 실행 종료시 
+사용한 메모리 영역은 사용가능한 영역으로 바뀐다 하지만 영역에
+는 쓰레기(garbage value)가 남는다 이를 사용할 때 초기화하여 
+사용한다고 의미한다 
+
+메모리는 연속된 바이트의 1 차원 배열이다 
+이해를 돕기위해 2차원으로 표현한다
+
+app -> OS로부터 제공받은 메모리
+명령문 -> (code segment)
+데이터를보관 -> (data segment)
+
+
+<strong>JVM과 메모리</strong>
+
+
+java.exe(JVM) -> 사용
+
+OS가 승인한 메모리에
+
+method Area
+- 클래스 코드를 둔다
+- static 변수를 둔다
+
+Heap
+-new명령으로 준비한 변수를 둔다
+
+constant Pool
+-상수값을 둔다
+
+stack
+-스레드(thread)별로 stack 영역을 관리 
+-> 1thread = 1stack
+
+
+<strong>배열 메모리에 접근</strong>
+
+
+int[] arr = new int[4];
+
+arr[0] = 100;
+arr[1] = 200;
+arr[2] = 300;
+arr[3] = 400;
+arr[4] = 500;  // 실행오류 (runtime exception = Array )
+
+예)
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 5 out of bounds for length 5
+	at com.eomcs.lang.ex04.Exam0520.main(Exam0520.java:28)
+
+
+
+<strong>배열 reference 변수</strong>
+
+배열 인스턴스의 주소를 담는 변수
+
+
+int[] arr = new int[4];
+
+arr = 0;   // (X)
+arr = null // (O)  레퍼런스 주소를 초기화시킨다
+
+
+int a;
+
+로컬변수는 자동으로 초기화 되지않는다
+반드시 직접초기화 해야한다
+
+
+<strong>배열 인스턴스와 가비지(garbage)</strong>
+
+인스턴스의 주소를 잃어버려 사용할 수 없는 상태의 인스턴스
+
+int[] arr = new int[4];
+
+arr[0] = 300;
+arr[2] = 400;
+
+
+arr = new int[3];
+
+arr[0] = 70;
+
+위에있는 int[0] = 300; 은 주소를 잃어버려 접근 불가
+이것을 farbage라고하며 메모리 부족시
+garbage collector 가
+
+1. 메모리가 부족할 때 
+2. CPU 한가할 때 
+
+자동으로 지워서 메모리를 제공해준다
+ 
+ 
+<strong>가비지와 레퍼런스 카운트</strong>
+
+
+JVM
+
+
+int[] arr1 = new int[3]; (200)  X
+
+int[] arr2 = arr1; (200)
+
+int[] arr3 = new int[2]; (300)
+
+arr1 = new int[4]; (400)
+
+arr2 = arr3; (300)
+
+JVM Cnt 
+200 0
+300 2
+400 1
+
+
+
+1) 배열 선언 + 초기화
+
+  데이터타입[] 변수명 = new 데이터타입[]{값, 값, 값};
+  - 배열 메모리를 초기화시킬 때는 배열 개수를 지정해서는 안된다.
+  - 배열을 초기화시키는 값의 개수 만큼 메모리가 만들어진다.
+  - 즉 다음은 값 개수만큼 int 메모리가 3개가 생성된다.
+   ex) int[] arr = new int[]{10, 20, 30};
+  - 다음과 같이 new 명령을 생략할 수 있다.
+    데이터타입[] 변수명 = {값, 값, 값};
+    ex) int[] arr = {10, 20, 30};
+
+
+ 2) 배열 선언 후 따로 배열 초기화 문장 실행
+
+   데이터타입[] 변수명;
+   변수명 = new 데이터타입[]{값, 값, 값};
+   ex)
+   int[] arr1;
+   arr1 = new int[]{10, 20, 30};
+  - 변수를 선언한 후 따로 배열을 초기화시킬 때는
+    new 명령을 생략할 수 없다.
+
+
+<strong>상수 - 변수의 값을 고정하는 방법</strong>
+
+public class Exam0610 {
+  public static void main(String[] args) {
+    // 변수
+    // => 언제든지 값을 변경할 수 있다.
+    int a; //static type binding
+    a = 10;
+    a = 100;
+    a = -300;
+
+    // 상수
+    // => 값을 오직 한 번만 저장할 수 있다.
+    // => 변수 앞에 final을 붙여라!
+    final int b;
+    b = 100;
+
+    // 만약 final로 선언된 변수의 값을 두 번째로 바꾸려 한다면?
+    //    b = 200; // 컴파일 오류!
+
+    // 변수와 상수를 구분하기 위해서
+    // => 상수인 경우 이름을 보통 모두 대문자로 작성한다.
+    // => 그리고 변수를 선언하는 문장에서 바로 값을 초기화시킨다.
+    final float PI = 3.14159f;
+    final float MILE = 0.621371f;
+
+
+<strong>변수의 종류</strong>
+
+
+public class Exam0710 {
+
+  int a; // 인스턴스 변수
+
+  static int b; // 클래스 변수 == 스태틱 변수
+
+
+  public static void main(String[] args/*로컬변수=파라미터*/) {
+
+    int c; // 로컬 변수
+
+  }
+}
+
+// 인스턴스 변수(instance variable)
+// - new 명령을 사용하여 인스턴스를 생성할 때 준비되는 변수
+//
+// 클래스 변수(class variable = static variable)
+// - 클래스가 로딩될 때 준비되는 변수
+//
+// 로컬 변수(local variable)
+// - 블록을 실행할 때 준비되는 변수
+//
+// 파라미터(parameter)
+// - 메서드의 아규먼트를 받는 로컬 변수이다.
+//   예) 위의 코드에서 main()의 args 로컬 변수
+//
+
+
+1. 값.println(값)
+2. 
+
+
+
+system.out.println()
+
+system
+도구함(class)
+
+out
+변수(field)
+
+println
+작업자=연산자(method=function)
+
+()
+파라미터
+
+
+
+system.out.println("번호: " + no)
+=>
+
+과정 (Optimizing)
+"번호: " + "1"
+
+결과
+번호: 1
+
+
+System.out.printf("번호: %d\n", no);
+
+printf
+문자열과 
+
+String levelTitle;
+switch (level) {
+  case 0: levelTitle = "비전공자"; break;
+  case 1: levelTitle = "준전공자"; break;
+  default : levelTitle = "전공자";
+}
+
+System.out.printf("전공: %s\n" , levelTitle);
+
+///////////
+
+Scanner KeyScanner = new Scanner(System.in);
+
+new Scanner
+파라미터로 주어진 입력장치에서 데이터를 읽는 일을 하는 객체
+
+
+keyScanner.nextLine()
+
+keyScanner (맨앞 소문자)
+값
+
+nextLine()
+값을 사용해서 작업수행
+
+
+Integer.parseInt (문자열값)
+
+Integer (맨앞 대문자)
+도구함
 
 
 </pre>
