@@ -1421,6 +1421,248 @@ ex07,09 보기
 
 
 </pre>
+<br>
+<hr>
+<br>
+<h1>2023-01-02</h1>
+<br>
+<br>
+<pre>
+<strong>메소드 활용</strong>
+1. 주석이 필요없이 메소드 네임을 보면 직관적으로 내용을 알수있다
+2. 관리하기 쉽고 재사용하기 편하게 묶는 문법
+
+
+<strong>파라미터와 아규먼트</strong>
+
+
+int plus(int a, int b) <- 파라미터 {
+  return atb;
+}
+
+int plus(int a, int b) 
+-메서드 시그너처
+
+
+{
+  return atb;
+}
+-메서드 바디
+
+
+int result = plus(100, 200) <- 아규먼트;
+
+
+파라미터가 없을경우 아규먼트도 넘길수 없다 
+컴파일 오류!!
+
+
+static String hello() {
+  return "안녕하세요";
+}
+
+리턴값이 있을경우 return은 맨 아래로해야한다 
+return까지만 실행하기 때문
+
+
+static void hello(String... names) {
+  for (int i = 0; i < names.length; i++) {
+    System.out.printf("%s 님 반갑습니다.\n", names[i]);
+  }
+}
+
+가변 파라미터는 각각의 파라미터로 받아도되고 
+배열로 받아도 된다 
+
+배열로 넘길 경우 배열의 주소를 넘기기 때문에 
+내용을 바꾸면 바뀐다   
+
+->
+hello("홍길동", "임꺽정", "유관순");
+//String[] temp = {"홍길동", "임꺽정", "유관순"};
+// hello(temp);
+
+-위처럼 넘길경우 주석에있는 과정을 거쳐 넘긴다
+
+
+static void m2(int a, String... names) {} // OK!
+// - 메서드에 가변 파라미터는 한 개만 사용할 수 있다.
+// - 가변 파라미터는 반드시 맨 뒤에 와야 한다.
+
+
+*블루스크린이 발생하는 이유* 
+device driver 가 하드웨어에 직접 접근하려 햇을때 발생한다
+
+
+<strong>call by value</strong>
+
+static void swap(int a, int b) {
+  System.out.printf("swap(): a=%d, b=%d\n", a, b);
+  int temp = a;
+  a = b;
+  b = temp;
+  System.out.printf("swap(): a=%d, b=%d\n", a, b);
+}
+
+a와 b의 위치를 바꿔줌
+
+<strong>call by value 와 메모리 상태</strong>
+
+
+method Area
+실행할 클래스 코드가 놓인다
+자바의 모든 byte코드를 이곳에 구조화 시켜 보관한다
+
+
+stack
+스텍프레임 안에 호출메소드의 로컬변수를 놓인다
+메소드 호출이 끝나면 제거된다
+-> 호출이 끝나지 않고 계속 쌓이면 stackoverflow가 발생
+
+Heap
+new 명령으로 만든 인스턴스 변수가 놓인다
+
+
+-> jvm이 종료되면 메모리를 회수한다
+
+
+<strong>call by reference 와 객체</strong>
+
+
+1. 클래스 로딩
+
+2. main()호출 (stack)
+-args
+-ref
+
+3.new MyObject(); 메모리 설계도,fata type,class 
+- myobject 클래스 로딩
+- myobject 설계도에 따라 변수 준비
+
+4.인스턴스변수에 값저장
+
+5. swap() 호출
+
+6. main()에 return과 호출 끝
+
+7. JVM종료
+
+
+<strong>reference 리턴하기</strong>
+
+
+public class Exam0340 {
+
+  // swap()에서 만든 int a와 int b의 값을 main()에서 사용하기
+  // primitive data type 값을 객체에 담아 넘겨라!
+
+  static class MyObject {
+    int a;
+    int b;
+  }
+
+  static MyObject swap(int a, int b) {
+    MyObject ref = new MyObject();  // Heap에 인스턴스 변수를 생성한다 swap메소드가 
+    ref.a = b;                      // 종료하더라도 인스턴스 변수는 남아있다, stack은 사라진다
+    ref.b = a;
+    return ref;
+  }
+
+  public static void main(String[] args) {
+    int a = 100;
+    int b = 200;
+
+    MyObject ref = swap(a, b);
+
+    System.out.printf("main(): ref.a=%d, ref.b=%d\n", ref.a, ref.b);
+  }
+}
+
+
+<strong>스텍 메모리 응용 재귀호출</strong>
+
+static int sum(int value) { 
+  if (value == 1)
+    return 1;
+
+  return value + sum(value - 1);
+}
+main() -> args 
+
+sum(18289)
+
+// JVM Stack 메모리의 사용
+// 0) 시작
+// 1) main()
+// 2) main() => sum(5)
+//           => 5 + sum(4)
+//                  => 4 + sum(3)
+//                         => 3 + sum(2)
+//                                => 2 + sum(1)
+//                                       => 1
+// 3) main()
+// 4) 종료!
+
+
+public static void main(String[] args) {
+  // 호출하는 메서드의 로컬 변수 메모리가 많을 때는 스택 메모리가 빨리 찬다.
+  // => 즉 스택 오버플로우는 메서드 호출 회수에 영향을 받는 것이 아니라,
+  //    메서드에서 생성하는 로컬 변수의 크기에 영향을 받는다.
+  System.out.println(sum(9000, 0, 0, 0, 0, 0));
+}
+}
+
+
+<strong>main() 메서드</strong>
+
+java Exam0520 aaa-bbb-ccc
+
+
+// # 프로그램 아규먼트(arguments)
+// - 프로그램을 실행할 때 넘겨주는 값.
+// - 어떻게 아규먼트를 넘기는가?
+//
+// $ java 클래스명 값1 값2 값3
+//
+// - 아규먼트는 공백으로 구분한다.
+// - JVM은 아규먼트의 개수만큼 문자열 배열을 만들어 저장한다.
+// - 아규먼트가 없으면 빈 배열을 만든다.
+// - 그런후 main()을 호출할 때 그 배열의 주소를 넘겨준다.
+
+java -cp ./bin/main -D이름=값 -D이름=값 -D이름=값 com.eomcs.basic.ex07.Exam0610
+
+앞에 넣으면 JVM아규먼트 
+-Da=ok 
+
+
+<strong>변수</strong>
+
+
+class A {
+  static int v1;      <- 클래스(변수,필드) = 스테틱(변수)
+  int v2;             <- 인스턴스 필드 = 논스테틱필드
+  void m(int v3) {    <- 로컬변수 = 파라미터     
+    int v4;           <- 로컬변수
+  }
+}
+
+
+-클래스변수는 클래스 로딩시 Method Area 영역에 생성된다
+
+-인스턴스필드는 new명령 실행시 Heap 영역에 생성된다
+
+-로컬변수는 메서드 호출시 JVM stack 영역에 생성된다
+
+
+
+
+
+
+
+
+
+
+</pre>
 </section>
 </main>
 </div>
