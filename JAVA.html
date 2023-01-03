@@ -1653,16 +1653,496 @@ class A {
 
 -로컬변수는 메서드 호출시 JVM stack 영역에 생성된다
 
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-01-03</h1>
+<pre>
+<strong>클래스 사용법</strong>
+
+// 1) 클래스 문법으로 성적 데이터를 저장할 메모리 구조를 설계한다.
+// [클래스]
+// - 다양한 타입의 메모리를 묶어서
+//   새로운 형태의 메모리를 설계하는 문법이다.
+// - 개발자가 새롭게 정의한 데이터 타입이다.
+// - 그래서 "사용자 정의 데이터 타입" 이라 부른다.
+// - 문법:
+//      class 새_데이터_타입_이름 {
+//        변수 선언;
+//        ...
+//      }
+
+// [새_데이터_타입의_이름]
+// - 대문자로 시작한다.
+// - 여러 단어가 결합된 이름인 경우 각 단어의 시작도 대문자로 작성한다.
+// - 보통 명사형으로 짓는다.
+
+
+<strong>클래스 문법의 용도</strong>
+
+1. 메서드를 분류
+: MemberHeandler
+prompt
+
+2. 새 데이터 타입을 정의
+class Score {
+  String name;
+  int kor;
+  int eng;
+  int math;
+  int sum;
+  float aver;
+}
+
+Score obj;
+-> score의 인스턴스 주소를 저장(reperence)
+
+obj = new Score();
+-> 설계도에 따라 변수를 Heap 영역에 만든다
+
+String name;
+int kor;
+int eng;
+int math;
+int sum;
+float aver;
+->
+Score의 인스턴스(instance) = 인스턴스 변수 (instance field)
+
+인스턴스에 값 저장
+obj.name = "홍길동";
+
+obj는 객체의 주소를 가리킨다
+
+
+클래스 정의의 위치 
+
+1. 클레스가 동동한 위치에 있다면 접근가능 (package 맴버)
+
+2. test 만 쓸 class를 내부에 만들어 사용 다른곳에서 접근 불가 (중첩 클래스)
+(이렇게 내부에 사용할 클래스를 지정하면 유지보수가 좋다
+혼자사용하는 클래스를 밖에 두면 어디 사용하는 건지 직관성이 좋지 않음)
+
+class Test {
+  class Score{}
+  void m1(){}
+  void m2(){}
+}
+class Test2{}
+class Test3{}
+
+
+3. m1 메소드만 사용할 클래스 (지역 클래스)
+
+class Test{
+  void m1() {
+    class Score{}
+  }
+  void m2(){}
+}
+class Test2{}
+class Test3{}
+
+
+<strong>메서드에서 인스턴스 생성 후 리턴</strong>
+
+
+createScore(string name, int kor, int eng, int math) {
+  Score S = new Score();
+  s.name = name;
+  s.kor = kor;
+  s.eng = eng;
+  s.math = math;
+  return s;
+}
+
+Score s = createScore("홍길동",100,100,100);
+
+
+<strong>레퍼런스 배열 사용 전</strong>
+
+
+Score s1,s2,s3;
+
+s1 = new Score();
+s2 = //
+s3 = //
+
+// 수 십 개의 인스턴스를 저장한다면
+// 레퍼런스도 그 개수에 맞춰 선언해야 한다.
+// 코딩하기가 매우 불편하다.
+// 만약 수 백 개라면 더더욱 불편할 것이다.
+// 해결책?
+// - 레퍼런스를 배열로 만드는 것이다.
+
+Score[] scores = new Score[1000];
+score[0] = new Score(); // 객체를 한번에 만들려면 반복문을 사용해야한다
+
+
+<strong>레퍼런스 배열 사용 후</strong>
+
+Score[] scores = new Score[3];
+
+// 배열 레퍼런스에 레퍼런스 배열을 담는다 
+// 이렇게 사용할경우 레퍼런스들을 하나하나 생성할 필요가 없다
+
+
+public class Exam0240 {
+
+  // 여러 메서드에서 공유하려면 클래스를 메서드 밖에 선언해야 한다.
+  // => static 메서드들이 사용할 수 있게 클래스도 static으로 선언한다.
+  // => static에 대한 의미는 나중에 설명한다.
+  //
+  static class Score {
+    String name;
+    int kor;
+    int eng;
+    int math;
+    int sum;
+    float aver;
+  }
+
+  public static void main(String[] args) {
+
+    Score[] arr = new Score[3];
+
+    // 메서드에서 생성한 Score 객체를 레퍼런스 배열의 각 항목에 저장한다.
+    arr[0] = createScore("홍길동", 100, 100, 100);
+    arr[1] = createScore("임꺽정", 90, 90, 90);
+    arr[2] = createScore("유관순", 80, 80, 80);
+
+    // 메서드에 배열을 통째로 넘길 수 있다.
+    // => 정확하게 표현하면, arr 변수에 저장된 레퍼런스 배열의 주소를 넘긴다.
+    printScoreList(arr);
+
+  }
+
+  // 클래스를 이용하면 성적 정보를 하나로 묶어 리턴할 수 있다.
+  // 참고!
+  // - 다음과 같이 메서드를 통해 인스턴스를 생성하는 코딩 기법을 
+  //   "팩토리 메서드(factory method)" 패턴이라 부른다.
+  static Score createScore(String name, int kor, int eng, int math) {
+    Score s = new Score();
+
+    s.name = name;
+    s.kor = kor;
+    s.eng = eng;
+    s.math = math;
+    s.sum = s.kor + s.eng + s.math;
+    s.aver = s.sum / 3f;
+
+    return s;
+  }
+
+  static void printScoreList(Score[] arr) {
+    // main()에서 넘겨준 레퍼런스 배열의 주소를 arr 변수에 받는다.
+    // 결국 main()에서 만든 레퍼런스 배열을 사용하는 것이다.
+    //
+    for (int i = 0; i < arr.length; i++) {
+      System.out.printf("%s: %d, %d, %d, %d, %.1f\n",
+          arr[i].name, arr[i].kor, arr[i].eng, arr[i].math, arr[i].sum, arr[i].aver);
+    }
+  }
+}
+
+
+<strong>garbage(가비지)</strong>
+
+
+//# 레퍼런스와 인스턴스 - 가비지
+//
+public class Exam0320 {
+  public static void main(String[] args) {
+    class Score {
+      String name;
+      int kor;
+      int eng;
+      int math;
+      int sum;
+      float aver;
+    }
+
+    // Score 레퍼런스 선언
+    Score s1;
+
+    // 인스턴스를 만들어 그 주소를 레퍼런스에 저장한다.
+    s1 = new Score();
+    s1.name = "홍";
+    System.out.println(s1.name); // "홍"
+
+    // 새 인스턴스를 만들어 s1에 주소를 저장한다.
+    s1 = new Score();
+    System.out.println(s1.name); // null
+
+    // 그러면 기존에 들어 있던 주소는 잃어 버린다.
+    // 주소를 잃어버려 사용할 수 없는 메모리를
+    // "가비지(garbage)"라 부른다.
+
+    // 가비지는 가비지 컬렉터에 의해 메모리에서 해제된다.
+    // 가비지 컬렉터(garbage collector)의 실행
+    // - 메모리 부족할 때
+    // - CPU가 한가할 때
+    // - System.gc()를 호출하여 가비지 실행을 요청할 때
+    //   물론 이 경우에 바로 실행하는 것이 아니라
+    //   빠른 시간 내에 실행할 것을 종용하는 것이다.
+    //   아무래도 원래의 시간보다는 앞 당겨 청소를 하게 될 것이다.
+
+  }
+}
+
+// ## 가비지 컬렉터(garbage collector)
+// - 힙 메모리에 존재하는 가비지를 찾아 제거(?)하는 일을 한다.
+// - 다른 용도로 사용할 수 있도록 메모리를 해제하는 일을 한다.
+//
+// ## 언제 작업하는가?
+// - JVM이 관리하는 메모리가 부족할 때
+// - CPU가 한가할 때
+
+
+<strong>인스턴스와 레퍼런스 카운트</strong>
+
+
+Score s1 = new Score();
+Score s2 = new Score();
+
+s2 = s1;
+// s1의 주소는 s2에도 저장되었다.
+// 즉 s1이 가리키는 객체는 s2도 가리키게 되었다.
+// JVM은 객체의 참조 상태를 관리하기 위해 "레퍼런스 카운트(reference count)"를 이용한다.
+// s1이 가리키는 객체처럼 주소를 알고 있는 변수가 늘어나면 레퍼런스 카운트를 증가시키고
+// s2이 이전에 가리켰던 객체처럼 주소를 알고 있는 변수가 줄어들면 레퍼런스 카운트를 감소시킨다.
+// 레퍼런스 카운트가 0인 상태가 "가비지(garbage)"이다.
+
+
+//# 패키지 클래스 
+// - 다른 클래스 안에 선언되지 않고 별도로 선언된 클래스를 "패키지 클래스"라 부른다.
+// - 한 소스 파일에 여러 개의 클래스를 정의할 수 있지만,
+//   유지보수를 쉽게 하기 위해 보통 한 소스 파일에 한 클래스를 정의한다.
+// - 패키지 클래스란? 패키지에 직접 소속된 클래스라는 의미다.
+// - 이전에 만든 Score 클래스는 main() {} 블록 안에 정의하였다.
+//   main() {} 블록 안에 정의한 클래스는 
+//   main() {} 블록 안에서만 사용할 수 있다.
+//
+
+// 패키지 멤버 클래스
+// - 단독으로 선언하는 클래스이다.
+// - "패키지 멤버 클래스"라 부른다.
+// - 물론 이 예제처럼 한 파일에 여러 개의 클래스를 선언할 수 있지만,
+//   보통은 한 파일에 한 클래스를 선언한다.
+// - 패키지 멤버 클래스는 접근 권한이 있다면 누구든 사용할 수 있다.
+//
+
+
+<strong>public클래스와 default 클래스 </strong>
+
+public은 다른 패키지에서 접근가능 default는 (package private class)
+다른 패키지에서 접근불가  
+
+
+<strong>import 사용전</strong>
+
+
+package com.eomcs.oop.ex01;
+
+// # import : 사용 전
+//
+public class Exam0710 {
+  public static void main(String[] args) {
+
+    // 다른 패키지의 클래스 사용
+    // => 패키지 이름을 항상 붙여야 한다.
+    //    그래야만 컴파일러가 해당 클래스를 찾을 수 있다.
+    // => 패키지 전체 이름을 붙여야 한다.
+    // => 현재 패키지를 기준으로 상대 경로를 사용할 수 없다.
+    //    예) sub.Y2 obj = new sub.Y2(); // 컴파일 오류!
+    //
+    com.eomcs.oop.ex01.sub.Y2 obj;
+    obj = new com.eomcs.oop.ex01.sub.Y2();
+
+  }
+}
+
+
+package com.eomcs.oop.ex01;
+
+// # import : 사용 후
+//
+// - import 명령은 package 명령 다음에 와야 한다.
+// - 클래스 선언 전에 와야 한다.
+import com.eomcs.oop.ex01.sub.Y2;
+
+public class Exam0720 {
+  public static void main(String[] args) {
+
+    // 다른 패키지의 클래스를 사용할 때 마다
+    // 패키지명을 적는다면 코드가 너무 길어진다.
+    //
+    // 이를 해결하기 위해 자바는 import 라는 명령을 제공한다.
+    // 클래스를 사용하기 전에 미리 해당 클래스가 어느 패키지에 있는지 지정하는 것이다.
+    // 문법:
+    //      import 패키지명.클래스명;
+    //
+    Y2 obj;
+    obj = new Y2();
+  }
+}
+
+
+package com.eomcs.oop.ex01;
+
+// # import - 사용 후 II
+//
+import com.eomcs.oop.ex01.sub.*;
+import java.util.*; 
+import java.net.*;
+import java.io.*;
+
+public class Exam0730 {
+  public static void main(String[] args) {
+
+    // 특정 패키지에 소속된 여러 클래스를 사용한다면 
+    // 다음과 같이 패키지명 다음에 wildcard(*)를 지정하면 편리하다.
+    // 문법:
+    //      import 패키지명.*;
+    //
+    // - 이 경우 사용하는 클래스 마다 import를 따로 지정할 필요가 없다.
+    // - (주의!) 서브 패키지는 해당이 안된다.
+    // - 단 소스 코드를 읽을 때 어떤 클래스가 어떤 패키지 있는지 바로 확인할 수 없는 불편함이 있다.
+    //   그래서 대부분의 자바 개발자들은 널리 알려진 클래스가 아닌 경우
+    //   가능한 wildcard(*)를 사용하지 않고 패키지명과 클래스명을 정확하게 명시한다.
+    //
+    Y2 obj;
+    obj = new Y2();
+
+    Z2 obj2;
+    obj2 = new Z2();
+  }
+}
+// 결론!
+// - 가능한 import 문을 선언할 때 * 대신 구체적인 클래스명을 적어라!
+// - 같은 패키지의 여러 클래스를 사용하더라도 귀찮지만 클래스명을 적어라!
+// - 왜?
+//   소스 코드를 읽을 때 어떤 클래스가 어떤 패키지에 있는지 빠르게 파악할 수 있기 때문이다.
+//   wildcard(*) 를 사용하게 되면 어떤 패키지인지 바로 확인할 수 없다.
+//
+
+
+java.lang.Integer obj1; // OK!
+java.lang.System obj2; // OK!
+java.lang.reflect.Array obj3;
+java.io.File obj4; // OK!
+
+Integer obj5; // OK!
+System obj6; // OK!
+//    Array obj7; // 컴파일 오류!
+//    File obj8; // 컴파일 오류!
+
+// java.lang 패키지에 있는 클래스는 패키지를 지정하지 않아도 된다.
+// 즉 패키지명을 명시하지 않아도 컴파일 오류가 발생하지 않는다.
+// 그 외 다른 모든 패키지의 클래스는 패키지명을 명시하지 않으면
+// 컴파일 오류가 발생한다.
+}
+}
+
+// 결론!
+// - java.lang 패키지에 소속된 클래스를 사용할 때는
+//   패키지 이름을 명시하지 않아도 된다.
+// - 주의!
+//   - java.lang 패키지의 하위 패키지는 해당되지 않는다.
+//   - 예) java.lang.annotation, java.lang.invoke 등
+// - java.lang 패키지의 클래스들은 가장 많이 사용하는
+//   기본 클래스이기 때문에 자바 컴파일러는 해당 클래스를 자동으로 찾는다.
+// - 그 외의 모든 패키지 클래스들은 반드시 패키지명을 지정해야 한다.
+// - 지정하기 싫으면 클래스 선언 전에 import 명령으로 패키지를 지정해야 한다.
 
 
 
+package com.eomcs.oop.ex02;
+
+//0) 낱개 변수 사용
+//1) 성적 데이터를 저장할 사용자 정의 데이터 타입을 만든다.
+//2) 리팩토링: 메서드 추출(extract method), static nested class
+//3) 리팩토링: 메서드 추출(extract method) = 한 개의 메서드는 한 개의 기능을 수행해야 한다.
+//4) GRASP(General Responsibility Assignment Software Patterns) 패턴 
+//     => Information Expert: 데이터를 다룰 때는 그 데이터를 갖고 있는 객체에게 묻는다.
+//   리팩토링: 메서드 이동(Move Method)
+//     => 메서드를 관련된 클래스로 이동시킨다. => 코드의 이해가 쉽다.
+// 
+public class Exam0140 {
+
+  static class Score {
+    String name; 
+    int kor;
+    int eng;
+    int math;
+    int sum;
+    float aver;
+
+    // 메서드를 이용하여 이 타입의 데이터를 다룰 수 있는 연산자를 정의한다.
+    // - 사용자 정의 데이터 타입 입장에서는 메서드가 연산자 역할을 한다.
+    // - 즉 사용자 정의 데이터 타입에 메서드를 정의하는 것은
+    //   그 데이터를 다룰 연산자를 정의하는 것이다.
+
+    // Score 데이터 값을 다룰 수 있는 새 연산자를 정의해 보자.
+    // - 다음 메서드는 Score 객체의 국,영,수 값의 합계와 평균을 계산하는 연산자이다.
+    static void compute(Score s) {
+      s.sum = s.kor + s.eng + s.math;
+      s.aver = (float) s.sum / 3;
+    }
+    // 클래스 메서드
+    // - static이 붙은 메서드이다.
+    // - 특정 인스턴스에 대해 사용하는 것이 아니라, 모든 인스턴스에 대해 사용할 수 있다.
+    // - 특정 인스턴스의 값을 다루고 싶다면 파라미터로 그 인스턴스의 주소를 받아야 한다.
+  }
+
+  public static void main(String[] args) {
+
+    Score s1 = new Score();
+
+    s1.name = "홍길동";
+    s1.kor = 100;
+    s1.eng = 90;
+    s1.math = 85;
+
+    // 다음은 Score의 값을 다루는 연산자가 없을 때의 예이다.
+    // core.sum = score.kor + score.eng + score.math; 
+    // score.average = score.sum / 3f;
+
+    // 사용자 정의 데이터 타입의 값을 연산자를 사용하여 다뤄보자!
+    Score.compute(s1);
+
+    printScore(s1);
+
+    Score s2 = new Score();
+    s2.name = "임꺽정";
+    s2.kor = 90;
+    s2.eng = 80;
+    s2.math = 75;
+    Score.compute(s2);
+    printScore(s2);
+
+    Score s3 = new Score();
+    s3.name = "유관순";
+    s3.kor = 80;
+    s3.eng = 70;
+    s3.math = 65;
+    Score.compute(s3);
+    printScore(s3);
+  }
+
+  static void printScore(Score s) {
+    System.out.printf("%s: %d, %d, %d, %d, %.1f\n", 
+        s.name, s.kor, s.eng, s.math, s.sum, s.aver);
+  }
 
 
-
-
+}
 
 
 </pre>
+<br>
+<br>
 </section>
 </main>
 </div>
