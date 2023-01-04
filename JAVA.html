@@ -2138,6 +2138,159 @@ public class Exam0140 {
 
 
 }
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-01-04</h1>
+<br>
+<br>
+<pre>
+  
+  //0) 낱개 변수 사용
+  //1) 성적 데이터를 저장할 사용자 정의 데이터 타입을 만든다.
+  //2) 리팩토링: 메서드 추출(extract method), static nested class
+  //3) 리팩토링: 메서드 추출(extract method) = 한 개의 메서드는 한 개의 기능을 수행해야 한다.
+  //4) GRASP(General Responsibility Assignment Software Patterns) 패턴
+  //5) 인스턴스 메서드: 인스턴스 주소를 받는 더 쉬운 문법
+  //6) 패키지 멤버 클래스
+  //7) 클래스를 역할에 따라 패키지로 분류
+  //8) 생성자 도입: 인스턴스를 생성할 때 값을 초기화시키는 특별한 메서드
+
+<strong>래퍼런스와 인스턴스</strong>
+
+레퍼런스
+-> 각 메모리 영역을 참고
+-> 인스턴스의 주소
+
+
+인스턴스
+-> new
+-> Heap
+-> garbage
+-> garbage collector
+-메모리가 부족할때 , 한가할때
+
+
+<strong>리팩토링</strong>
+
+GRASP의 information Expert
+
+1메소드 1기능
+->
+static void printScore(Score s) {
+  
+}
+
+->
+클레스에 관련있는 메소드를 넣어서 직관적으로 관리한다
+
+->
+인스턴스에 더 쉽게 접근하는 법
+
+
+<strong>인스턴스에 더 쉽게 접근하는 법</strong>
+
+1. static 메서드 =  클래스 메서드
+
+Score.compute(s1);
+
+Score: 메서드가 소속된 클래스 
+
+(s1): 파라미터 값
+
+
+2. 인스턴스(non-static) 메서드
+
+-인스턴스 주소를 앞,뒤 에 받을 것인가 차이
+-사용시 반드시 앞에 데이터를 줘야한다
+-해당 메소드가 소속한 class의 정보만줄 수 있다
+
+예)
+Score.compute(s1); X
+보다는
+s1.compute(); O
+가 직관적
+
+
+<strong>인스턴스 메서드와 this</strong>
+
+
+s1.compute();
+
+/*(static)*/ void vompute() {
+  this.sum = this.kor......
+}
+
+this
+-메소드를 호출할 때 앞쪽에서 넘겨준 인스턴스
+주소를 받는 built-in 로컬 변수 
+=> non-static 메서드에만 존재한다
+
+-인스턴스 주소는 this 내장변수에 자동 저장된다
+=> 인스턴스 주로를 받기 위해 따로 변수를 선언할 필요가 없다
+
+
+<strong>패키지 멤버 클래스</strong>
+클래스는 public 또는 default(안붙이는것) 두가지 형태 뿐이다 
+
+1. 같은패키지에 있다면 public으로 공개하지 않아도 된다
+
+2. 다른 패키지의 메소드,클래스,를 사용 하려면 public으로 공개해야 한다 
+
+domain (VO = dto) 데이터타입
+- ex02의 하위패키지 
+
+
+<strong>객체 초기화 문법</strong>
+
+Exam0180
+main
+printScore()
+
+Score2
+name
+kor,eng,math,sum,aver
+compute()
+Score2() <- 생성자(constructor)
+
+
+생성자
+
+public Score {
+  리턴값이 없다 Score 반드시 클래스이름과 같아야한다 (파라미터,...) {
+
+  }
+}
+
+
+사용전
+
+Score s = new Score();
+s.name = ""
+s.kor = 100;
+
+
+사용후
+
+Score s = new Score("",100);
+=> 인스턴스 생성후 즉시 생성자 자동호출
+Score(String n, int k,int e, math m){
+  this.name = n;
+  this.kor = k;
+
+  this.compute();
+}
+
+Score 설계도에 따라 인스턴스 생성
+=> 생성자 호출
+
+Score s1 = new Score("이순신", 100, 100, 100);
+  printScore(s1);
+
+
+
+
 
 
 </pre>
