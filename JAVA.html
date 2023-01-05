@@ -2402,11 +2402,158 @@ public static void main(String[] args) {
 
 GRASP 패턴 - information Export
 계산을 수행하는 클래스에서 결과를 관리하는 것이 옳다
-
+->
 main메소드에 소속해있던 result를 calculator로 이동
 
 
+<strong>클래스 변수의 한계</strong>
 
+
+calculator
+result
+
+static 변수로 클래스 당 한개만 존재
+
+
+해결
+->
+
+// 인스턴스 변수(= non-static 변수)
+// - 작업 결과를 개별적으로 관리하고 싶을 때 인스턴스 변수로 선언한다.
+// - 인스턴스 변수는 클래스가 로딩 될 때 만들어지지 않는다.
+// - new 명령을 사용해서 만들어야 한다.
+// - 변수 선언 앞에 static이 붙지 않는다.
+int result = 0;
+
+
+// 두 개의 식을 동시에 계산하고 싶은가?
+// 그럴려면 계산 결과를 개별적으로 관리할 수 있어야 한다.
+// 다음과 같이 각 식의 계산 결과를 보관할 메모리를 준비한다.
+Calculator c1 = new Calculator(); // 식1의 계산 결과를 보관할 메모리 준비
+Calculator c2 = new Calculator(); // 식2의 계산 결과를 보관할 메모리 준비
+
+
+// 계산을 수행할 때 계산 결과를 보관할 메모리를 전달한다.
+Calculator.plus(c1, 2); // + 2
+Calculator.plus(c2, 3); // + 3
+
+
+인스턴스 변수를 사용하는경우 메소드도 인스턴스로 바꾸면
+this로 접근이 가능하다 하지만 인스턴스 변수를 사용하지 
+않을 경우 static으로 두면 된다
+
+void divide(int value) {
+  this.result /= value;
+}
+
+// 인스턴스를 사용하지 않는 메서드라면 그냥 클래스 메서드로 두어라.
+static int abs(int a) {
+  return a >= 0 ? a : a * -1;
+}
+
+그리고 main메소드에서 사용하기위해 서는 앞쪽에 주소를 
+받고 값을 넘긴다
+
+// 계산을 수행할 때 계산 결과를 보관할 메모리를 메서드 호출 앞에서 전달하라!
+// - 인스턴스 메서드를 사용하면 파라미터로 메모리 주소를 전달할 필요가 없다.
+c1.plus(2); // + 2
+c2.plus(3); // + 3
+
+
+<strong>Nested 클래스 -> packageMember 클래스 -> 패키지 분류</strong>
+
+중첩클래스 (Nested)
+->
+class{
+  class{
+    main{
+
+    }
+  }
+}
+
+동일한 패키지 안에서 사용 (packageMember)
+->
+ex02{
+  class{
+
+  }
+  class{
+
+  }
+}
+
+패키지 분류
+->
+ex02{
+  class{
+
+  }
+}
+ex03
+{
+  class{
+
+  }
+}
+
+
+<strong>JVM 메모리 영역과 변수, 메서드</strong>
+
+
+void main() {
+  Calculator c1 = new Calculator();
+  .
+  .
+}
+
+
+
+*Method Area*
+
+Ex0280{
+  bytecode
+    클래스 정의
+    메소드 정의
+    변수 정의
+}
+
+Calculator.class{
+  result 변수 선언문
+  plus(){} 인스턴스 메소드
+  minus(){} 인스턴스 메소드
+  ads(){} 클래스 메서드
+}
+
+
+*JVM Stack*
+
+main(){
+  args
+  c1
+}
+
+plus(){
+  value: 2
+  this: 인스턴스 주소
+}
+
+*Heap*
+
+
+<strong>스태틱변수, 인스터스변수 ,로컬변수</strong>
+
+class Exam0100{
+  static int a;   <- 스테틱필드 = 클래스가 로딩될 때 생성 
+  int b;          <- 인스턴스필드 = new 명령 실행할 때 생성
+  vois main(){
+    int c;        <- 로컬 변수 = 메서드가 호출될 때 생성 
+    .
+    .
+    Exam0100 obj;
+    obj = new Exam0100(); 
+  }
+}
 
 
 
