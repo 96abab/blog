@@ -2976,15 +2976,186 @@ public abstract class Car {
 
 }
 
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-01-09</h1>
+<br>
+<pre>
+<strong>멤버에 대한 접근제어: (default)</strong>
+  class Score {
+  String name;
+  int kor;
+  int eng;
+  int math;
+  int sum;
+  float aver;
+  compute{-}
+}
+
+Score compute(){} 는 같은 멤버라서 다른변수에 접근가능
+Exam0110 main(){} 
+
+
+멤버 접근 제어
+
+
+<strong>private: 같은 멤버만</strong>
+
+
+public int getKor() {
+  return this.kor;
+}
+
+// sum과 aver의 값을 직접 변경하지 못하게 접근을 막았으면,
+// 외부에서 이 값들을 조회할 수 있는 방법/수단(method)은 제공해야 한다.
+// => 보통 이렇게 필드의 값을 조회하는 용도로 사용하기 위해 메서드를 만들 경우
+//    메서드의 용도를 이해하기 쉽도록 getXxx() 형태로 이름을 짓는다.
+//       get필드명() {...}
+// => 메서드의 이름이 get 으로 시작한다고 해서 "게터(getter)"라고 부른다.
+// => 그리고 이런 getter는 공개 모드로 설정한다.
+
+// => 자바 는 필드나 메서드의 외부접근 범위를 조정하는 문법을 제공하는데
+// 이 문법을 캡슐화(encapsulation) 라 부른다.
+// 실무에서는 셋터에서 유효 값을 검증하는 코드를 잘 넣지 않는다.
+// 따로 인스턴스 변수의 값을 검증하는 메서드를 추가하여 처리한다.
+// 그래서 실무에서 셋터 메서드는 인스턴스 변수에 그냥 값을 넣는 경우가 많다.
+// 즉 인스턴스 변수에 직접 값을 넣는 것과 동일하게 동작한다.
+// 이런 상황 때문에 셋터, 겟터의 무용론을 주장하는 개발자들이 있다.
+// 그들은 그냥 인스턴스 변수의 접근 범위를 public으로 공개하여 사용할 것을 주장한다.
+// 그러나 대부분의 개발자들은 셋터의 무용함을 떠나,
+// 메서드를 통해 변수의 값을 설정하는 방법을 선호한다.
+// 혹 나중에 메서드에 기타 코드를 추가할 경우를 대비하기 위함이다.
+// 변수를 직접 사용하면 변수를 제어하는 코드를 삽입하기 어렵기 때문이다.
 
 
 
+public void setKor(int kor) {
+  this.kor = kor;
+  this.compute();
+}
+
+// 대신 메서드를 통해 값을 설정하게 하라!
+// 보통 필드의 값을 설정하는 메서드는 'set필드명()'으로 이름을 짓는다.
+// - 이런 메서드를 "세터(setter)"라 부른다.
+// - 외부에서 호출할 수 있도록 공개 모드로 설정한다.
+// - 필드를 비공개로 막으면 값을 조회할 수 없기 때문에
+//   getter도 추가해야 한다.
+
+// 세터를 통해서 국, 영, 수 값을 설정할 때마다
+// 합계와 평균을 자동으로 계산하기 때문에 직접 compute()를 호출할 필요가 없다.
+
+// 값들의 유효범위를 설정해 추상화가 무너지지 않도록 해야한다
+
+public void setAge(int age) {
+  if (age > 0 && age < 150)
+    this.age = age;
+  else
+    throw new RuntimeException("나이가 유효하지 않습니다!");
+}
 
 
+생성자를 private 으로 막기
+
+// 생성자를 private으로 선언하면 외부에서 이 클래스의 인스턴스를 생성하는 것을 막을 수 있다.
+private Car() {}
+
+
+Car c1 = new Car(); // 컴파일 오류!
+// 생성자가 private이기 때문에 다른 클래스에서 호출할 수 없다.
+// 따라서 인스턴스를 생성할 수 없다.
+//
+// 그럼 왜 생성자를 private으로 만들었는가?
+// => 개발자가 직접 인스턴스를 생성하면 너무 복잡하니,
+//    다른 메서드를 통해 인스턴스를 생성하라는 의미다!
+
+// 팩토리 일을 하는 메서드를 통해 인스턴스를 생성한다
+// static 메소드로 사용
+
+java.util.Calendar cal = Calendar.getInstance();
+
+
+<strong>protected: 같은멤버 + 같은 패키지 + 서브클래스의 멤버</strong> 
+
+
+같은 패키지 이지만 접근 불가할때 super클래스의 설계도로 만들었다면 접근불가
+: 서브클래스 설계도에 따라 만든 변수일경우에만 접근가능
+=> sub클래스는 Y클래스의 설계도를 사용할수 있기 때문에 sub클래스에 설계도가
+없어도 Y에 있으면 사용가능하다 이렇게 만든 다면 접근가능
+
+
+deault: 같은멤머 + 같은 패키지
+
+
+public: 모두 가능
+
+
+<strong>springBoot 프로젝트 준비</strong>
+
+02. 게시글 관리 REST API 추가
+
+web Browser -> SpringBoot -> App
+
+backend-app
+
+import 아래
+
+//다음 클래스가 클라이언트 요청을 처리하는 일을 한다는 것을 SpringBoot 에게 알리는 표시
+// => springBoot는  다음 클래스의 인스턴스를 생성해서 보관해 둔다
+// => "/hello" 라는 클라이언트 요청 이 URL로 들어오면 해당 메서드를 호출한다
+
+@RestController // 클래스에적용
+public class HelloController {
+
+  @GetMapping("/hello") // 메소드에 적용
+  public String hello() {
+    return "Hello, world!";
+  }
+}
+
+<strong>GRASP: high cohetion(응집력을 높혀라)-> 1클래스 = 1책임</strong>
+
+BoardHandler
+CLI I/O
+String title = Prompt.inputString("제목? ");
+System.out.println("입력 했습니다");
+
+=> 처음부터 역할을 더 잘게 쪼갯더라면 일부코드만 뜯어서
+붙일 필요가 없었다
+-> 재활용성이 떨어진다 
+
+
+BoardController
+HTTP I/O
+http://localhost:8080/boards/27
+
+@GetMapping("/boards/{boardNo}")
+String getboard(@Pathvariable int boardNo) {
+  return "게시글 상세 내용";
+}
+
+12. GRASP의 High cohesion 적용: Data 처리 역할 분리
+
+설계는 트레이드오프 활동이다. 동일한 기능을 구현할 수 있는 무수한 많은 설계가 존재한다.
+따라서 실제로 설계를 진행하다 보면 몇 가지 설계 중에서 한 가지를 선택해야 하는 경우가 빈번하게 발생한다.
+이 경우에는 올바른 책임 할당을 위해 INFORMATION EXPERT 패턴 이외의 다른 책임 할당 패턴들을 함께 고려해야 한다.
+
+높은 응집도와 낮은 결합도는 객체에 책임을 할당할 때 항상 고려해야하는 기본 원리다.
+책임을 할당할 수 있는 다양한 대안들이 존재한담녀 응집도와 결합도의 측면에서 더 나은 대안을 선택하는 것이 좋다.
+즉, 두 협력 패턴 중에서 높은 응집도와 낮은 결합도를 얻을 수 있는 설계가 있다면 그 설계를 선택해야 한다.
+응집도는 모듈 내부의 기능적인 응집 정도를 나타낸다.
+결합도는 모듈과 모듈간의 상호 결합 정도를 나타낸다.
+
+낮은 결합도과 높은 응집도의 관점에서 매순간마다 전체적인 설계 품질을 검토하면 단순하면서도 재사용 가능하고 유연한 설계를 얻을 수 있다.
+
+출처
+조용호, 『[eBook] 오브젝트』, 위키북스(2019), p143~144.
 
 </pre>
 <br>
 <br>
+
 </section>
 </main>
 </div>
