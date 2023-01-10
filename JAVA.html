@@ -3154,8 +3154,98 @@ String getboard(@Pathvariable int boardNo) {
 
 </pre>
 <br>
+<hr>
 <br>
+<h1>2023-01-10</h1>
+<pre>
+<strong>System Architecture 와 Layer</strong>
 
+Use-case 주도 객체 지향 설계패턴 (by Ivar jacodison)
+
+
+user -> boundry(ui담당) -> control(boundry와 Entity를 제어) -> Entity(데이터담당)
+
+1. CLI
+myapp -> boardHandler(boundry와 control역할) -> boardDao
+
+2. MVC web
+//  ->  board_list.jsp(boundry) -> boardServlet(control) -> BoardDao(Entity)
+
+하나로 본다면?
+
+3. backend-app (Entity)
+boardHandler(boundry와 control) -> BoardDao(Entity)
+
+4. frontend-app (boundry,control)
+.html(boundry) -> .js(control) -> JSON
+
+
+1클래스-1역할과 클래스 의존도를 낮춘다
+
+
+<strong>REST API 와 HTTP method</strong>
+
+1. create  post -> 요청할 때마다 데이터가 추가된다 
+-> http://localhost:8080/boards
+
+2. retrieve(read) get -> 요청 처리후 데이터 변경은 없다
+-> http://localhost:8080/boards <- 목록조회 복수형
+-> http://localhost:8080/boards/112 <- 상세조회 /112 는 데이터를 특정하는 아이디
+
+3. updatd  put -> 요청 처리후 추가되는 데이터는 없다
+->  http://localhost:8080/boards/112
+
+4. delete  delete -> 요청 처리후 데이터 삭제
+->  http://localhost:8080/boards/112
+
+
+<strong>요청과 응답 과정</strong>
+
+
+web browser
+
+POST /voards HTTP/1.1
+HOST:localhost:8080
+Content-Type: application/x-www-form-urlencoded
+
+title=${title}&content=${content}&password=${password}
+
+getBoards(){
+  String title,
+  String content,
+  String password
+
+  return contentMap;
+}
+
+값이 넘어가지 않을때 값이 넘어갔는지 개발자 도구에서 확인
+
+
+<strong>AJAX 와 CORS</strong>
+
+
+서버 1 localhost:5500
+-> HTML 요청,응답
+
+서버 2 localhost:8080
+-> AJAX 요청,응답
+
+@CrossOrigin("http://localhost:5500")
+이서버에서 다운로드 받은 HTML 페이지에서 AJAX 요청을 한다면 허락한다
+
+
+과제
+
+백엔드 프로젝트 
+0.2 회원관리 REST API 추가
+
+프론트엔드 프로젝트
+0.2 회원 관리 UI 추가
+
+
+</pre>
+<br>
+<br>
 </section>
 </main>
 </div>
