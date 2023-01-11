@@ -3192,7 +3192,7 @@ boardHandler(boundry와 control) -> BoardDao(Entity)
 -> http://localhost:8080/boards <- 목록조회 복수형
 -> http://localhost:8080/boards/112 <- 상세조회 /112 는 데이터를 특정하는 아이디
 
-3. updatd  put -> 요청 처리후 추가되는 데이터는 없다
+3. updatd  put -> 요청 처리후 추가되는 데이터는 없다 **멱등성!!!!**
 ->  http://localhost:8080/boards/112
 
 4. delete  delete -> 요청 처리후 데이터 삭제
@@ -3245,7 +3245,147 @@ getBoards(){
 
 </pre>
 <br>
+<hr>
 <br>
+<h1>2023-01-11</h1>
+<pre>
+1. query string 방식으로 데이터 보내기
+-> 브라우저가 URL을 cache에 보관하여 보안에 취약
+
+DELETE / boards/1?password=1111    // ?password=1111   <- query String 방식
+host: localhost:8080
+.
+.
+
+
+2. message-body 방식으로 데이터 보내기
+-> 브라우저 cache에 보관하지 않아 직접적인 외부노출 방지
+
+DELETE / boards/1    
+host: localhost:8080
+content-length: 13
+content-Type: application/x-www-form-urlencoded
+password = 1111    // message-body 방식
+
+
+password=1111&name=홍길동&
+
+Member obj = new Member();
+obj.setNo(1);
+
+class Member {
+  int no;            // field
+  String name;
+  Sting tel;
+  String postNo;
+
+
+
+  getNo(){}          // property
+  setNo(){}
+  getTel(){}      // read only
+  setpostnumber(){}      // write only
+
+  // springBoot는 프로퍼티를 사용해서 값을 적용한다
+  // 
+}
+
+
+03. 강사관리 추가하기
+
+강사 입력
+이름:
+전화:
+이메일:
+최종학력:
+대학교:
+전공:
+강사료:
+번호:
+등록일:
+
+
+<strong>보충내용</strong>
+
+
+var name = encodeURIComponent(document.querySelector('#f-name').value);  
+-> encodeURIComponent 한글입력받은 값을 json으로 인코딩해줌
+
+var tel = document.querySelector('#f-tel').value;   
+-> 해당 value 값을 name에 저장  
+
+
+fetch(`http://localhost:8080/teachers/${no}`, {
+  method: 'PUT',            // put  업데이트 해주는 용도 
+  headers: {
+    'Content-type': 'application/x-www-form-urlencoded'  // 아래 body의 내용을 인코딩하여 숨겨준다
+  },                                                     // 주소창에 ?name="홍길동" 과 같은 정보를 숨겨줌 
+  body: `name=${name}&tel=${tel}&eMail=${eMail}&eduCation=${eduCation}&uniVerSity=${uniVerSity}&marJoIn=${marJoIn}&pay=${pay}`
+})
+.then((response) => response.json()) // 요청한 데이터가 없다면 변경오류
+.then((obj) => {
+  if (obj.status == "failure") {
+    alert("강사정보 변경 오류!\n" + obj.data);
+    return;
+  }
+
+  location.href = "list.html";
+})
+.catch((err) => {
+  alert("서버 요청 오류!");
+  console.log(err);
+});
+
+
+};
+
+
+var values = location.href.split('?');    // split() 파라미터를 기준으로 앞,뒤에있는 값을 배열로 만들어 0번,1번에 저장 
+if (values.length != 2) {
+  alert("옳바른 페이지 주소가 아닙니다.");
+  throw "no 파라미터 값이 누락되었습니다.";
+} 
+var values2 = values[1].split("=");
+if (values2.length != 2 || values2[0] != "no") {
+  alert("옳바른 페이지 주소가 아닙니다.");
+  throw "no 파라미터 값이 누락되었습니다.";
+}
+
+var no = parseInt(values2[1]);
+if (isNaN(no)) {
+  alert("강사가 옳지 않습니다.");
+  throw "no 파라미터 값이 숫자가 아닙니다.";
+}
+
+fetch(`http://localhost:8080/teachers/${no}`)
+  .then((response) => response.json())
+  .then((obj) => {
+    if (obj.status == "failure") {
+      alert("서버 요청 오류!");
+      console.log(obj.data);
+      return;
+    }
+
+    document.querySelector('#delete-btn').onclick = (e) => {
+
+      fetch(`http://localhost:8080/teachers/${no}`, {
+        method: 'DELETE'  -> delete는 body와 header가 없다
+      })
+
+
+document.querySelector("#f-pay").value = obj.data.pay; 
+-> 입력받은값을 왼쪽에 넣어줘서 출력
+
+document.querySelector("#f-createdDate").innerHTML = obj.data.createdDate;
+-> 날짜 값을 innerHTML로 넣어줌
+
+
+
+
+
+
+
+</pre>
 </section>
 </main>
 </div>
