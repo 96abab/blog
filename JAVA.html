@@ -3380,8 +3380,365 @@ document.querySelector("#f-createdDate").innerHTML = obj.data.createdDate;
 -> 날짜 값을 innerHTML로 넣어줌
 
 
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-01-12</h1>
+<pre>
 
 
+<strong>의존객체 생성 및 주입 자동화</strong>
+
+
+의존객체(dependency)
+-> 작업을 수행할때 사용하는 객체
+
+Teachercontroller  (사용) ->  TeacherDao => @Conponent 를 붙이면 Spring IoC 컨테이너가 자동으로 생성한다
+
+IoC inversion of control
+
+1. 의존객체 주입(Dependency injection(DI))
+
+위에 둘다 의존 -> Teacher(Data Transfer Object(DTO)=value Object(VO) = Domain Object)
+
+2. 이벤트 리스너
+프로그램이 실행중 외부에서 클릭으로 요청을 하기 때문에
+역행하는것으로 본다
+
+
+<strong>SpringBoot 핵심 부품</strong>
+
+Application server
+
+-web server
+-> HTTP server HTTP 요청과응답을 한다
+
+-servlet container
+-> servlet/jsp 관리및 실행
+
+
+Spring framework
+
+-webMVCframework
+-> Controller 등을 실행
+
+-IoC Container
+-> 스프링 컴포넌트 생성 및 관리 = Bean Container
+@component,@Controller... 으로 표시된 클래스
+스프링 IOC Conatiner가 관리하는 클래스
+
+
+App
+-> 개발자가 만든 controller,Dao,service
+
+위 모든 것은 
+
+JVM
+
+위에서 작동
+
+
+<strong>component 와 class의 관계</strong>
+
+
+Component
+-> 1개 이상의 클래스로 구성된 부품
+
+
+-class = 1component
+-class
+-class
+
+예) 회원관리
+
+-Member
+-MemberDao = 데이터를 처리하는 component
+-MmeberController = 요청처리 component
+
+
+<strong>class 와 Bean</strong>
+
+자바가 자바산 커피를 의미하고 bean(property를 가진 클래스를 의미)은 
+커피콩을 의미한다 즉 자바에 생성된 클래스다
+
+
+<strong>@Component 와 아이들</strong>
+
+스프링 컴포넌트= IoC컨테이너가 자동 생성하는 객체
+
+@Controller
+@RestController
+@Service
+
+역할에 따라 분류
+- 제어가 용이 조회,생성,제외
+
+예)
+
+TeacherDao
+
+@Repository  // DAO 역할을 수행하는 객체에 붙인다
+public class TeacherDao {}
+
+
+TeacherController
+
+@RestController  // 데이터들을 json으로 변환
+public class TeacherController {
+
+  방법 1
+  @Autowired TeacherDao teacherDao; // TeacherDao 클래스를 Ioc로 만든 클래스정보를 불러와줌
+
+  방법 2
+  MemberDao memberDao;
+  // Spring Ioc 컨테이너가 이 클래스의 인스턴스를 만들기 위해
+  // 생성자를 호출할때 파라미터로 선언된 memberDao 객체를 주입할 것이다
+  public MemberController(MemberDao memberDao) {
+    this.memberDao = memberDao;
+  }
+
+}
+
+
+<strong>SpringBoot 설정</strong>
+
+MemberController
+
+@CrossOrigin
+addMember
+@CrossOrigin
+getMember
+
+// 메서드 마다 세밀하게 @CrossOrigin을 제어할 수 있다
+
+->
+
+@CrossOrigin
+MemberController
+
+addMember
+getMember
+
+// @CrossOrigin이 같다면 간결하게 class에 사용가능 
+
+
+->
+
+MemverController
+BoardController
+TeacherController
+
+// @CrossOrigin 설정이 다 같으면 한곳에서 설정 가능
+
+webConfig
+
+
+@Configuration
+// 설정에 관련된 일을 하는 클래스로 선언
+// 즉 스프링 컴포넌트로 표시하는 것
+//  Spring ioC컨테이너는 이 클래스의 인스턴스를 자동생성
+
+//@EnableWebMvc
+// Spring 프레임 워크에서 webMVC 기능을 사용할 수 있게 관련객체를 준비하게 선언
+// 웹 애플리케이션을 제작할 때 사용할 도구를 완전하게 구비되는 것이다
+// SpringBoot의 경우 이 애노테이션을 생략 가능
+
+public class webConfig
+implements WebMvcConfigurer{ // implements 약속등을 이행하다 = 약속을 이행하는 클래스를 정의
+  
+  // 이클래스는 WebMvcConfigurer 규칙에 따라 메서드를 만들었음을 선언
+  // 단 모든 메서드를 정의할 필요는 없다
+  // WebMvcConfigurer 를 Ctrl + 클릭 으로 기본 설정된 메서드들을 확인할수 있다
+  // 프로젝트에 맞는 부분만 설정하면 된다 (customizing; 고객화)
+  // Spring WebMVC 프레임 워크는 이 클래스의 메서드를 참고하여 설정을 완성한다
+  public webConfig() {
+    System.out.println("WebConfig 생성됨");
+  }
+
+  // Cross-Origin 관련 해서 추가로 설정할게 있다면 이 메서드를 정의한다
+  // 스프링 부트가 시작되면 이 메서드를 호출하여 CrossOrigin을 설정할 것이다
+  @Override
+  public void addCorsMappings(CorsRegistry registry) {  // registry 저저ㅏㅇ고
+    registry.addMapping("/**")
+    .allowedOrigins("http://localhost:5500", "http://127.0.0.1:5500");
+  }
+}
+
+이렇게 webConfig 클래스에 spring IoC 컨테이너 설정들을 
+한번에 설정하고 필요한 설정은 각자 설정할 수 있다
+
+
+<strong>상속 활용</strong>
+
+
+Member
+
+private int no;
+private String name;
+private String tel;
+private String postNo;
+private String basicAddress;
+private String detailAddress;
+private boolean working;
+private  char gender;
+private byte level;
+private String createdDate;
+
+
+Teacher
+
+private int no;
+private String name;
+private String tel;
+private String email;
+private int degree;
+private String school;
+private String major;
+private int wage;
+private String createdDate;
+
+
+// 각 클래스 필드가 공통으로 사용할 것을 상속받는다
+
+
+Membe
+
+public class Member {
+  private int no;
+  private String name;
+  private String tel;
+  private String createdDate;
+
+
+// 이제 각 클래스의 필드와 property를 지워준후 상속 받는다
+
+public class Teacher extends Member {
+  
+  private String email;
+  private int degree;
+  private String school;
+  private String major;
+  private int wage;
+
+
+//  extends 상속할 클래스 를 지정
+
+
+<strong>상속 기법</strong>
+
+
+specialization (전문화)
+-> 기능의 확장, 더 특별한 기능을 추가한다
+부모에서 자식
+
+super클래스 
+car
+
+sub클래스
+Truck
+
+
+generalization (일반화)
+-> 공통기능을 추출해서 정의 
+자식에서 부모
+
+super클래스=parent클래스
+car
+
+sub클래스=child
+Truck,Forklift
+
+
+<strong>static 필드, instance필드, local변수</strong>
+
+1. static 필드
+- 클래스가 로딩될때 생성 (Method Area)
+
+2. instance 필드
+- new 연산자로 인스턴스 생성할 때 만든다 (Heap)
+
+3. local변수
+- 메서드가 호출 될때 (JVM stack)
+
+
+<strong>생성자</strong>
+
+class Score{
+  Score(){
+    --
+    --
+  }
+  Score(String name){
+    --
+    --
+  }
+}
+
+호출 
+
+new Score(); <- default constructor
+
+파라미터의 값에 따라서 호출할 생성자가 결정
+
+new Score("홍길동");
+
+기본생성자는 생성자가 없을때 자동으로 생성된다(일관성때문)
+
+
+public static class A {
+  static int a = 100;
+
+// 변수 초기화 문장을 컴파일 할 때,
+// - 스태틱 초기화 블록이 없으면 컴파일러가 자동으로 삽입한다.
+// - 스태틱 초기화 블록에 a 에 100을 할당하는 문장을 삽입한다.
+// - 위의 문장은 다음 문장으로 바뀐다.
+//
+//    static int a;
+//    static {
+//      a = 100;
+//    }
+// - 바이트 코드(Exam067
+
+}
+
+
+static class A {
+  int a;
+  int b;
+  int c;
+
+  // 여러 개의 인스턴스 초기화 블록이 있을 때,
+  // - 선언된 순서대로 생성자의 앞 부분에 삽입된다.
+  // - 바이트코드(Exam0740$A.class)를 확인해 보라!
+  {
+    this.a = 101;
+    System.out.println("첫 번째 인스턴스 초기화 블록");
+  }
+
+  {
+    this.a = 102;
+    System.out.println("두 번째 인스턴스 초기화 블록");
+  }
+
+  {
+    this.a = 103;
+    System.out.println("세 번째 인스턴스 초기화 블록");
+  }
+
+  A() {
+    // 인스턴스 초기화 블록은 선언된 순서대로 삽입한다.
+    // 즉 다음과 같다.
+    // this.a = 101;
+    // System.out.println("첫 번째 인스턴스 초기화 블록");
+    // this.a = 102;
+    // System.out.println("두 번째 인스턴스 초기화 블록");
+    // this.a = 103;
+    // System.out.println("세 번째 인스턴스 초기화 블록");
+
+    System.out.println("A()");
+    b = 200;
+    c = 300;
 
 
 
