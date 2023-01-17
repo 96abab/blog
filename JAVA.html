@@ -4078,29 +4078,253 @@ postman을 이용하여 서버를 테스트한후 frontend를 작업하면 좀�
 
 
 
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-01-17</h1>
+<pre>
+
+<strong>클래스 간의 관계와 UML</strong>
+
+
+1. 상속(inheritance)
+
+class Truck extends Car {}
+
+
+2. 연관(association)
+
+MemberController -> MemberDao
+사람 -> 휴대폰
+지속적인 사용관계
+
+
+3. 집합(aggregation)
+약결합
+
+computer <> -> keyboard
+
+class Computer {
+  keyboard keyboard;
+}
+
+- class를 지울때 따로 사용이 가능할때
+예) 컴퓨터와 마우스
+
+
+4. 합성(composition)
+강결합
+
+Car <> -> engine
+
+class computer {
+  mainboard;
+}
+
+- class를 지울때 따로 같이 쓰레기가 될때
+예) 컴퓨터와 메인보드
+
+
+5. 의존 (dependency)
+특정 작업에서 일시적으로 사용
+
+Car -> GasStation
+
+class Car {
+  void oil(GasStation){
+
+  }
+}
+
+
+<strong>다형성(polymorphism)</strong>
+
+vehicle v;
+
+v = new vehicle();
+v = new Bike();
+v = new Car();
+v = new Sedan();
+v = new Truck();
+
+
+13. 패키지 활용
+
+패키지를 사용하여 역할에 따라 클래스 분류
+
+=>클래스를 찾고 관리가 쉽다 
+
+
+14. 상속활용
+
+상속을 받아 기존코드를 생성하지 않고 사용할수 있다
+
+
+15. 다형적 변수 활용
+
+상속의 일반화 과정중 추상클래스의 추상메소드를 sub클래스 @Override 할때
+
+1. 추상클래스에 추상메소드가 protected로 공개되어야하고
+2. sub클래스는 추상메소드의 형식을 그대로 사용하고 사용
+   @Override 로 검사를 하고 목적을 알맞게 바꾼다  
+3. 해당 메서드를 사용하는 인스턴스필드가 있다면 protected로 바꾸거나
+  공개용 메서드를 만들어서 인스턴스 필드를 생성하여 공유한다
+
+
+<strong>다형적변수와 형변환</strong>
+
+Vehicle obj;
+
+obj = new Car();
+Car c = (Car) obj;
+obj = new Vehicle();
+Car c = (Car) obj; // 컴파일러가 개발자를 신뢰하여 승인
+                   // 하지만 JVM에서 실행할때 예외 발생
+
+  private void searchBoard() {
+    Board[] boards = (Board[]) this.boardDao.findAll();   <- 이렇게 배열로 받으면 오류는 사라지지만 실행시 애러가 난다
+    String keyword = Prompt.inputString("검색어? ");
+    System.out.println("번호\t제목\t작성일\t조회수");
+    for (Board b : boards) {
+      if (b.getTitle().indexOf(keyword) != -1 ||
+          b.getContent().indexOf(keyword) != -1) {
+        System.out.printf("%d\t%s\t%s\t%d\n",
+            b.getNo(), b.getTitle(), b.getCreatedDate(), b.getViewCount());
+      }
+    }
+  }
+
+
+  Exception in thread "main" java.lang.ClassCastException: class [Ljava.lang.Object; cannot be cast to class [Lbitcamp.myapp.vo.Student; ([Ljava.lang.Object; is in module java.base of loader 'bootstrap'; [Lbitcamp.myapp.vo.Student; is in unnamed module of loader 'app')
+	at bitcamp.myapp.handler.StudentHandler.printMembers(StudentHandler.java:35)
+	at bitcamp.myapp.handler.StudentHandler.service(StudentHandler.java:172)
+	at bitcamp.myapp.App.goMainMenu(App.java:31)
+	at bitcamp.myapp.App.main(App.java:11)
+
+
+=>
+
+
+private void printBoards() {
+  System.out.println("번호\t제목\t작성일\t조회수");
+
+  Object[] boards = this.boardDao.findAll();
+
+  for (Object obj : boards) {
+    Board b = (Board) obj;
+    System.out.printf("%d\t%s\t%s\t%d\n",
+        b.getNo(), b.getTitle(), b.getCreatedDate(), b.getViewCount());
+  }
+}
+
+객체를 사용하려면 알맞는 타입(Object)으로 바꿔줘야한다 
+
+
+<strong>오버라이딩(overriding)</strong>
+
+ObjectDao
+
+boardDao
+
+-> sub클래스에서 필요한 기능이 super클래스에 없다면 
+super 클래스에서 재정의하여 상속받고 Overriding하여 
+사용한다 이 과정에서 Object로 타입이 받아왔기 때문에
+받은 타입에 맞게 타입을 변환하여야한다
 
 
 
+// 상위 클래스의 레퍼런스로 하위 클래스의 인스턴스를 가리킬 때
+
+
+Car c = new Sedan();
+
+c.model = "티코"; // Vehicle의 인스턴스 변수
+c.capacity = 5;  // Vehicle의 인스턴스 변수
+c.cc = 890;      // Car의 인스턴스 변수
+c.valve = 16;    // Car의 인스턴스 변수
+
+// 레퍼런스가 실제 하위 인스턴스를 가리키고 있다 하더라도,
+// 레퍼런스 타입의 범위를 벗어나서 사용할 수 없다.
+//    c.sunroof = true; // 컴파일 오류!
+//    c.auto = true;    // 컴파일 오류!
 
 
 
+// 해결책?
+// => 레퍼런스 변수가 실제 가리키는 것이 무엇인지 알려줘야 한다.
+// => ((실제 레퍼런스가 가리키는 인스턴스의 타입) 레퍼런스).멤버
+((Sedan)c).sunroof = true; // OK!
+((Sedan)c).auto = true;    // OK!
+
+// => 또는 인스턴스의 원래 클래스 레퍼런스에 저장한 다음에 사용.
+Sedan s = (Sedan)c;
+s.sunroof = true;
+s.auto = true;
 
 
+<strong>instanceof 연산자</strong>
+
+Vehicle v = new Sedan();
+
+// instanceof 연산자?
+// => 레퍼런스에 들어있는 주소가 특정 클래스의 인스턴스인지 검사한다.
+// => 또는 그 상위/하위 클래스의 인스턴스인지 검사한다.
+//
+System.out.println(v instanceof Sedan);  
+System.out.println(v instanceof Car);
+System.out.println(v instanceof Vehicle);
+System.out.println(v instanceof Object);
+// true
+System.out.println(v instanceof Truck);
+System.out.println(v instanceof Bike);
+// false
 
 
+<strong> getClass()</strong>
 
 
+Vehicle v = new Sedan();
+
+// getClass() ?
+// => 레퍼런스가 가리키는 인스턴스의 실제 클래스 정보를 리턴한다.
+// => == 연산자를 사용하여 특정 클래스의 인스턴스인지 좁혀서 검사할 수 있다.
+//
+// 클래스명.class
+// => 클래스 정보를 갖고 있는 스태틱 변수이다.
+//
+System.out.println(v.getClass() == Sedan.class);
+System.out.println(v.getClass() == Car.class);
+System.out.println(v.getClass() == Vehicle.class);
+System.out.println(v.getClass() == Truck.class);
+System.out.println(v.getClass() == Bike.class);
+}
 
 
+<strong>overloading</strong>
 
 
+static int plus(int a, int b) {
+  return a + b;
+}
 
+static int plus(int a) {
+  return a + a;
+}
 
+static float plus(float a, float b) {
+  return a + b;
+}
+}
+
+파라미터타입과 개수가 다르지만 메소드를 같게하면 
+프로그래밍에 일관성을 제공할수있다
 
 
 
 
 </pre>
+
 </section>
 </main>
 </div>
