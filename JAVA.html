@@ -4620,6 +4620,9 @@ public static void main(String[] args) {
 
 
 Hasgset 동작원리
+- 저장은 가능하지만 원하는 값을 꺼낼수는 없다
+  hashCode의 값을 나눈 나머지값으로 위치를 지
+  정하기 때문이다
 
 Hash 
 -값을 보관할 위치를 계산할 때 사용
@@ -4627,7 +4630,9 @@ Hash
 set
 -집합: 중복저장 불가!
 
-
+->
+아래와 같이 HashCode()와 equals()를 동일하게 오버라이딩
+해주면 같은 값으로 간주한다
 
 @Override
 public int hashCode() {
@@ -4651,6 +4656,399 @@ public boolean equals(Object obj) {
 //    2) equals()의 리턴값도 true이고 hashCode()의 리턴값도 같을 경우,
 //     같은 객체로 판단하여 저장하지 않는다.
 //    3) 저장할때 저장 위치는 hashCode()의 리턴값을 사용하여 계산한다
+
+
+
+
+<strong>Object 클래스 - getClass() : 해당 클래스의 정보를 리턴한다.</strong>
+
+
+// 레퍼런스를 통해서 인스턴스의 클래스 정보를 알아낼 수 있다.
+Class classInfo = obj1.getClass();
+
+// 클래스 정보로부터 다양한 값을 꺼낼 수 있다.
+System.out.println(classInfo.getName()); // 패키지명 + 바깥 클래스명 + 클래스명
+System.out.println(classInfo.getSimpleName()); // 클래스명
+
+
+<strong>Object 클래스 - getClass() 와 배열</strong>
+
+
+String obj1 = new String();
+Class classInfo = obj1.getClass();
+System.out.println(classInfo.getName()); // java.lang.String
+
+// 배열의 클래스 정보
+String[] obj2 = new String[10];
+classInfo = obj2.getClass();
+System.out.println(classInfo.getName()); //[Ljava.lang.String;
+
+//    int i = 100;
+//    classInfo = i.getClass(); // primitive type은 Object의 서브 클래스가 아니다.
+
+int[] obj3 = new int[10];
+classInfo = obj3.getClass();
+System.out.println(classInfo.getName()); //[I
+
+float[] obj4 = new float[10];
+classInfo = obj4.getClass();
+System.out.println(classInfo.getName()); //[F
+
+double[] obj5 = new double[10];
+classInfo = obj5.getClass();
+System.out.println(classInfo.getName()); //[D
+
+System.out.println(new byte[10].getClass().getName()); //[B
+System.out.println(new short[10].getClass().getName()); //[S
+System.out.println(new long[10].getClass().getName()); //[J
+System.out.println(new char[10].getClass().getName()); //[C
+System.out.println(new boolean[10].getClass().getName()); //[Z
+
+
+<strong>Object 클래스 - clone() 사용법</strong>
+
+
+// 인스턴스 복제 기능을 활성화하려면 Cloneable 인터페이스를 구현해야 한다.
+// => 이 인터페이스에는 메서드가 선언되어 있지 않다.
+// => 따라서 클래스는 따로 메서드를 구현할 필요가 없다.
+// => Cloneable을 구현하는 이유는 
+//    JVM에게 이 클래스의 인스턴스를 복제할 수 있음을 표시하기 위함이다.
+//    이 표시가 안된 클래스는 JVM이 인스턴스를 복제해 주지 않는다. 즉 clone()을 호출할 수 없다.
+static class Score implements Cloneable {
+  String name;
+  int kor;
+  int eng;
+  int math;
+  int sum;
+  float aver;
+
+  public Score() {}
+
+  public Score(String name, int kor, int eng, int math) {
+    this.name = name;
+    this.kor = kor;
+    this.eng = eng;
+    this.math = math;
+    this.sum = this.kor + this.eng + this.math;
+    this.aver = this.sum / 3f;
+  }
+
+  @Override
+  public String toString() {
+    return "Score [name=" + name + ", kor=" + kor + ", eng=" + eng + ", math=" + math + ", sum="
+        + sum + ", aver=" + aver + "]";
+  }
+
+  @Override
+  public Score clone() throws CloneNotSupportedException {
+    // Object의 clone() 메서드는 Heap의 존재하는 인스턴스 변수들을 그대로 복제한다.
+    return (Score) super.clone();
+  }
+}
+
+public static void main(String[] args) throws Exception {
+
+  Score s1 = new Score("홍길동", 100, 100, 100);
+  Score s2 = s1.clone(); // 이제 예외가 발생하지 않는다!
+  // 복제 실행 오류가 발생하지 않는 이유?
+  // => Score 클래스의 복제 기능을 활성화시켰기 때문이다.
+  //    class Score implements Cloneable {...}
+  //
+  System.out.println(s1 == s2);
+  System.out.println(s1);
+  System.out.println(s2);
+ }
+}
+
+
+<strong>Object 클래스 - clone() : shallow copy</strong>
+- 얕은 복제 껍데기를 복제한다 클론한 인스턴스에 레퍼런스가 
+있다면 레퍼런스를 복제한다 
+즉, 그 레퍼런스의 인스턴스는 하나이고 사용하는 객체는 클론한
+객체까지 추가하는것이다  
+
+
+static class Engine {
+  int cc;
+  int valve;
+  
+  public Engine(int cc, int valve) {
+    this.cc = cc;
+    this.valve = valve;
+  }
+  
+  @Override
+  public String toString() {
+    return "Engine [cc=" + cc + ", valve=" + valve + "]";
+  }
+}
+
+static class Car implements Cloneable {
+  String maker;
+  String name;
+  Engine engine;
+  
+  public Car(String maker, String name, Engine engine) {
+    this.maker = maker;
+    this.name = name;
+    this.engine = engine;
+  }
+
+  @Override
+  public String toString() {
+    return "Car [maker=" + maker + ", name=" + name + ", engine=" + engine + "]";
+  }
+
+  @Override
+  public Car clone() throws CloneNotSupportedException {
+    return (Car) super.clone();
+  }
+}
+
+public static void main(String[] args) throws Exception {
+  Engine engine = new Engine(3000, 16);
+  Car car = new Car("비트자동차", "비트비트", engine);
+  
+  // 자동차 복제
+  Car car2 = car.clone();
+  
+  System.out.println(car == car2); // false
+  System.out.println(car);
+  System.out.println(car2);
+  System.out.println(car.engine == car2.engine); // true
+  
+  // car와 car2의 엔진이 같다는 것은,
+  // 같은 engine의 객체 주소라는 뜻이다.
+  car.engine.cc = 2000;
+  System.out.println(car2.engine.cc);
+  
+  // 
+  // Object의 clone()은 해당 객체의 필드 값만 복제한다.
+  // 그 인스턴스 변수가 가리키고 있는 객체는 복제하지 않는다.
+  // 이런 방식의 복제를 "shallow copy(얕은 복제)"라 부른다.
+  //
+  // 그 객체의 인스턴스 변수가 가리키고 있는 객체까지 복제하는 것을 
+  // "deep copy(깊은 복제)"라 부른다.
+  // deep copy는 개발자가 직접 clone() 메서드 안에 
+  // deep copy를 수행하는 코드를 작성해야 한다.
+
+
+<strong>Object 클래스 - clone() : deep copy</strong>
+- 인스턴스와 레퍼런스가 가리키는 super 클래스의 인스턴스까지
+  복제 하여 사용하는것 
+
+
+public class Exam0174 {
+
+  static class Engine implements Cloneable {
+    int cc;
+    int valve;
+
+    public Engine(int cc, int valve) {
+      this.cc = cc;
+      this.valve = valve;
+    }
+
+    @Override
+    public String toString() {
+      return "Engine [cc=" + cc + ", valve=" + valve + "]";
+    }
+
+    @Override
+    public Engine clone() throws CloneNotSupportedException {
+      return (Engine) super.clone();
+    }
+  }
+
+  static class Car implements Cloneable {
+    String maker;
+    String name;
+    Engine engine;
+
+    public Car(String maker, String name, Engine engine) {
+      this.maker = maker;
+      this.name = name;
+      this.engine = engine;
+    }
+
+    @Override
+    public String toString() {
+      return "Car [maker=" + maker + ", name=" + name + ", engine=" + engine + "]";
+    }
+
+    @Override
+    public Car clone() throws CloneNotSupportedException {
+      // deep copy
+      // => 포함하고 있는 객체에 대한 복제를 수행하려면 다음과 같이 
+      //    개발자가 직접 포함하는 객체를 복제하는 코드를 작성해야 한다.
+      // 
+      Car copy = (Car) super.clone();
+      copy.engine = this.engine.clone();
+      return copy;
+    }
+  }
+
+  public static void main(String[] args) throws Exception {
+    Engine engine = new Engine(3000, 16);
+    Car car = new Car("비트자동차", "비트비트", engine);
+
+    // 자동차 복제 
+    // => Car의 clone()에서 Engine 객체도 복제할 것이다.
+    Car car2 = car.clone();
+
+    System.out.println(car == car2);
+    System.out.println(car);
+    System.out.println(car2);
+    System.out.println(car.engine == car2.engine);
+
+    // car의 엔진과 car2의 엔진이 다른 엔진인지 확인해보자!
+    car.engine.cc = 2000;
+    System.out.println(car2.engine.cc);
+
+
+<strong>문자열 리터럴과 String 인스턴스</strong>
+
+
+String x1 = "Hello";
+String x2 = "Hello";
+
+- 상수메모리 영역에 같은 문자열이 존재한다면
+  기존 문자열의 주소를 리턴, 새로 생성하지 않
+  는다 
+
+
+<strong>String 인스턴스를 상수풀에 생성하기: intern()</strong>
+
+
+  public static void main(String[] args) {
+
+    String s1 = new String("Hello");  // Heap 영역에 String 인스턴스를 생성한다.
+
+    // intern()
+    // - String 객체에 들어 있는 문자열과 동일한 문자열을 갖고 있는 String 객체를 상수풀에서 찾는다.
+    // - 있으면 그 String 객체의 주소를 리턴한다.
+    // - 없으면 상수풀에 String 객체를 생성한 후 그 주소를 리턴한다.
+    String s2 = s1.intern();
+
+    String s3 = "Hello";  // 해당 문자열을 가진 String 객체를 String Pool에서 찾는다. 
+    // 있으면 그 객체를 리턴한다. 없으면 새 객체를 만들고 리턴한다.
+
+    System.out.println(s1 == s2);
+    System.out.println(s2 == s3);
+
+
+    <strong>String - mutable vs immutable 객체</strong>
+    -immutable
+
+    public class Exam0160 {
+      public static void main(String[] args) {
+        // String 객체는 immutable 객체이다.
+        // 즉 한 번 객체에 값을 담으면 변경할 수 없다.
+    
+        String s1 = new String("Hello");
+    
+        // String 클래스의 메서드는 원본 인스턴스의 데이터를 변경하지 않는다. 
+        // 다만 새로 String 객체를 만들 뿐이다.
+        String s2 = s1.replace('l', 'x');
+        System.out.println(s1 == s2);
+        System.out.printf("%s : %s\n", s1, s2); // 원본은 바뀌지 않는다.
+    
+        String s3 = s1.concat(", world!");
+        System.out.printf("%s : %s\n", s1, s3); // 원본은 바뀌지 않는다.
+      }
+    }
+
+
+    -mutable
+
+    public class Exam0161 {
+      public static void main(String[] args) {
+        // StringBuffer 객체는 mutable 객체이다.
+        // 인스턴스의 데이터를 변경할 수 있다.
+        // 원래의 문자열을 변경하고 싶을 때 사용하는 클래스이다.
+        //
+        StringBuffer buf = new StringBuffer("Hello");
+        System.out.println(buf);
+    
+        buf.replace(2, 4, "xxxx");// 원본을 바꾼다.
+        System.out.println(buf);
+    
+        // println() 메서드에 넘겨주는 파라미터 값이 String 타입이 아닐 경우,
+        // println() 메서드 내부에서 해당 값에 대해 toString() 호출하여
+        // 그 리턴 값(String)을 출력한다.
+        // 만약에 해당 클래스에 toString() 메서드가 없으면 어떡하나요?
+        // => 자바의 모든 클래스는 toString()이 있다.
+        // => 왜? 자바의 모든 클래스는 Object 클래스를 상속 받는다.
+        // => Object 클래스에 toString()이 정의되어 있다.
+      }
+    }
+
+
+<strong>Wrapper 클래스 - 종류</strong>
+
+
+// Wrapper 클래스의 인스턴스를 생성할 때는 생성자 대신 클래스 메서드를 사용하라.
+Byte b2 = Byte.valueOf((byte)100);
+Short s2 = Short.valueOf((short)20000);
+Integer i2 = Integer.valueOf(3000000);
+Long l2 = Long.valueOf(60000000000L);
+Float f2 = Float.valueOf(3.14f);
+Double d2 = Double.valueOf(3.14159);
+Boolean bool2 = Boolean.valueOf(true);
+Character c2 = Character.valueOf((char)0x41);
+
+
+<strong>Wrapper 클래스 - primitive type 을 객체로 다루기</strong>
+
+
+public class Exam0211 {
+  public static void main(String[] args) {
+
+    // Wrapper 클래스의 가장 큰 목적!
+    // => primitive 값을 포함하여 모든 값을 쉽게 주고 받기 위함이다.
+
+    // wapper 클래스가 없다면,
+    // 다음과 같이 각 타입에 대한 메서드가 따로 있어야 한다.
+    long l = 100L;
+    double d = 3.14;
+    boolean bool = true;
+
+    m(l);
+    m(d);
+    m(bool);
+
+    // 이렇게 wrapper 클래스를 사용하면
+    // 객체로 다룰 수 있다.
+    Long obj1 = Long.valueOf(l);
+    Double obj2 = Double.valueOf(d);
+    Boolean obj3 = Boolean.valueOf(bool);
+
+    m(obj1);
+    m(obj2);
+    m(obj3);
+  }
+
+  // 만약에 Wrapper 클래스가 없다면 다음과 같이
+  // 정수를 받는 메서드와 부동소수점을 받는 메서드,
+  // 논리값을 받는 메서드를 따로따로 정의해야 한다.
+  // => 이런 불편함을 없애기 위해 Wrapper 클래스를 만든 것이다.
+  // => 즉 primitive type을 객체처럼 다룰 수 있도록 만든 문법이다.
+  static void m(long value) { // byte, short, int, long, char
+    System.out.printf("long value=%s\n", value);
+  }
+  static void m(double value) {// float, double
+    System.out.printf("double value=%s\n", value);
+  }
+  static void m(boolean value) {// boolean
+    System.out.printf("boolean value=%s\n", value);
+  }
+
+  // wapper 클래스는 primitive type의 값을 객체로 다룰 수 있게 해준다.
+  // primitive type에 상관없이 Object 타입의 파라미터로 값을 받을 수 있다.
+  static void m(Object value) { // 모든 객체를 받을 수 있다.
+    System.out.printf("wrapper value=%s\n", value);
+  }
+}
 
 
 
