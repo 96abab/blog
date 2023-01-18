@@ -4329,11 +4329,335 @@ static float plus(float a, float b) {
 메서드 명과 타입,순서로 구분할수있다 
 
 
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-01-18</h1>
+<pre>
+
+<strong>오버라이딩</strong>
+
+
+Score {
+  name
+  kor
+  eng
+  math
+  sum
+  aver
+}
+
+Score2 {
+  music
+  art
+}
+
+super클래스의 메소드가 sub클래스의 용도에 맞지 않는다면
+알맞게 재정의 한다
+
+<strong>필드 오버라이딩</strong>
+
+A{
+  name: String
+  tel: String
+  working: boolean
+  print(){}
+}
+
+A4{
+  working: string
+}
+
+
+public static void main(String[] args) {
+  A4 obj = new A4();
+  obj.name = "홍길동"; // A의 name
+  obj.tel = "1111-1111"; // A의 tel
+  //    obj.working = true; // A4의 working : obj의 클래스에서 먼저 필드를 찾기 때문이다.
+  obj.working = "취업";
+
+  obj.print();
+  // A의 print() 호출 
+  // - A4 가 오버라이딩 한 필드를 사용하지 않는다.
+  // - 필드 오버라이딩은 그냥 새 필드를 추가한 것과 같다.
+  /
+
+메소드가 있는 클래스의 필드를 먼저 찾는다 
+
+
+void print() {
+  System.out.println("A4.print():");
+  System.out.printf("  => this.name(%s)\n", this.name);
+  System.out.printf("  => this.tel(%s)\n", this.tel);
+  System.out.printf("  => this.working(%s)\n", this.working);
+  System.out.printf("  => super.working(%b)\n", super.working);
+  }
+}
+
+super클래스의 필드를 사용하고 싶다면 super.working
+지정해주면 된다
+
+
+<strong>Method Signature = 'function Prototype'</strong>
+
+void m() <- methos signature {
+  method body
+}
+
+
+static class C {
+  private void m1() {}
+  void m2() {}
+  protected void m3() {}
+  public void m4() {}
+}
+
+
+<strong>오버라이딩할 때 접근 범위</strong>
+
+static class C4 extends C {
+
+  // 오버라이딩 할 때(메서드를 재정의 할 때)
+  // => 원본 보다 접근 범위를 좁힐 수는 없다.
+  //
+  //    @Override private void m2() {} // (default) ==> private : 컴파일 오류!
+  //    @Override void m3() {} // protected ==> (default) : 컴파일 오류!
+  //    @Override protected void m4() {} // public ==> protected : 컴파일 오류!
+
+  // 결론!
+  // 수퍼 클래스의 메서드를 자식 클래스가 재정의할 때
+  // 접근 범위를 확대할 순 있지만, 좁힐 수는 없다!
+
+
+
+  void test() {
+    // this 레퍼런스로 메서드를 호출하면,
+    // => 현재 클래스(this의 실제 클래스, 예: A3)에서 메서드를 찾아 호출한다.
+    // => 현재 클래스에 메서드가 없으면 수퍼 클래스에서 메서드를 찾는다.
+    // => 메서드를 찾을 때까지 최상위 클래스까지 따라 올라간다.
+    this.m();
+
+    // super 레퍼런스로 메서드를 호출하면,
+    // => 수퍼 클래스(메서드가 소속된 클래스의 수퍼 클래스, 예: A)에서 메서드를 찾아 호출한다.
+    // => 수퍼 클래스에 없으면 그 상위 클래스로 따라 올라간다.
+    // => 오버라이딩 하기 전의 메서드를 호출하고 싶을 때 유용하다.
+    super.m();
+  }
+}
+
+  static class A3 extends A2 {
+    @Override
+    void m() {
+      System.out.println("A3의 m()");
+    }
+  }
+
+  public static void main(String[] args) {
+    A3 obj = new A3();
+    obj.test();  // A2의 test() 호출
+  }
+}
+// 결과 
+// A3.m()
+// A.m()
+
+
+- this.는 사용한 인스턴스가 있는 클래스부터 찾아올라감
+- super.는 해당 메소드의 위치에서부터 찾아올라간다
+
+
+- 인스턴스 필드를 찾는 때:
+- this => 메서드가 소쇡된 클래스의 필드부터 찾아 올라간다.
+- super => 메서드가 소속된 클래스의 수퍼 클래스 필드부터 찾아 올라간다.
+
+
+**간단 정리**
+
+인스턴스 필드
+
+this.
+- 메소드가 소속된 클래스의 필드
+super.
+- 메소드가 소속된 클래스의 수퍼 클래스 의 필드
+
+
+메소드 
+
+this.
+- 레퍼런스가 가리키는 인스턴스가 속한 클래스의 필드 
+super.
+- 메소드가 소속된 클래스의 수퍼클래스의 필드  
+
+- 형변환을 하면 변환한 타입부터 찾아 올라가며
+  검사를 하고 없다면 컴파일 오류
+
+
+<strong>오버라이딩(overriding) - 리턴 타입</strong>
+
+public class Exam0610 {
+
+static class Car {}
+static class Sedan extends Car {}
+static class Truck extends Car {}
+static class Tico extends Sedan {}
+
+static class CarFactory {
+  Car create() {
+    return new Car();
+  }
+}
+
+static class SedanFactory extends CarFactory {
+  // 오버라이딩 메서드의 리턴 타입은 
+  // 서브 클래스도 가능하다.
+  @Override
+  Sedan create() {
+    return new Sedan();
+  }
+}
+
+- super클래스에게 상속받은 메서드의 리턴타입은 sub클래스도 가능하다
+- 메서드를 오버라이딩 할 때 리턴 타입으로 수퍼 클래스는 불가능하다.
+
+
+
+클래스에 final을 사용하면 클래스를 상속받을수 없다
+필드에 final을 사용하면 상수 필드가 된다 생성자에서 초기화해야한다
+
+
+ // 상수 필드는 인스턴스 마다 개별적으로 관리하지 않기 때문에
+  // 보통 스태틱 필드(클래스 필드)로 만든다.
+  // 공개할 경우 public 으로 선언한다.
+  //
+  public static final int v1 = 100;
+
+
+  class G {
+
+    public void m1(final int a) {
+      // 파라미터는 메서드가 호출될 때 외부의 값을 받는 용도의 변수다.
+      // 메서드 안에서 파라미터 값을 임의로 변경하게 되면
+      // 처음 받은 파라미터 값을 사용하지 못하는 상황이 발생한다.
+      // 그래서 이런 상황을 피하고자,
+      // 보통 실무에서 파라미터를 final로 선언한다.
+      //
+      //    a = 200; // 컴파일 오류!
+  
+      System.out.println(a);
+    }
+  }
+  
+  public final class Exam0510 {
+    public static void main(String[] args) {
+      G g = new G();
+      g.m1(100);
+    }
+  }
+
+
+<strong>Object 클래스 - 자바 최상위 클래스</strong>
+
+
+// Object 클래스의 주요 메서드
+// 1) toString() 
+//    => 클래스이름과 해시코드를 리턴한다.
+      Qname = FQname (Fally-QualifiedName@해시번호)
+// 2) equals()
+//    => 같은 인스턴스인지 검사한다.
+      인스턴스 주소가 같은지 비교
+// 3) hashCode()
+//    => 인스턴스를 식별하는 값을 리턴한다.
+      해시번호(int)
+// 4) getClass()
+//    => 인스턴스의 클래스 정보를 리턴한다.
+      class 객체: 클래스 정보를 담은 객체
+// 5) clone()
+//    => 인스턴스를 복제한 후 그 복제 인스턴스를 리턴한다.
+// 6) finalize()
+//    => 가비지 컬렉터에 의해 메모리에서 해제되기 직전에 호출된다.
+
+
+<strong>Object 클래스 - equals() 오버라이딩</strong>
+
+
+public static void main(String[] args) {
+  My obj1 = new My();
+  obj1.name = "홍길동";
+  obj1.age = 20;
+  obj1.tel = "1111-1111";
+  obj1.email = "hong@test.com";
+  obj1.gender = 1;
+  obj1.working = false;
+
+  My obj2 = new My();
+  obj2.name = "홍길동";
+  obj2.age = 20;
+  obj2.tel = "1111-1111";
+  obj2.email = "hong@test.com";
+  obj2.gender = 1;
+  obj2.working = false;
+
+  System.out.println(obj1 == obj2);
+  System.out.println(obj1.equals(obj2));
+
+  // 결론!
+  // => Object에서 상속 받은 것을 그대로 사용하면 equals()는 인스턴스가 같은지 비교한다.
+  // => 인스턴스의 내용물이 같은지 비교하도록 만들고 싶다면 equals()을 오버라이딩 하라!
+  // => String와 wrapper 클래스는 equals() 오버라이딩 하였다.
+  // => StringBuffer 클래스는 equals()를 오버라이딩 하지 않았다.
+  // => eclipse에 소스에 가보면 자동으로 생성해준다
+}
+
+
+<strong>Hashset 과 hashCode() 와 equals() 의 관계</strong>
+
+인스턴스의 hashcode가 빠른 순서대로 꺼낸다
+
+해쉬코드의 저장 라인이 존재한다 라인에 값을 저장할때는 
+해쉬코드를 일정 값으로 나눈 나머지값으로 저장을하기 때
+문에 그값에 의해서 출력 순서가 바뀐다
+
+
+Hasgset 동작원리
+
+Hash 
+-값을 보관할 위치를 계산할 때 사용
+
+set
+-집합: 중복저장 불가!
+
+
+
+@Override
+public int hashCode() {
+  return 100;
+}
+
+@Override
+public boolean equals(Object obj) {
+  return true;
+}
+
+
+// 집합?
+// => 중복 값을 저장할 수 없다.
+//
+// HashSet
+// => 값을 저장할때 해쉬 값을 계산하여 저장 위치를 알아낸다
+// => 집합방식으로 목록을 다룬다. 즉 중복 값을 저장하지 않는다.
+// => 저장 과정 :
+//    1) equals()와 hashCode를 호출하여 중복 여부를 검사한다.
+//    2) equals()의 리턴값도 true이고 hashCode()의 리턴값도 같을 경우,
+//     같은 객체로 판단하여 저장하지 않는다.
+//    3) 저장할때 저장 위치는 hashCode()의 리턴값을 사용하여 계산한다
 
 
 
 </pre>
-
+<br>
+<hr>
+<br>
 </section>
 </main>
 </div>
