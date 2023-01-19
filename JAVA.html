@@ -5051,6 +5051,410 @@ public class Exam0211 {
 }
 
 
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-01-19</h1>
+<pre>
+
+
+<strong> Wrapper 클래스 - 오토박싱(auto-boxing)/오토언박싱(auto-unboxing)</strong>
+
+
+public class Exam0220 {
+  public static void main(String[] args) {
+
+    // 다음과 같이 프로그래밍 중에
+    // primitive type의 값을 인스턴스에 담고("박싱(boxing)"이라 부른다)
+    // 인스턴스의 담긴 primitive 값을 다시 꺼내는 일("언박싱(unboxing)"이라 부른다)은
+    // 매우 불편한다.
+
+    // int ==> Integer
+    int i1 = 100;
+    Integer obj1 = Integer.valueOf(i1);
+
+    // Integer ==> int
+    Integer obj2 = Integer.valueOf(200);
+    int i2 = obj2.intValue();
+
+  }
+}
+
+
+Integer obj7 = 128;
+Integer obj8 = 128;
+Integer obj9 = 128;
+System.out.println(obj7 == obj8); // false
+System.out.println(obj7 == obj9); // false
+System.out.println(obj8 == obj9); // false
+
+// 결론!
+// - wrapper 객체의 값을 비교할 때 == 연산자를 사용하지 말라!
+// - -128 ~ 127 범위 내(상수풀)의 값이라면 == 연산자를 사용하여 비교할 수도 있지만,
+//   매번 비교할 때 마다 범위의 유효성을 생각하는 것이 번거롭다.
+// - 그외의 값은 Heap에 생성하여
+// - equals() 메서드 재정의하여 값을 비교하라!
+// - 더 좋은 방법은 auto-unboxing 하여 primitive type 의 값으로 바꾼후에 == 연산자로 비교하라.
+
+
+<strong>java.util.Calendar 클래스 - 생성자 활용</strong>
+
+
+public class Exam0410 {
+  public static void main(String[] args) {
+
+    Calendar c1;
+
+    // 생성자가 있다하더라도 접근 권한이 없으면 호출할 수 없다.
+    //    c1 = new Calendar(); // 컴파일 오류!
+
+    // Calendar는 인스턴스 생성을 도와주는 별도의 클래스 메서드(스태틱 메서드)를 제공한다.
+    c1 = Calendar.getInstance();
+    System.out.println(c1.get(Calendar.YEAR));
+
+  }
+}
+
+// 객체 생성 디자인 패턴 중 일부 소개
+//
+// 1) 팩토리 메서드(factory method)
+// - GoF(Gang of Four)의 23가지 디자인 패턴(design pattern) 중 하나이다.
+// - 인스턴스를 생성해주는 메서드이다.
+// - 인스턴스 생성 과정이 복잡할 경우에 인스턴스를 생성해주는 메서드를 미리 정의해 둔다.
+// - 그래서 인스턴스가 필요할 때 마다 메서드를 호출하여 인스턴스를 리턴 받는다.
+//
+// 2) 싱글톤(singleton)
+// - GoF(Gang of Four)의 23가지 디자인 패턴(design pattern) 중 하나이다.
+// - 인스턴스를 한 개만 생성하도록 제한할 때 사용한다.
+// - 생성자를 private으로 처리하여 직접 인스턴스를 생성하지 못하도록 만든다.
+// - 메서드를 통해 인스턴스를 생성하도록 유도한다.
+
+
+- 캡슐화   
+  복잡한 기능을 function(method)로 감싸는 것 
+  위에 상황처럼 calender를 사용하는 경우 new로 생성하면
+  지정해야할 기능들이 많아서 캡슐화를 한다
+  
+
+<strong>예외 처리발생과 catch</strong>
+
+JVM 
+-> 
+APP.main() 
+-> 
+goMainMenu() 
+-> 
+print.inpuInt() 예외 발생
+
+catch 사용전이라면 보고를 JVM 까지 전달하여 시스템을 종료시킨다
+
+
+JVM 
+-> 
+APP.main() 
+-> 
+goMainMenu() catch 
+-> 
+print.inpuInt() 예외 발생
+
+사용하면 사용지점 이후에 보고를 하지 않아 시스템이 종료되지 않음
+
+
+JVM 
+-> 
+APP.main() 
+-> 
+goMainMenu() catch 
+-> 
+- BoardHandler.service() 예외 발생, 
+- TeacherHandler.service() 예외 발생, 
+- StudentHandler.service() 예외 발생, catch
+
+  예외가 발생하면 catch한곳으로 이동 어디에서
+  catch 를 하는가는 상황에 따라 달라진다 
+
+
+try {
+  예외가 발생하는 코드
+} catch (Throwable e) {
+  예외 처리코드
+} finally {
+  예외가 발생하든 정상적으로 수행하든 상관없이
+  반드시 실행할 코드
+}
+
+
+<strong>예외 상황을 알리는 고전적인 방법</strong>
+
+Calculator.compute()
+
+1. call
+2. 계산수행
+3. 결과리턴
+ 오류상황을 리턴값으로 알린다
+ => 정상적인 리턴값과의 혼동을 피하기 위해서 
+    일반적으로 리턴하지 않는 값을 리턴하여
+    오류 상황을 알린다
+
+
+public class Exam0130 {
+  public static void main(String[] args) {
+
+    int result = Calculator2.compute("#", 100, 200);
+
+    // 예전에는 작업 실행중에 오류가 발생하면 희귀한 값을 리턴하여 알려줬다.
+    if (result == -1212121212) {
+      System.out.println("유효하지 않은 연산자입니다!");
+    } else {
+      System.out.println(result);
+    }
+
+    // 일반적인 결과는 정상적으로 수행된다.
+    result = Calculator2.compute("-", 6, 7);
+    if (result == -1212121212) {
+      System.out.println("유효하지 않은 연산자입니다!");
+    } else {
+      System.out.println(result);
+    }
+  }
+}
+ 
+
+// 아무리 희귀한 값을 리턴한다 하더라도 결국에는 그 희귀한 값 또한
+// 정상 값일 수 있다.
+// 이것은 해결할 수 없다.
+
+
+<strong>예외를 알리는 다른 방법</strong>
+
+
+Throw 예외 정보를 담은 객체;
+반드시 throwable에 객체여야한다
+
+예) Throw new Throwable("예외 내용");
+
+
+예외를 던지는 메서드를 선언부에 표시해야한다
+
+예) int compute(String op, int a,int b ) {}
+
+
+예외처리 문법을 사용하는 이유
+
+
+1.예외상황을 알리는 문법
+
+2.조치를통해 시스템을 멈추지 않고 실행하는 문법
+
+
+<strong>Throwable 계층도</strong> 
+
+1. Error (시스템 오류)
+
+- JVM 이 발생시키는 예외
+- 정상적인 실행상태로 복귀 불가 -> 예외 처리(현재까지 작업한내용 임시 저장후 사용자에게 안내메세지 출력과 오류기록을 남긴다)
+  후 즉시 종료해야한다
+- App 에서 던지면 안된다.
+
+
+2. Exception (애플리케이션 오류)
+
+- App 에서 발생시키는 예외
+- 적절한 조치를 취한후 정상적인 실행상태로 복귀할 수 있다
+- 개발자가 던지는 예외
+- 호출하는 쪽에서 반드시 try,catch로 받아야 한다
+
+  1) RuntimeException (unchecked Exception)
+  - try,catch 로 받지 않아도 된다
+  - 그러면 상위 호출자에게 전달
+  - 예외처리 편이성
+
+
+
+  // 오류를 던진다면 반드시 메서드 선언부에 어떤 오류를 던지는지 선언해야 한다.
+  // => 메서드 호출자에게 알려주는 것이다.
+  static void m1() throws Throwable {
+    throw new Throwable(); // OK!
+    // 예외를 던질 때 Throwable 클래스를 직접 사용하지 말라!
+    // 그 하위 클래스를 사용하라.
+    // 특히 애플리케이션 오류를 의미하는 Exception 클래스를 사용하라.
+  }
+
+  // 여러 개의 오류를 던지는 경우 메서드 선언부에 그대로 나열하라.
+  static void m2() throws FileNotFoundException, RuntimeException {
+    int a = 100;
+    if (a < 0)
+      throw new FileNotFoundException(); // OK!
+    else
+      throw new RuntimeException(); // OK!
+  }
+
+  public static void main(String[] args) {}
+
+}
+
+
+System.out.println("try");
+m(0);
+System.out.println("try 블록 실행");
+// m()에서 발생된 예외는
+// try 블록에서 받지 않는다.
+// 따라서 main() 호출자에게 위임한다.
+// => 물론 main() 메서드 선언부에 위임할 예외의 종류를 표시해야 한다.
+//
+} finally {
+// try 블록을 나가기 전에 무조건 실행해야 할 작업이 있다면
+// catch 블록이 없어도 finally 블록만 사용할 수 있다.
+System.out.println("마무리 작업 실행!");
+}
+
+// 이렇게 catch 블록이 없는 try ~ finally ~ 블록을 작성하는 상황:
+// - 예외가 발생하면 그 처리는 호출자에게 맡긴다.
+// - 그러나 이 메서드를 호출하는 동안 사용한 자원은 이 메서드를 종료하기 전에 해제시킨다.
+//
+}
+
+
+<strong>Fineally</strong>
+
+
+try (Scanner)
+
+
+<strong>예외 던지고 받기</strong>
+
+
+static void m1() throws Exception {
+  // m2()와 같다.
+  m2();
+}
+
+static void m2() throws Exception {
+  // m3()에서 발생된 예외를 상위 호출자에게 던지려면
+  // m2() 메서드에서도 선언부에 예외를 기술해야 한다.
+  // => m2() 안에서 Exception 예외가 발생합니다" 라고!
+  m3();
+}
+
+static void m3() throws Exception {
+  // m4()에서 발생된 예외를 상위 호출자에게 던지려면
+  // m3() 또한 메서드 선언부에 해당 예외를 기술해야 한다.
+  // => "m3() 안에서 Exception 예외가 발생합니다" 라고!
+  m4();
+}
+
+static void m4() throws Exception {
+  // 이 메서드에서 발생된 예외를 main()에 전달하는 방법
+  // => 상위 호출자에게 전달하려면 여기서 try ~ catch ~ 해서는 안된다.
+  // => 여기서 예외를 처리하지 않으면 
+  //    메서드 선언부에 어떤 예외가 발생하는 지 선언해줘야 한다.
+  throw new Exception("m4()에서 예외 발생!");
+}
+
+public static void mein(String[] args) {
+  try{
+    m1();
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+}
+// Exception 계열의 예외를 상위 호출자에게 전달하려면,
+// 그 호출 경로에 있는 모든 메서드에
+// throws 문장을 선언해야 하는 버거로움이 있다.
+// 어쩔 수 없다!
+// 무조건 선언해야 한다.
+
+
+<strong>RuntimeException 예외 던지고 받기</strong>
+
+
+static void m1() {
+  // RuntimeException 예외를 받을 경우
+  // try ~ catch ~ 예외를 처리하지 않으면
+  // 자동으로 상위 호출자에게 던진다.
+  m2();
+}
+
+static void m2() {
+  // RuntimeException 예외를 받을 경우
+  // try ~ catch ~ 예외를 처리하지 않으면
+  // 자동으로 상위 호출자에게 던진다.
+  m3();
+}
+
+static void m3() {
+  // m4()에서 어떤 예외가 발생하는지 구체적으로 선언되어 있지 않기 때문에
+  // m4()를 호출할 때는 예외처리를 고민할 필요가 없다.
+  // 그냥 예외를 던지지 않는 메서드인 것 처럼 사용하면 된다.
+  // => 그러나 명심하라!
+  // m4() 예외가 발생되면 상위 호출자에게 예외를 던질 것이다.
+  m4();
+}
+
+static void m4() /*throws RuntimeException*/ {
+  // RuntimeException을 상위 호출자에게 전달할 때는
+  // Error 예외의 경우처럼 
+  // 굳이 메서드 선언부에 지정하지 않아도 된다.
+  throw new RuntimeException("m4()에서 예외 발생!");
+}
+
+public static void main(String[] args) {
+  try {
+    m1();
+  } catch (RuntimeException e) {
+    // m4() 에서 발생된 예외가 여기까지 도달한다.
+    System.out.println(e.getMessage());
+  }
+
+  // RuntimeException 계열의 예외를 던지는 메서드를 사용할 때는
+  // 그 호출 경로에 있는 모든 메서드에 굳이 throws 문장을 선언할 필요가 없다.
+  // 예외를 처리하고 싶은 곳에서
+  // catch 블록으로 받아 처리하면 된다.
+  // 즉 중간에 끼어 있는 메서드를 만들 때
+  // throws 문장을 선언하지 않아도 되기 때문에 편하다!
+  // => 스텔스처럼 조용히 예외를 전달한다.
+
+
+<strong>배열 늘리기</strong> 
+비트 연산자를 통해 배열의 길이를 복제하여 늘린다 
+
+- 단점 기존에 있던 배열은 garbage로 변한다
+
+public void insert(Object object) {
+  if (count == objects.length) {
+    objects = Arrays.copyOf(objects, objects.length + (objects.length >> 1));
+  }
+  this.objects[this.count++] = object;
+}
+
+
+<strong>Linkedlist 알고리즘으로 데이터 </strong>
+200
+data: aaa
+next: 300
+
+300
+data: bbb
+next: 500
+
+400 => gargage
+data: ccc
+next: null
+
+500
+data: ddd
+next: null
+
+
+배열을 링크로 즉 주소로 관리하게 만드는 방법
+
+- garbage 로 변하는 인스턴스를 정확하게 지우는 방법을 알아야한다
+예) 현재 사용하는 방법은 이전 주소를 알아내서 다음 객체를 지정,삭제
+하는 방식이다 garbage가 가리키는 객체가 삭제 혹은 이동 하였을때
+기존에 있는 곳을 garbage가 가리켜 레퍼런스 카운트가 존재하므로
+문제가 발생한다 
+
 
 </pre>
 <br>
