@@ -5595,9 +5595,256 @@ public class ArrayList implements List {}
  } 
 
 
+메소드를 규격화 시켜 ArrayList와 LinkedList를 쉽게
+바꿀수 있다 즉 연결성이 낮다
+
+
+
+
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-01-25</h1>
+<pre>
+<strong>데이터 조회 기능을 규격화 -> 구현 방식에 상관없이 일관된 조회가능</strong>
+
+
+ArrayList 
+-배열을 이용하여 목록을 다룬다
+-index 이용하여 데이터를 조회
+-add(인덱스,값)
+ get(값)
+
+LinkedList
+-노드간의 연결을 이용해 목록을 다룬다
+-index 이용하여 데이터를 조회
+-add(인덱스,값)
+ get(값)
+
+Stack
+-lAST in First Out(LIFO)
+-First in Last Out(FILO)
+-push(값)
+ pop()
+
+Queue
+-First in First Out(FIFO)
+-offer(값)
+ poll()
+
+
+데이터 저장 방식(mechanism)에 따라 데이터를 꺼내는 방법이다르다
+데이터 조회기법에 일관성이 없다
+
+->
+
+client - call(메서드 signature가 같아야한다 = 인터페이스) > 데이터 조회객체 - get() -> ArrayList
+client - call > 데이터 조회객체 - get() -> LinkedList
+client - call > 데이터 조회객체 - pop() -> Stack
+client - call > 데이터 조회객체 - poll() -> Queue
+
+
+규칙에 따라 호출 일관성 확보
+Iterator
+
+
+<strong>list와 Iterator 인터페이스</strong>
+
+Dao가 iterator() 를 사용하기위해 List를 Iterable을 상속받게 만든다
+
+-여러 인터페이스 (예) List 와 Queue)에 공통으로 적용되는 규칙(메서드)이 있다면,
+슈퍼 인터페이스를 만들어 공통 규칙을 정의한 후, 상속받는 것이 인터페이스
+유지 보수에 좋다
  
+즉 인터페이스상속(generalization)을 활용
 
 
+<strong>인터페이스 사용 전</strong>
+
+
+AWorker -> doA
+BWorker -> doB
+CWorker -> doC
+
+처럼 객체마다 사용방법이 다르다 즉 일관성이 없다 
+이렇게 되면 각각 기억해야한다
+
+-> 개선 인터페이스 사용
+
+interface worker -> execute()
+
+로 호출 규칙을 통일시켜 일관성을 가춘다
+
+implements Aworker -> execute()
+implements Bworker -> execute()
+implements Cworker -> execute()
+
+이렇게 인터페이스에서 정한 규칙을 모두 구현한다면 이것이 
+구현체라고 부른다 일반클래스(concrete class)이다 
+하나라도 구현하지 않았다면 추상메서드가 남아있는것이기 때문에
+이것은 일반클래스가 아니라 추상클래스이다
+
+
+caller(사용하는 클래스) -> 인터페이스 -> callee(사용당하는 클래스)
+
+
+<strong>인터페이스의 구현</strong>
+
+MyInterface{
+  m1()
+  m2()
+  m3()
+}
+
+class MyObject {
+  m1(){}
+  m2(){}
+  m3(){}
+}
+
+abstract MyObject2 {
+  m1(){}
+  m2(){}
+}
+
+인터페이스를 모두 구현했다면 일반클래스가 되며 public,abstract를 생략가능하지만
+MyObject2처럼 모두 구현하지 않았다면 추상클래스가 되며 생략 불가능하다
+
+
+<strong>인터페이스 필드</strong>
+
+
+// 인터페이스 필드 선언
+interface MyInterface2 {
+  // 인터페이스 필드는 public static final 이다.
+  // - 인스턴스를 생성할 수 없기 때문에 인스턴스 필드를 선언할 수 없다.
+  // - 규칙이기 때문에 무조건 public 이다.
+  // - 인스턴스 필드가 아니기 때문에 값을 변경할 수 없다.
+  public static final int v1 = 100;
+
+  // public, static, final 을 생략할 수 있다.
+  static final int v2 = 200;
+  public final int v3 = 300;
+  public static int v4 = 400;
+
+  int v5 = 500; // 모두 생략된 상태!
+}
+
+
+<strong>default method</strong>
+
+
+인터페이스에 추가된 새로운 규칙이 추가 되면 기존에 사용하던 클래스들이
+오류가 발생한다 이러한 상황을 발생시키지 않게 하기위해 default 메소드를
+사용한다
+
+default autoPilot(){}
+
+Car에 추가된 새로운 규칙은 구현된 메소드이기 때문에 기존클래스에
+아무런 영향이 없다 단 강제할 수 없다는 단점이 있다 
+
+
+<strong>인터페이스 상속과 구현</strong>
+
+
+public class Exam0110 {
+
+  interface ProtocolA {
+    void rule1();
+  }
+
+  // 인터페이스도 다른 인터페이스를 상속 받을 수 있다.
+  // - ProtocolB 는 ProtocolA의 입장에서 서브 인터페이스이다.
+  // - ProtocolA 는 ProtocolB의 입장에서 수퍼 인터페이스이다.
+  interface ProtocolB extends ProtocolA {
+    void rule2();
+  }
+
+  // 인터페이스를 구현할 때는
+  // 수퍼 인터페이스의 메서드까지 모두 구현해야 한다.
+  class ProtocolImpl implements ProtocolB {
+    // ProtocolA 규칙 준수!
+    @Override
+    public void rule1() {System.out.println("rule1()");}
+
+    // ProtocolB 규칙 준수!
+    @Override
+    public void rule2() {System.out.println("rule2()");}
+
+    // 인터페이스와 상관 없이 메서드 추가
+    public void m1() {System.out.println("m1()");}
+  }
+
+  void test() {
+
+    ProtocolImpl obj = new ProtocolImpl();
+
+    // 1) 클래스의 레퍼런스 사용,
+    // - 그 클래스에 정의된 메서드 호출 가능
+    // - 그 클래스의 상위 클래스에 정의된 메서드 호출 가능
+    obj.rule1(); // OK
+    obj.rule2(); // OK
+    obj.m1(); // OK
+
+    System.out.println("------------------------------------");
+
+    // 2) 인터페이스의 레퍼런스 사용
+    // - 인터페이스에 정의된 메서드 호출 가능 
+    // - 상위 인터페이스에 정의된 메서드 호출 가능
+    ProtocolB b = obj;
+    b.rule2(); // OK --> ProtocolB.rule2() 
+    b.rule1(); // OK --> ProtocolA.rule1()
+    //    b.m1(); // 컴파일 오류 --> ProtocolImpl.m1() 
+
+    System.out.println("-------------------------------");
+
+    // 3) 수퍼 인터페이스의 레퍼런스 사용
+    // - 인터페이스에 정의된 메서드 호출 가능 
+    // - 상위 인터페이스에 정의된 메서드 호출 가능
+    // - ProtocolImpl 클래스가 ProtocolB 의 규칙에 따라 제작되었다면
+    //   결국 그 수퍼 인터페이스의 규칙도 준수하는 것이 된다.
+    // - 따라서 수퍼 인터페이스 레퍼런스에 객체를 담을 수 있다.
+    //   즉 수퍼 인터페이스 레퍼런스로 객체를 가리킬 수 있다.
+    //
+    ProtocolA a = obj;
+    a.rule1(); // OK --> ProtocolA.rule1()
+    //    a.rule2(); // 컴파일 오류 --> ProtocolB.rule2() 
+    //    a.m1(); // 컴파일 오류 --> ProtocolImpl.m1() 
+  }
+
+  public static void main(String[] args) {
+    new Exam0110().test();
+  }
+}
+
+
+<strong>인터페이스 다중 상속</strong>
+
+
+interface ProtocolA{
+  rule1()
+}
+
+interface ProtocolB{
+  rule2()
+}
+
+
+interface ProtocolC extends ProtocolA,ProtocolB {
+  rule3()
+}
+
+class ProtocolImpl {
+  rule1()
+  rule2()
+  rule3()
+}
+
+
+인터페이스는 다중상속이 가능하다 구현이 안되었기 때문이다 
+콘크리트 클래스로 구현하기 위해서는 상속 받은 모든 인터페이
+스의 추상 메소드를 구현해야한다 
 
 
 </pre>
