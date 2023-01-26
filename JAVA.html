@@ -5823,10 +5823,12 @@ public class Exam0110 {
 
 
 interface ProtocolA{
+  rule0()
   rule1()
 }
 
 interface ProtocolB{
+  rule0()
   rule2()
 }
 
@@ -5836,6 +5838,7 @@ interface ProtocolC extends ProtocolA,ProtocolB {
 }
 
 class ProtocolImpl {
+  rule0()
   rule1()
   rule2()
   rule3()
@@ -5845,6 +5848,236 @@ class ProtocolImpl {
 인터페이스는 다중상속이 가능하다 구현이 안되었기 때문이다 
 콘크리트 클래스로 구현하기 위해서는 상속 받은 모든 인터페이
 스의 추상 메소드를 구현해야한다 
+
+
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-01-26</h1>
+<pre>
+<strong>인터페이스 다중 상속 불가능한 경우</strong>
+
+
+interface ProtocolA {
+  void rule0()
+  void rule1()
+}
+
+interface ProtocolB {
+  int rule0()
+  void rule2()
+}
+
+메소드의 리턴타입이 다른경우 다중상속이 불가능하다
+즉 어떤 메소드를 상속받는지에 따라서 구현이 달라진다
+
+
+<strong>인터페이스와 추상클래스</strong>
+
+
+interface ProtocolA{
+  rule1()
+  rule2()
+  rule3()
+  rule4()
+}
+
+abstract ProtocolA {
+  rule2()
+  rule3()
+  rule4()
+}
+
+class ProtocolImpl {
+  rule1()  // 강제적으로 구현
+  rule3()  // 선택적으로 구현 
+}
+
+추상클레스가 인터페이스를 직접 받고 그 추상클래스를
+받아서 사용하면 인터페이스를 간접적으로 사용하기 때
+문에 선택적으로 사용가능하다 
+
+** 이때 추상클래스에서 일부러 구현하지 추상 메서드가 있을경우
+모든 상속받은 클래스들은 추상클래스를 강제적으로 구현해야한다 
+
+
+<strong>인터페이스 default 메서드</strong>
+
+
+interface computer {
+  on()
+  off()
+  default touch() // default로 추가
+  touch() // public abstract 로 추가하면 컴파일 오류
+}
+
+class Computer1 {
+  on()
+  off()
+}
+
+class Computer2 {
+  on()
+  off()
+  touch() 
+}
+
+
+기존에 사용하던 프로젝트에서 새로운 메소드를 추가하고 싶다면
+default 메소드로 추가하라 이미 구현된 메소드이기 때문에 컴파
+일 오류가 발생하지 않는다 단 강제성이 없어진다
+
+
+또다른 방식은 기존 인터페이스를 상속받아 ComputerB를 만들어 
+새로운 메소드를 추가하면 가능하다 하지만 이런경우 또다른 클
+래스가 만들어 지기 때문에 기존 프로젝트와 연결성이 없어진다 
+
+즉 computer를 가지고 활용하는 메소드가 있을경우 ComputerB 로
+바꿔줘야한다 
+
+
+<strong>중첩클래스 활용</strong>
+
+
+LinkedList {
+  add(){}
+  toArray(){}
+  set(){}
+  remove(){}
+  indexOf(){}
+  get(){}
+
+  static class Node {
+    Object value;
+    Node next;
+  
+    public Node() {}
+  
+    public Node(Object value) {
+      this.value = value;
+    }
+  }
+}
+
+
+LinkedList에 있는 모든 메소드는 Node를 사용하고 이 클래스만 사용한다
+Node는 인스턴스 사용을 하지 않는다 그래서  static nested class로 만들
+어 관리하는것이 유지보수에 좋다 
+
+
+class AbstractList {
+  iterator() {
+    class ListIterator (){
+      ListIterator(List list){}
+    }
+  }
+  return new ListIterator();
+}
+
+
+해당 클래스가 하나의 클래스의 하나의 메소드에서만 사용한다면
+로컬 클래스로 만든다 
+
+
+class AbstractList {
+  iterator() {
+    Iterator obj = new Iterator() {
+      ListIterator(List list){}
+    }
+  };
+  return obj;
+}
+
+
+인스턴스를 하나만 사용하면서 크기도 작다면 익명 클래스로 바꾼다
+
+
+class AbstractList {
+  iterator() {
+  return new Iterator() {
+    ListIterator(List list){}
+  }
+ };
+}
+
+
+return 문 + anonymous class 사용
+
+
+<strong>nested class 종류</strong>
+
+
+class 01{
+  static class A{} // static nested class
+  class B{} // non-static nested class = inner class
+
+  public static void main(String[] args) {
+    class C{}  // local class
+    Object obj = new Object() { // 익명클래스
+      public void m1() {}
+    }
+  }
+}
+
+
+<strong>inner class 클래스 정의와 인스턴스 생성</strong>
+
+
+class A {
+  class B{
+    인스턴스 중첩 클래스는 바깥클래스의 인스턴스 주소를 저장할
+    필드를 컴파일러가 자동으로 추가하고 파라미터로 받는 생성자
+    를 만든다 
+  }
+  static class {}  스태틱 중첩클래스는 내부에서 사용하기 때문에 생성하지 않는다
+}
+
+
+<strong>바깥 클래스 인스턴스 멤버 접근하기</strong>
+
+
+class B3 {
+
+  // 인스턴스 멤버
+  int v1 = 10;
+
+  class X {
+    int v1 = 100;
+
+    void test() {
+      int v1 = 1000;
+
+      System.out.printf("v1 = %d\n", v1); // 로컬 변수 
+      System.out.printf("this.v1 = %d\n", this.v1); // 인스턴스 변수 
+      System.out.printf("B3.this.v1 = %d\n", B3.this.v1); // 바깥 객체의 인스턴스 변수 
+    }
+  }
+}
+
+public class Exam0230 {
+
+  public static void main(String[] args) {
+    B3 outer = new B3();
+    outer.v1 = 11;
+
+    B3.X x1 = outer.new X();
+    x1.test();
+    System.out.println("--------------------");
+
+    B3.X x2 = outer.new X();
+    x2.test();
+    System.out.println("--------------------");
+
+    B3 outer2 = new B3();
+    outer2.v1 = 22;
+
+    B3.X x3 = outer2.new X();
+    x3.test();
+    System.out.println("--------------------");
+  }
+
+
 
 
 </pre>
