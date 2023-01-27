@@ -6014,7 +6014,7 @@ class 01{
 
   public static void main(String[] args) {
     class C{}  // local class
-    Object obj = new Object() { // 익명클래스
+    Object obj = new Object() { // 익명클래스 (anonymous class)
       public void m1() {}
     }
   }
@@ -6081,6 +6081,513 @@ public class Exam0230 {
 
 
 </pre>
+<br>
+<hr>
+<br>
+<h1>2023-01-27</h1>
+<pre>
+<strong>중첩클래스와 .class 파일</strong>
+
+class A {
+  
+  static class B {}   -> A$B.class
+  
+  class C {}    -> A$C.class
+
+  void Method {
+    class D {}    -> A$1D.class
+
+    Object object = new Object(){};   -> A$1.class
+  }
+}   -> A.class
+
+
+<strong>static nested class 와 non-static nested class 차이</strong>
+
+
+class A {
+  static class X{} // X (){} 컴파일러가 기본생성자를 추가해준다 
+
+  class Y{} // A this$0; Y(A arg) {this$0 = arg;}
+            // 컴파일러가 바깥클래스의 객체 주소를 담을 레퍼런스와 파라미터를 추가
+            // Y obj = new Y() ->  Y obj = new Y(this)
+            // 컴파일러가 자동으로 변경해준다
+}
+
+
+<strong>local class : .class 파일명</strong>
+
+
+class B2 {
+  void m1() {
+    class X {
+      // 로컬 클래스의 .class 파일명
+      // => [바깥클래스명]$[정의된순서][로컬클래스명].class
+      // => 예) B2$1X.class
+    }
+    class Y {
+      // 로컬 클래스의 .class 파일명
+      // => [바깥클래스명]$[정의된순서][로컬클래스명].class
+      // => 예) B2$1Y.class
+    }
+  }
+
+  static void m2() {
+    class Y {
+      // 로컬 클래스의 .class 파일명
+      // => [바깥클래스명]$[정의된순서][로컬클래스명].class
+      // => 예) B2$2Y.class
+    }
+    class X {
+      // 로컬 클래스의 .class 파일명
+      // => [바깥클래스명]$[정의된순서][로컬클래스명].class
+      // => 예) B2$2X.class
+    }
+    class Z {
+      // 로컬 클래스의 .class 파일명
+      // => [바깥클래스명]$[정의된순서][로컬클래스명].class
+      // => 예) B2$1Z.class
+    }
+  }
+}
+
+public class Exam0130 {
+
+  public static void main(String[] args) {
+  }
+
+}
+
+
+<strong>local class에서 바깥 메서드의 로컬 변수 접근</strong>
+
+
+// 계산기 사용법을 정의한다.
+interface Calculator {
+  double compute(int money);
+}
+
+class CalculatorFactory {
+
+  static Calculator create(float interest) {
+
+    class CalculatorImpl implements Calculator {
+
+      @Override
+      public double compute(int money) {
+        return money + (money * interest);
+        // interest는 create() 함수의 로컬 변수이다.
+        // CalculatorImpl 객체를 생성하여 리턴한 후에는 interest 로컬 변수는 스택에서 사라진 상태일 것이다.
+        // 나중에 compute()를 호출할 때 interest 변수는 없을텐데, 어떻게 된 것인가?
+        // => 로컬 클래스에서 메서드의 로컬 변수를 사용한다면
+        //    컴파일러는 로컬 클래스에 바깥 메서드의 로컬 변수 값을 저장할 필드를 추가한다.
+        //    또한 로컬 클래스의 객체를 생성할 때 생성자에 로컬 변수의 값을 넘겨 줄 것이다.
+      }
+    }
+
+    return new CalculatorImpl();
+  }
+}
+
+public class Exam0310 {
+
+  public static void main(String[] args) {
+    Calculator c1 = CalculatorFactory.create(0.02f);
+    Calculator c2 = CalculatorFactory.create(0.08f);
+
+    System.out.printf("%.2f\n", c1.compute(1235_0000));
+    System.out.printf("%.2f\n", c2.compute(1235_0000));
+  }
+
+}
+
+
+<strong>anonymous class : 클래스를 상속 받은 익명 클래스 정의</strong>
+
+
+public class Exam0121 {
+
+  // 클래스는 static과 non-static이 구분된다.
+  static abstract class A {
+    abstract void print();
+  }
+
+  public static void main(final String[] args) {
+    // 2) 익명 클래스로 서브 클래스 만들기
+    // => 인스턴스를 한 번 만 생성할 것이라면,
+    //    로컬 클래스로 정의하는 것 보다 익명 클래스로 정의하는 것이 더 낫다.
+    // => 특히 객체를 사용하려는 곳에 바로 익명 클래스를 정의하면
+    //    읽기 쉽기 때문에 소스 코드를 유지보수에 더 좋다.
+    //
+    // 익명 클래스로 인터페이스 구현하기
+    // 문법:
+    // => 수퍼클래스 레퍼런스 = new 수퍼클래스() {};
+    //  
+    //    - 호출하는 생성자는 수퍼 클래스의 생성자이다.
+    //
+    A obj2 = new A() {
+      @Override
+      void print() {
+        System.out.println("Hello!");
+      }
+    };
+    obj2.print();
+  }
+}
+
+
+<strong>anonymous class - 익명 클래스가 놓이는 장소: 리턴</strong>
+
+
+class My {
+  static void m1() {
+    System.out.println("오호라!!!!");
+  }
+
+  void m2() {
+    System.out.println("와우~~~~!");
+  }
+}
+
+public class Exam0450 {
+  // 인터페이스의 경우 static으로 선언하지 않아도 스태틱 멤버에서 사용할 수 있다.
+  interface A {
+    void print();
+  }
+
+  static A create0() {
+    class X implements A {
+      @Override
+      public void print() {
+        System.out.println("Hello!0");
+      }
+    }
+    return new X();
+  }
+
+  static A create1() {
+    A a = new A() {
+      @Override
+      public void print() {
+        System.out.println("Hello!1");
+      }
+    };
+    return a;
+  }
+
+  static A create2() {
+    return new A() {
+      @Override
+      public void print() {
+        System.out.println("Hello2!");
+      }
+    };
+  }
+
+  static A create3() {
+    return () -> System.out.println("Hello3!");
+  }
+
+  static A create4() {
+    return My::m1;
+  }
+
+  static A create5() {
+    return new My()::m2;
+  }
+
+  public static void main(String[] args) {
+    A obj0 = create0();
+    obj0.print();
+
+
+    A obj1 = create1();
+    obj1.print();
+
+    A obj2 = create2();
+    obj2.print();
+
+    A obj3 = create3();
+    obj3.print();
+
+    A obj4 = create4();
+    obj4.print();
+
+    A obj5 = create5();
+    obj5.print();
+  }
+}
+
+
+<strong>Lambda 문법 - 익명 클래스 vs 람다</strong>
+
+
+public class Exam0110 {
+
+  // 다음과 같이 추상 메서드가 한 개 있는 인터페이스를 "functional interface"라고 부른다.
+  // => 이런 경우에 람다 문법을 사용할 수 있다.
+  // => 인터페이스는 static 을 붙이지 않아도 static 멤버가 사용할 수 있다.
+  interface Player {
+    void play();
+  }
+
+  public static void main(String[] args) {
+
+    // 익명 클래스로 인터페이스 구현하기
+    Player p1 = new Player() {
+      @Override
+      public void play() {
+        System.out.println("익명 클래스");
+      }
+    };
+    p1.play();
+
+    // 람다 문법으로 인터페이스 구현하기
+    // => 메서드 한 개짜리 인터페이스를 좀 더 간결하게 구현하기 위해 만든 문법이다.
+    // => 뻔한 코드 생략!
+    Player p2 = () -> System.out.println("익명 클래스");
+    p2.play();
+
+  }
+}
+
+// 익명 클래스와 .class 파일 
+// => 자바의 nested class 는 모두 별도의 .class 파일을 갖는다.
+// => 위의 main()에 정의된 로컬 익명 클래스는 다음과 같은 이름의 .class 파일로 컴파일 된다.
+//      Exam0110$1.class
+//
+// 람다와 .class 파일 
+// => 람다는 별도의 .class 파일을 생성하지 않는다.
+// => 컴파일러는 람다 코드를 해당 클래스의 스태틱 메서드로 정의한다.
+// => 그리고 리플렉션 API를 사용하여 이 메서드를 호출하도록 변경한다. 
+// => 람다 문법이 초기에 등장했을 때는 익명 클래스로 변환되었다.
+// => 그러나 최근에는 메서드로 변환한 후 호출하는 방식으로 바뀌었다.
+// => 예) 
+// 원래의 자바코드:
+//    Player p2 = () -> {
+//      System.out.println("람다");
+//    };
+//
+// 컴파일러가 변환한 코드:
+//    private static synthetic void lambda$0();
+//    0  getstatic java.lang.System.out : java.io.PrintStream [33]
+//    3  ldc <String "람다"> [39]
+//    5  invokevirtual java.io.PrintStream.println(java.lang.String) : void [41]
+//    8  return
+//      Line numbers:
+//        [pc: 0, line: 27]
+//        [pc: 8, line: 28]
+//
+// => 람다를 호출하는 코드는 자동 생성된 메서드를 호출하는 코드로 변환된다.
+
+
+파라미터가 하나일때 타입,괄호 생략가능
+
+
+
+public class Exam0130 {
+
+  interface Player {
+    void play(String name);
+  }
+
+  public static void main(String[] args) {
+    // 1) 파라미터는 괄호() 안에 선언한다.
+    Player p1 = (String name) -> System.out.println(name + " 님 환영합니다.");
+    p1.play("홍길동");
+
+    // 2) 파라미터 타입을 생략할 수 있다.
+    Player p2 = (name) -> System.out.println(name + " 님 환영합니다.");
+    p2.play("홍길동");
+
+    // 3) 파라미터가 한 개일 때는 괄호도 생략할 수 있다.
+    Player p3 = name -> System.out.println(name + " 님 환영합니다.");
+    p3.play("홍길동");
+  }
+}
+
+
+
+파라미터가 여러개 일때 도 똑같이 생략가능
+
+
+
+public class Exam0140 {
+
+  interface Player {
+    void play(String name, int age);
+  }
+
+  public static void main(String[] args) {
+    // 1) 파라미터는 괄호() 안에 선언한다.
+    Player p1 = (String name, int age) -> System.out.printf("%s(%d)님 환영합니다.\n", name, age);
+    p1.play("홍길동", 20);
+
+    // 2) 파라미터 타입을 생략할 수 있다.
+    Player p2 = (name, age) -> System.out.printf("%s(%d)님 환영합니다.\n", name, age);
+    p2.play("임꺽정", 30);
+
+    // 3) 파라미터가 여러 개일 때는 괄호를 생략할 수 없다.
+    //    Player p3 = name, age -> System.out.printf("%s(%d)님 환영합니다.\n", name, age);
+    //    p3.play("임꺽정", 30);
+  }
+}
+
+
+<strong>functional interface의 자격</strong>
+
+
+public class Exam0230 {
+
+  // 여러 개의 메서드가 있다 하더라도 추상 메서드가 한 개이면 된다.
+  interface Player {
+
+    static String info() {
+      return "Player입니다.";
+    }
+
+    default void stop() {}
+
+    void play();
+  }
+
+  public static void main(String[] args) {
+    // static 메서드나 default 메서드가 몇개이든 그 개수는 중요하지 않다.
+    // 추상 메서드가 한 개이면 람다 문법을 사용할 수 있다.
+    Player p = () -> System.out.println("Player...");
+    p.play();
+    System.out.println(Player.info());
+  }
+
+
+<strong>메서드 레퍼런스 - 스태틱 메서드 레퍼런스</strong>
+
+
+
+public class Exam0510 {
+
+  static class MyCalculator {
+    public static int plus(int a, int b) {return a + b;}
+    public static int minus(int a, int b) {return a - b;}
+    public static int multiple(int a, int b) {return a * b;}
+    public static int divide(int a, int b) {return a / b;}
+  }
+
+  interface Calculator {
+    int compute(int x, int y);
+  }
+
+  public static void main(String[] args) {
+    // 메서드 한 개짜리 인터페이스의 구현체를 만들 때,
+
+    // 1) 익명 클래스 활용
+    Calculator obj1 = new Calculator() {
+      @Override
+      public int compute(int x, int y) {
+        return x * y;
+      }
+    };
+
+    // 2) 람바 문법 활용
+    Calculator obj2 = (x, y) -> x * y;
+
+    // 3) 기존에 작성한 클래스의 스태틱 메서드를 재활용하기
+    // => 인터페이스의 메서드 규격과 일치하는 메서드가 있다면,
+    //    그 메서드를 람다 구현체로 대체할 수 있다.
+    // => 새로 코드를 작성할 필요가 없어 매우 편리하다.
+    // => 규격? 메서드의 파라미터 타입/개수/순서, 리턴 타입
+    // => 문법:
+    //    클래스명::메서드명
+    Calculator c1 = MyCalculator::plus;  // MyCalculator의 스태틱 메서드인 plus() 를 가지고 구현체를 자동생성
+    Calculator c2 = MyCalculator::minus;
+    Calculator c3 = MyCalculator::multiple;
+    Calculator c4 = MyCalculator::divide;
+
+    System.out.println(c1.compute(200, 17)); // compute() ==> plus()
+    System.out.println(c2.compute(200, 17)); // compute() ==> minus()
+    System.out.println(c3.compute(200, 17)); // compute() ==> multiple()
+    System.out.println(c4.compute(200, 17)); // compute() ==> divide()
+  }
+}
+
+
+인스턴스 메서드 또한 같은 형식이지만 인스턴스는 앞에 주소를 넘겨주는 방식으로 사용
+
+
+<strong>메서드 레퍼런스 - 생성자 레퍼런스</strong>
+
+
+public class Exam0710 {
+
+  interface ListFactory {
+    List create();
+  }
+
+  public static void main(String[] args) {
+
+    // 인터페이스에 정의된 메서드가
+    // 생성자의 형식과 일치하다면
+    // 메서드 레퍼런스로 생성자를 지정할 수 있다.
+    //
+    // 1) 익명 클래스로 인터페이스 구현
+    //    ListFactory f1 = new ListFactory() {
+    //      public List create() {
+    //        return new ArrayList();
+    //      }
+    //    };
+
+    // 2) 람다 문법으로 인터페이스 구현
+    //    ListFactory f1 = () -> new ArrayList();
+
+    // 3) 메서드 레퍼런스로 인터페이스 구현 
+    ListFactory f1 = ArrayList::new;
+
+    // 인터페이스의 메서드를 호출하면
+    // 지정된 클래스의 인스턴스를 만든 후 생성자를 호출한다.
+    List list = f1.create(); // new ArrayList();
+
+    System.out.println(list instanceof ArrayList);
+    System.out.println(list.getClass().getName());
+  }
+}
+
+
+사용 법은 동일하다
+
+
+<strong>List 와 forEach() - forEach() 사용 후</strong>
+
+
+public class Exam0920 {
+
+  public static void main(String[] args) {
+    ArrayList<String> names = new ArrayList<>(); // <> 제너릭문법
+    names.add("홍길동");
+    names.add("임꺽정");
+    names.add("유관순");
+    names.add("김구");
+    names.add("안중근");
+
+    class MyConsumer<T> implements Consumer<T> {
+      @Override
+      public void accept(T item) {
+        System.out.println(item);
+      }
+    }
+    names.forEach(new MyConsumer<String>());
+  }
+}
+
+
+제너릭 문법은 클래스,인터페이스 를 선언할때 사용할 데이터 타입을 
+지정해 재사용할 수 있게 하는 문법이다 
+
+
+
+</pre>
+<br>
+<hr>
+<br>
 </section>
 </main>
 </div>
