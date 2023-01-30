@@ -6588,6 +6588,144 @@ public class Exam0920 {
 <br>
 <hr>
 <br>
+<h1>2023-01-30</h1>
+<pre>
+
+
+map 의 값을 꺼낼때
+
+
+static void print(Map<String,Member> map) {
+  Set<Entry<String,Member>> entrySet = map.entrySet(); // set 안에는 Entry가 있고 그안에 키로 String,과 Member가 있다
+
+  for (Entry<String,Member> entry : entrySet) {
+    System.out.printf("%s ==> %s\n" , entry.getKey(), entry.getValue());
+  }
+  System.out.println("_____________________________");
+}
+}
+
+
+<strong>FileOutputStream/FileInputStream</strong>
+
+
+파일에 FileOutputStream ->  
+파일에 fileInputStream -> 
+
+
+<strong>myapp 의 게시판 데이터 포맷을 추출하는법</strong>
+
+
+1. BoardDao 에 save 메소드를 만든다
+
+public void save(String filename) {
+  try (FileOutputStream out = new FileOutputStream(filename)){
+
+    // 바이너리 데이터(바이트배열)를 출력할 도구를 준비한다 .
+
+    //목록에서board객체를 꺼내 바이트 배열로 만든후 출력
+    //      for (Borad b : list) {
+    //        byte[] bytes = b.toBytes();
+    // out.write(bytes);
+    //}
+
+    if (list.size() > 0) {
+      Board b = list.get(0);
+      out.write(ByteArrayGenerator.write(b.getNo()));       // 0x348a3b10 = 0x348a3b10
+      out.write(ByteArrayGenerator.write(b.getTitle()));
+      out.write(ByteArrayGenerator.write(b.getContent()));
+      out.write(ByteArrayGenerator.write(b.getPassword()));
+      out.write(ByteArrayGenerator.write(b.getViewCount()));
+      out.write(ByteArrayGenerator.write(b.getCreatedDate()));
+
+    }
+  }catch (Exception e) {
+    e.printStackTrace();
+  }
+}
+
+
+2. util에 ByteArrayGenerator를 만든다 
+
+데이터를 저장할 방식을 지정
+
+public class ByteArrayGenerator {
+  public static byte[] write(int value) {
+    byte[] bytes = new byte[4];
+    bytes[0] = (byte)(value >> 24);
+    bytes[1] = (byte)(value >> 16);
+    bytes[2] = (byte)(value >> 8);
+    bytes[3] = (byte)value;
+    return bytes;
+
+  }
+
+  public static byte[] write(String value) {
+    // [2byte: 문자열의 바이트 배열길이[n바이트 : 문자열의 바이트배열]
+    byte[] strBytes = value.getBytes();
+    byte[] bytes = new byte[strBytes.length + 2];
+
+    System.arraycopy(strBytes, 0, bytes, 2, strBytes.length);
+    bytes[0] = (byte)(strBytes.length >> 8);
+    bytes[1] = (byte)(strBytes.length);
+
+    return bytes;
+  }
+  public static void main(String[] args) {
+    //    int value = 0xabcdef31;
+    //    byte[] bytes = ByteArrayGenerator.write(value);
+    byte[] bytes = ByteArrayGenerator.write("ABC가각간");
+    for (int i = 0; i < bytes.length; i++) {
+      System.out.printf("%02x" , bytes[i]);
+    }
+  }
+}
+
+
+3. BoardHandler 에 (0.이전) 을 선택하면 저장하게 작동
+
+public void service() {
+  while (true) {
+    System.out.printf("[%s]\n", this.title);
+    System.out.println("1. 등록");
+    System.out.println("2. 목록");
+    System.out.println("3. 조회");
+    System.out.println("4. 변경");
+    System.out.println("5. 삭제");
+    System.out.println("6. 검색");
+    System.out.println("0. 이전");
+    int menuNo = Prompt.inputInt(String.format("%s> ", this.title));
+
+    switch (menuNo) {
+      case 0:
+        boardDao.save("board.data");
+        return;
+      case 1: this.inputBoard(); break;
+      case 2: this.printBoards(); break;
+      case 3: this.printBoard(); break;
+      case 4: this.modifyBoard(); break;
+      case 5: this.deleteBoard(); break;
+      case 6: this.searchBoard(); break;
+      default:
+        System.out.println("잘못된 메뉴 번호 입니다.");
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
 </section>
 </main>
 </div>
