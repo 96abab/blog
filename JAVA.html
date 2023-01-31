@@ -6713,12 +6713,108 @@ public void service() {
 }
 
 
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-01-31</h1>
+<pre>
+ 
+<strong>Decorator 설계기법을 이용하여 기능확장</strong>
+
+
+DataOutputStream
+-> write() 사용
+FileOutputStream 
+->
+바이너리 파일(byte , byte[])
+-> 
+FileInputStream
+-> read() 사용
+DataInputStream
 
 
 
+Data -- Stream = Decorator
+File -- Stream = Data Sink Stream class
 
 
+<strong>Decorator Design Pattern의 계층도 : I/O Stream</strong>
 
+
+InputStream {
+  FileInputStream{ // 기능을 추가해주는 class
+    DataInputStream
+  }
+}
+
+
+<strong>기능 확장법</strong>
+
+
+1. 상속
+
+A {
+  public void run() {달려라}
+  public void stop() {}
+}
+B extends A {
+  public void run() {씽씽달려라}
+  public void go() {}
+}
+
+
+2. 포함
+
+B {
+  run (){}
+  stop(){}
+}
+
+-> call (위임)
+
+A {
+  run (){}
+  stop(){}
+}
+
+
+3. 데코레이터
+
+AA { 빵}
+  B {크림빵} // 다른 형제 자손에게 기능을 덧붙이는 역할
+  
+  A {소보루}
+  C {팥}
+  D {초코}
+
+class B {
+  E obj;
+  B(E obj) {
+    this.obj = obj;
+  }
+}
+
+
+new f2(new f1(new a()));
+
+와 같이 중첩사용 가능 
+
+
+<strong>객체 직렬화</strong>
+
+객체
+->write  
+ObjectOutputStream
+-> serialize(직렬화) = (marshaling) 
+FileOutputStream
+-> byte 클래스정보+
+파일 
+->
+FileInputStream
+->
+ObjectInputStream
+->deserialize(역직렬화) = (unmarshaling) 
 
 
 
