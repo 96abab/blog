@@ -6817,6 +6817,219 @@ ObjectInputStream
 ->deserialize(역직렬화) = (unmarshaling) 
 
 
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-02-01</h1>
+<pre>
+
+<strong>cvs 텍스트 형식으로 출력하기 : FlieReader/FileWriter</strong>
+
+
+'가'(0xac00(UTF-16)) -> Write(정수) -> FileOutputStream 
+-> 맨뒤 1byte 만 출력 (00)
+
+
+'A'(0x0041(UTF-16)) -> Write(문자코드) -> FileWriter 
+  -> JVM 옵션 file.encoding 에 지정된 문자집합의 코드로 변환 (41)
+
+
+  <strong>텍스트출력</strong>
+
+
+객체 -> csv형식 텍스트 -> write() -> FileWriter
+
+-> UTF-8 문자코드표에 따라 변환
+
+텍스트 파일
+
+-> UTF-8 문자코드 읽기
+
+FileReader -> read() -> BufferedReader -> 한줄의 문자열로 객체 필드에 저장
+
+
+<strong>리팩토링: information Expert, factory Method 패턴적용</strong>
+
+
+Board -> BoardDao -> csv데이터 생성
+
+
+
+만약 Board의 필드가 변경 삭제될경우 
+BoardDao의 코드를 변경해야한다
+
+
+BoardDao가 Board 인스턴스를 사용할 때
+Board에서 클래스를 변경하면 인스턴스 생성코드를 변경해야한다
+
+=>
+
+직접 객체를 생성하는 대신 Board.create(csv문자열) 호출
+
+즉 메서드에서 생성하는 코드로 만들어서 넘기면 필드가
+바뀌더라도 메서드를 사용하는 쪽에서는 변경할게 없다
+
+->
+
+
+class Student {
+
+// Factory Method 패턴 + Information Expert 패턴
+public static Student create(String csv) {
+  try {
+    String[] values = csv.split(",");
+
+    Student obj = new Student();
+    obj.setNo(Integer.parseInt(values[0]));
+    obj.setName(values[1]);
+    obj.setTel(values[2]);
+    obj.setCreatedDate(values[3]);
+    obj.setPostNo(values[4]);
+    obj.setBasicAddress(values[5]);
+    obj.setDetailAddress(values[6]);
+    obj.setWorking(Boolean.parseBoolean(values[7]));
+    obj.setGender(values[8].charAt(0));
+    obj.setLevel(Byte.parseByte(values[9]));
+
+    return obj;
+
+  } catch (Exception e) {
+    throw new RuntimeException("Board 객체 생성 오류!", e);
+  }
+}
+
+// Information Expert 패턴
+public String toCsvString() {
+  return String.format("%d,%s,%s,%s,%s,%s,%s,%b,%s,%d",
+      this.getNo(),
+      this.getName(),
+      this.getTel(),
+      this.getCreatedDate(),
+      this.getPostNo(),
+      this.getBasicAddress(),
+      this.getDetailAddress(),
+      this.isWorking(),
+      this.getGender(),
+      this.getLevel());
+  }
+}
+
+class StudentDao {
+
+public void save(String filename) {
+  try (FileWriter out = new FileWriter(filename)) {
+
+    list.forEach(obj -> {
+      try {
+        out.write(obj.toCsvString() + "\n");
+      } catch (Exception e) {
+        System.out.println("데이터 출력 중 오류 발생!");
+        e.printStackTrace();
+      }
+    });
+
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+}
+
+public void load(String filename) {
+  if (list.size() > 0) { // 중복 로딩 방지!
+    return;
+  }
+
+  try (BufferedReader in = new BufferedReader(new FileReader(filename))) {
+    String str = null;
+    while ((str = in.readLine()) != null) {
+      list.add(Student.create(str));
+    }
+
+    if (list.size() > 0) {
+      lastNo = list.get(list.size() - 1).getNo();
+    }
+
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+ }
+}
+
+
+<strong>데이터 처리를 별도의 Application으로 분리</strong>
+
+
+1. 분리전
+
+App-> I/o 파일
+App-> I/o 파일
+App-> I/o 파일
+
+로컬에 저장한다
+
+문제점
+- 각 App마다 파일을 관리하여 데이터공유가 불가능
+
+
+2. 파일공유
+
+App
+App
+App
+
+->
+
+computer HDD
+
+여러 App에서 동시에 파일에 접근하여 I/O 수행하면
+데이터가 왜곡발생 가능성이 있다
+
+
+3. 파일 I/O 관리자 도입
+
+App = Client Application
+App = Client Application
+App = Client Application
+
+-> 요청/응답
+
+
+App = server Application (관리자)
+
+
+-> I/O
+
+
+computer HDD
+
+
+원격의 App가 파일을 관리하여 App에 접근을 제어한다
+이를 통해 데이터가 왜곡되는것을 방지
+
+
+<strong>Client / Server</strong>
+
+
+Client
+ socket
+  -포트번호(port) OS가 자동부여
+
+
+-> write()/ read()
+
+
+Server
+-포트번호(port) 수동지정
+ socket
+
+
+
+
+
+
+
+
+
 
 
 
