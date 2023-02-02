@@ -7035,6 +7035,105 @@ Server
 
 
 </pre>
+<br>
+<hr>
+<br>
+<h1>2023-02-02</h1>
+<pre>
+
+<strong>데이터처리 아키텍처</strong>
+
+
+client -> (call) BoardDao
+
+
+기존에는 데이터처리를 Dao에서 진행하였지만
+ServerApp로 별도의 application 으로 분리
+
+=>
+
+BoardHandler -> BoardDao 이렇게 사용하는데 BoardHandler에서
+Dao를 생성해서 사용한다(강결합) boardDao에서 변경이 생기면 
+boardHandler도
+변경해야 한다
+
+->  해결책
+
+로우커플링(low coupling)
+
+1. 의존객체를 직성생성하는대신 주입 받기
+Dependency Injection(DI)
+
+2. 인터페이스를 통해 관계를 맺는다
+-> 즉 직접 클래스를 언급 X
+
+
+interface BoardDao 
+로 변경하여 사용
+
+NetworkBoardDao -> BoardDao 
+LocalBoardDao -> BoardDao
+
+
+class BoardHandler {
+  BoardDao boardDao;  // 기존에는 다른 클래스를 사용하면 변경해야한다 
+  BoardHandler(BoardDao boardDao){ // 파라미터도 똑같이 바꿔야한다
+    this.boardDao = boardDao;
+  }
+}
+
+
+하지만 interface를 사용하면 NetworkBoardDao 와
+LocalBoardDao로 구현화를 시켜놓고 사용을 하면 
+유지보수가 쉽다 
+interface를 구현한 객체를 사용  
+
+
+<strong>client/ Server Protocol</strong>
+
+Clinet <-> Server
+
+
+Client가 요청
+데이터명
+액션
+파라미터(선택)
+
+Server가 응답
+상태코드(문자열)
+데이터(Json텍스트)
+
+상태코드(성공200,
+ 실패400(클라이언트),
+ 실패500(서버)),
+ 
+ "result": 데이터(문자열,객체,배열)}
+
+
+
+
+
+Client -> BoardHandler ->call -> NetworkBoardDao(stub = 클라이언트 중계인) 
+
+<-> object Request Broker (ORB) 
+
+Server -> BoardDao -> BoardServlet(skeleton = 서버중계인)
+
+
+스테이스 풀(예)상담원)  -> 해당 요청이 끝날 때까지 다른 어플리케이션 사용불가
+- 해결: thread 를 이용 즉, 상담원 수를 늘린다 
+
+스테이스 리스 (예)114)-> 요청후 연결끊고 다른 어플리케이션이 사용가능 (단 이전에 요청을 다시 읽을수 없다)
+
+커넥션 오리엔테이션
+
+커넥션 리스
+
+
+</pre>
+<br>
+<hr>
+<br>
 </section>
 </main>
 </div>
