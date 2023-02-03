@@ -7134,6 +7134,241 @@ Server -> BoardDao -> BoardServlet(skeleton = 서버중계인)
 <br>
 <hr>
 <br>
+<h1>2023-02-03</h1>
+<pre>
+
+
+myapp 
+
+settings.gradle
+
+rootProject.name = 'myapp'
+include('app-common')
+include('app-client')
+include('app-server')
+
+사용할앱 추가
+
+
+build.gradle
+
+plugins {
+  id 'java-library'
+}
+
+
+build.gradle (build scrept file)
+
+dependencies {
+  implementation project(':app-common') // 추가
+}
+
+
+<strong>Networking 연결방식</strong>
+
+
+Connection-Oriented(연결지향) : 
+예) 전화,게임,구글미트,유튜브
+
+- 연결과정에서 시간소요
+- 연결한 후 데이터 전송 => 신뢰성보장
+
+  프로토콜 => TCP
+    - Stateful : SSH,Telnet,FTP,채팅 
+      상담전화
+
+        연결 <-(지속)> 끊기 
+
+      - 먼저 연결한 클라이언트가 요청 연결이 길다면 다른 클라이언트가
+       오래 기다려야한다
+
+    - Stateless : HTTP1, HTTP2
+      114
+
+        연결 -(요청,응답후 종료)> 끊기
+
+      - 한번 연결에 요청,응답 한번만 하고 종료하기 때문에 다른클라이
+      언트가 기다리는 시간이 적다
+
+        -쓰레드 : main쓰레드가 클라이언트 요청을 순차적으로 처리
+
+        -멀티 쓰레드 :main 쓰레드가 접수
+          여러 쓰레드가 동시처리
+
+
+
+Connectionless (비연결성) : 
+예) 방송,편지,택배 
+
+- 연결과정이 없다 => 시간절약
+- 연결 확인 없이 데이터를 전송 => 신뢰성 낮음
+
+  프로토콜 => UDP
+
+
+TCP -> UDP로 바뀌면서 시간이 절약된다 
+
+
+<strong>멀티테스킹 (Multi-tasking)</strong>
+
+
+1. single-tasking
+
+-cpu를 100% 활용 불가
+  - 도커 활용 이유 
+    여러서버를 구동하여 cpu의 활용성을 높인다 
+
+cpu -> app -> app2 -> app3
+app을 순차적으로 처리 뒤에는 대기
+
+예) 한 종업원이 손님한명이 밥을 다 먹고 나갈때까지
+기다리는 경우와 같다 
+
+
+2. Multi-tasking
+
+- cpu를 시간을 쪼개서 여러앱을 돌아다니며 명령처리 (시분할 시스템)
+
+       app
+cpu -> app
+       app
+      
+여러 app이 동시실행하는것처럼 보인다
+
+예) 한 종업원이 손님에게 요구사항을 받아 처리하면
+    시간을 쪼개서 다른 손님 요구사항을 처리한다
+
+    
+  1) 프로세스 복제방식(fork())
+
+  client -> Server (부모프로세스)
+
+  -> server (자식프로세스 를 생성 하여 처리)
+
+  - 문제점
+    1. 프로세스(서버프로그램)가 사용하는 메모리도 그대로 복제 
+    -> 메모리 낭비가 심하다
+
+    2. 부모프로세스가 종료하더라도 자식 프로세스는 종료하지 않음
+    -> 복제한 자식프로세스의 제어가 힘들다
+
+
+  2) 멀티 쓰레드 방식 
+
+  client -> Server 
+
+  -> Thread (쓰레드가 요청을 처리)
+
+  - 프로세스의 힙 메모리 를 공유한다
+  -> 메모리 낭비 적다
+  - 프로세스 종료시 쓰레드도 종료
+
+
+<string>JVM과 쓰레드</string>
+
+JVM (프로세스) -> main (Thread) -> main()
+
+- 실행흐름이 한줄로 이어진 실(Thread) 과 같다  
+
+
+계층도
+
+system(TG)
+  ==> Reference Handler(T)
+  ==> Finalizer(T)
+  ==> Signal Dispatcher(T)
+  ==> Attach Listener(T)
+  ==> Notification Thread(T)
+  main(TG)
+    ==> main(T)
+  InnocuousThreadGroup(TG)
+    ==> Common-Cleaner(T)
+
+
+<strong>부모 쓰레드와 자식 쓰레드</strong>
+
+
+main(Thread) -> main() -> { new(Thread)생성 -> }
+
+
+<strong>cpu scheduling</strong>
+
+-프로세스에게 cpu를 배정하는 방법
+
+     프로세스
+OS-> 프로세스
+     프로세스
+        쓰레드1
+        쓰레드2
+        쓰레드3
+
+
+프로세스 의 명령을 실행하고 순서나 시간을 제어
+이때 쓰레드 또한 순서와 시간을 제어한다
+
+
+1. Round - Robin (Windows OS)
+  - 모든프로세스를 통일한 시간으로 나눠 실행한다
+  - 우선순위가 실행에 영향을 끼친다
+  
+2. Priority + Aging 기법 (Linux, Unix)
+  - 우선순위가 높은 프로세스에게 실행회수나 시간을 더 부여한다
+  - 우선 순위가 실행에 영향을 끼침
+
+
+<strong>cpu 스케줄링과 Context Switching</strong>
+
+
+- 실행정보와 명령을 cpu케시 메모리에 적재하는것
+
+CPU 
+  L1 (명령어)
+  L2 (데이터)
+
+
+OS
+
+프로세스 A
+  실행
+프로세스 B
+  실행
+프로세스 C
+  실행
+
+
+- cpu 스케줄링 정책에 따라 프로세스가 돌아가면서 실행되면
+  이전프로세스 실행정보와 명령을 케시메모리에 저장
+
+  -> 즉 너무 많이 프로세스가 실행되면 Context Switching
+     시간이 더 많이 소요되기 때문에 비효율적이 된다  
+
+
+<strong>Creitical Region = Critical Section</strong>
+
+
+-여러 쓰레드가 동시에 실행할 때 문제가 발생할 수 있는 코드 영역
+=> synchronized 를 사용하여 lock을 걸어 동시 진입을 제어한다 
+   (단점: 병목현상이 발생할 수 있다
+    -> 현상이 발생하지 않는 코드는 Thread safe 라고 부른다)
+
+
+화장실 (Critical Section)
+- Semaphore(5)
+- 동시에 5명까지 진입가능
+
+  1번칸 (Critical Section)
+  - Semaphore(1)
+  - 동시에 1명까지 진입가능
+  2번칸
+  3번칸
+
+
+Mutual Exclusion(상호배제) Mutex => 오직 한개만 선택  
+예) 라디오채널,티비채널
+
+
+
+</pre>
 </section>
 </main>
 </div>
