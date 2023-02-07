@@ -7615,6 +7615,271 @@ SQL
 <br>
 <hr>
 <br>
+<h1>2023-02-07</h1>
+<pre>
+
+컬럼 값 자동 증가
+
+- 숫자 타입의 PK 컬럼 또는 Unique 컬럼인 경우 값을 1씩 자동 증가시킬 수 있다.
+- 즉 데이터를 입력할 때 해당 컬럼의 값을 넣지 않아도 자동으로 증가된다.
+- 단 삭제를 통해 중간에 비어있는 번호는 다시 채우지 않는다.
+  즉 증가된 번호는 계속 앞으로 증가할 뿐이다.
+
+- 테이블 생성
+
+create table test1(
+  no int not null,
+  name varchar(20) not null
+);
+
+
+- 특정 컬럼의 값을 자동으로 증가하게 선언한다.
+- 단 반드시 key(primary key 나 unique)여야 한다.
+
+alter table test1
+  modify column no int not null auto_increment; /* 아직 no가 pk가 아니기 때문에 오류*/
+
+alter table test1
+  add constraint primary key (no); /* 일단 no를 pk로 지정한다.*/
+
+alter table test1
+  add constraint unique (no); /* no를 unique로 지정해도 한다.*/
+
+alter table test1
+  modify column no int not null auto_increment; /* 그런 후 auto_increment를 지정한다.*/
+
+
+- 조회
+
+select no, name, class from test1 where working = 'Y';
+
+- 특정 조회를 가상 테이블로 만들기 (보여주는것이때문에 테이블의 값의 영향을 받음)
+
+create view worker
+  as select no, name, class from test1 where working = 'Y';
+
+- 뷰 조회,삭제는 테이블과 동일
+
+
+
+<strong>제약 조건 조회</strong> 
+
+MariaDB [studydb]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| studydb            |
++--------------------+
+
+use information_schema; // Database
+로 변경후 사용
+
+
+<strong>information_schema</strong>
+
+- INFORMATION_SCHEMA란 MySQL 서버 내에 존재하는 DB의 메타 정보(테이블, 칼럼, 인덱스 등의 스키마 정보)
+를 모아둔 DB다. INFORMATION_SCHEMA 데이터베이스 내의 모든 테이블은 읽기 전용이며, 단순히 조회만 가능하다. 즉, 읽기전용(Read-only)으로 사용자가 직접 수정하거나 관여할 수는 없다.
+
+1) 테이블의 제약 조건 조회
+
+select table_name, constraint_name, constraint_type
+from table_constraints;
+
+
+2) 테이블의 키 컬럼 정보 조회
+
+select table_name, column_name, constraint_name
+from key_column_usage;
+
+
+3) 테이블과 컬럼의 키 제약 조건 조회
+
+select
+  t2.table_name,
+  t2.column_name,
+  t2.constraint_name,
+  t1.constraint_type
+from table_constraints t1
+  inner join key_column_usage t2 on t2.constraint_name=t1.constraint_name;
+
+
+<strong>commit/ rollback</strong>
+
+
+1. auto commit 상태 
+
+
+임시DBMS에 저장된입력,변경,삭제를 테이블에 즉시 적용
+inert,update,delete 등을 하면 DBMS가 table에 바로 적용
+
+
+2. 수동 commit
+
+입력, 변경,삭제 결과는 임시DBMS에서 보관
+commit 명령을 받으면 보관된 정보를 실제 
+테이블에 적용시킨다 
+
+서버에 select를 요청하면 DBMS는 table 정보와
+임시DBMS 에 있는 내용을 적용
+
+
+3. rollback
+
+임시 DBMS에 있는 정보들을 지운다
+즉 commit 전상태라면 변경된 정보가 지워진다
+
+
+<strong>Transaction</strong>
+
+-여러개의 데이터 변경작업(insert,update,delete)을 한 단위로 묶은것
+             
+예) 여러개의 작업을 한 단위로 다뤄야하는 경우 
+    즉 주문->결제 => 주문 완료 
+
+
+<strong>select: projection/ selection</strong>
+
+특정 컬럼의 값만 조회할 때 => "프로젝션(projection)"이라 부른다
+
+select 컬럼명,컬럼명 from 테이블;
+select no, name, tel from test1 where working name='홍길동';
+
+
+
+특정 날짜의 게시글 찾기 
+
+// Datetime 타입일경우
+
+ select *
+from test1
+where regdt = '2022-6-17';
+
+/* 특정 기간의 게시글 조회 */
+select *
+from test1
+where regdt between '2022-11-1' and '2022-12-31';
+
+// 날짜 기준이기 때문에 고려해서 사용하여야 한다
+
+select *
+from test1
+where regdt >= '2022-11-1' and regdt <= '2022-12-31';
+
+
+<strong>첨부파일 저장</strong>
+
+
+1. DBMS에 파일저장
+
+Client -> Server -> DBMS -> 테이블
+
+1) 파일을 꺼낼때 DBMS를 경유하기 때문에 속도가 느리다
+2) 
+
+2. DBMS에 파일 경로에 저장
+
+Client -> Server -> DBMS -> 테이블
+                 -> HDD
+
+- 특정 컬럼에 파일이 저장된 경로만 입력한다
+
+  1) 데이터베이스가 급격하게 커지지 않는다
+  2) 파일을 OS가 읽기 때문에 속도가 빠르다
+
+
+<strong>첨부파일과 테이블</strong>
+
+
+고민해볼 사항!
+- 첨부 파일의 개수를 5 개로 정해 놓았다.
+- 따라서 최대 5개의 첨부 파일만 테이블에 저장할 수 있다.
+- 첨부파일이 없더라도 5개의 컬럼은 메모리를 차지한다.
+
+실무에서 원하는 것!
+- 첨부 파일의 개수에 제한을 받고 싶지 않다.
+- 첨부 파일 개수만큼만 값을 저장하고 싶다.
+
+이렇게 같은 데이터를 저장할 컬럼이 중복된 경우에는,
+- 중복 컬럼을 별도의 테이블로 분리한다.
+- 중복 컬럼의 값이 어느 테이블의 어느 데이터의 값인지 지정한다.
+
+
+no title content rdt file1 file2 file3 file4 file5
+--------------------------------------------------
+1 | aaa |       |   |a.gif|     |     |     |     | // 4개 낭비
+2 | bbb |       |   |b.gif|c.gif|     |     |     | // 3개 낭비
+3 | ccc |       |   |     |     |     |     |     | // 5개 낭비
+4 | ddd |       |   |a.gif|b.gif|c.gif|d.gif|e.gif|
+
+5개의 컬럼이 생성되기때문에 사용하지 않는 컬럼이 낭비된다
+
+insert into test1(title, content, filepath1,filepath2,filepath3,filepath4,filepath5)
+values('제목1', '내용', 'a.gif', null,null,null,null);
+
+insert into test1(title, content, filepath1,filepath2,filepath3,filepath4,filepath5)
+values('제목1', '내용', 'b.gif', 'b1.gif','b2.gif',null,null);
+
+insert into test1(title, content, filepath1,filepath2,filepath3,filepath4,filepath5)
+values('제목1', '내용', null, null,null,null,null);
+
+-- 파일 경로를 저장할수 있는 컬럼이 5개 밖에 없기 때문에 6,7번째 파일을 입력할수 없다
+insert into test1(title, content, filepath1,filepath2,filepath3,filepath4,filepath5)
+values('제목1', '내용', 'd1.gif','d2.gif','d3.gif','d4.gif','d5.gif'/*,'d6.gif','d7.gif'*/);
+
+
+<strong>게시글 데이터와 첨부파일 데이터를 쪼개기</strong>
+
+
+게시글 테이블(부모테이블) = entity
+
++----+-------+---------+---------------------+
+| no | title | content | rdt                 | // no = primary Key (PK)
++----+-------+---------+---------------------+
+|  2 | bbb   | NULL    | 2023-02-07 16:18:48 |
+|  3 | ccc   | NULL    | 2023-02-07 16:18:48 |
+|  4 | ddd   | NULL    | 2023-02-07 16:18:48 |
+|  5 | eee   | NULL    | 2023-02-07 16:18:48 |
+|  6 | fff   | NULL    | 2023-02-07 16:18:48 |
+|  7 | ggg   | NULL    | 2023-02-07 16:18:48 |
+|  8 | hhh   | NULL    | 2023-02-07 16:18:48 |
+|  9 | iii   | NULL    | 2023-02-07 16:18:48 |
+| 10 | jjj   | NULL    | 2023-02-07 16:18:49 |
++----+-------+---------+---------------------+
+
+
+첨부파일 테이블(자식테이블)
+
++-----+-------------------+-----+
+| fno | filepath          | bno | // bno = Foreign Key(FK)
++-----+-------------------+-----+ //  다른 테이블 key 값을 저장하는 컬럼
+|   1 | c:/download/a.gif |   1 |
+|   2 | c:/download/b.gif |   1 |
+|   3 | c:/download/c.gif |   1 |
+|   4 | c:/download/d.gif |   5 |
+|   5 | c:/download/e.gif |   5 |
+|   6 | c:/download/f.gif |  10 |
+|   7 | c:/download/x.gif | 100 |
++-----+-------------------+-----+
+
+
+Entity Relationship Diagram (ERD)
+
+
+다른 테이블을 참조하고 제어하는 문법 
+
+기존에 테이블에 무효한 데이터가 있을 수 있기 때문에 먼저 테이블의 데이터를 지운다.
+delete from test2;
+
+fk 컬럼을 설정하기 전에 무효한 데이터를 삭제해야 한다. 
+alter table test2
+    add constraint test2_bno_fk foreign key (bno) references test1(no);
+
+IE표기법
+
+
+
+</pre>
 </section>
 </main>
 </div>
