@@ -7709,7 +7709,6 @@ from table_constraints t1
 
 1. auto commit 상태 
 
-
 임시DBMS에 저장된입력,변경,삭제를 테이블에 즉시 적용
 inert,update,delete 등을 하면 DBMS가 table에 바로 적용
 
@@ -7746,7 +7745,6 @@ select 컬럼명,컬럼명 from 테이블;
 select no, name, tel from test1 where working name='홍길동';
 
 
-
 특정 날짜의 게시글 찾기 
 
 // Datetime 타입일경우
@@ -7755,10 +7753,13 @@ select no, name, tel from test1 where working name='홍길동';
 from test1
 where regdt = '2022-6-17';
 
-/* 특정 기간의 게시글 조회 */
+
+특정 기간의 게시글 조회 
+
 select *
 from test1
 where regdt between '2022-11-1' and '2022-12-31';
+
 
 // 날짜 기준이기 때문에 고려해서 사용하여야 한다
 
@@ -7775,7 +7776,8 @@ where regdt >= '2022-11-1' and regdt <= '2022-12-31';
 Client -> Server -> DBMS -> 테이블
 
 1) 파일을 꺼낼때 DBMS를 경유하기 때문에 속도가 느리다
-2) 
+2) 데이터베이스의 크기를 급격하게 늘린다 
+=> 비효율적이다
 
 2. DBMS에 파일 경로에 저장
 
@@ -7813,6 +7815,7 @@ no title content rdt file1 file2 file3 file4 file5
 4 | ddd |       |   |a.gif|b.gif|c.gif|d.gif|e.gif|
 
 5개의 컬럼이 생성되기때문에 사용하지 않는 컬럼이 낭비된다
+
 
 insert into test1(title, content, filepath1,filepath2,filepath3,filepath4,filepath5)
 values('제목1', '내용', 'a.gif', null,null,null,null);
@@ -7878,6 +7881,45 @@ alter table test2
 IE표기법
 
 
+<strong>테이블 조인 : 테이블 ERD</strong>
+
+
+mgr(매니저)
+mno(FK)
+->
+
+mno(PK)
+memb(회원기본정보)
+mno(PK)
+
+->
+
+mno(FK)
+stnt(학생)
+mno(PK)
+
+->
+
+mno(FK)
+lect_appl(수강신청)
+lno(FK)
+
+->
+
+lno(PK)
+lect(강의)
+rno(FK)
+
+->
+
+rno(PK)
+room(강의실)
+rno(PK)
+
+->
+
+rno(FK)
+room_phot(강의실 사진)
 
 </pre>
 </section>
