@@ -7922,6 +7922,202 @@ rno(FK)
 room_phot(강의실 사진)
 
 </pre>
+<br>
+<hr>
+<br>
+<h1>2023-02-08</h1>
+<pre>
+
+
+<h3>테이블 관계: addr ㅣ-- ok memb</h3>
+
+
+addr 
+
+  ano(pk)  pst_no  bas_addr
+    1       1111    강남구
+    2       1112    서초구
+    3       1113    광진구
+
+
+memb
+
+  mno(pk)   name    tel   ano(fk)
+   1        홍길동  111    2
+   2        임꺽정  222    2
+   3        유관순  333    1
+   4        안중근  444    .
+
+
+addr ㅣ- ok memb
+=>
+1 : 0 이상
+-ㅣ--ok- 
+
+
+<strong>관계차수에 따른 표기법</strong>
+
+1 : 0 Ehsms 1  
+-ㅣ--oㅣ-
+
+1 : 1  
+-ㅣ--ㅣ-
+
+1 : 0 이상
+-ㅣ--ok- 
+
+1 : 1 이상 
+-ㅣ-- ㅣk
+
+
+식별관계(identifying) = 실선
+FK = PK
+
+비식별관계(non-identfying) ---------------- = 점선
+FK != PK
+
+
+<h3>테이블 관계: stnt -ㅣo-- ㅣ- memb</h3>
+
+
+stnt
+- 회원중에서 학생회원의 추가정보를 저장하는 테이블
+
+  mno(fk = pk)   work    acc_no    bank
+   1              Y        -         -
+   2              N        -         -
+   4              Y        -         -
+
+
+stnt -ㅣo-- ㅣ- memb
+
+ㅣo
+- 0..1
+- 0,1
+
+ㅣ
+- 1
+
+이라고 표기 0이상은 ,또는 .. 으로 표기한다
+
+
+<h3>테이블 관계: stnt -ok-- ok- lect</h3>
+-다 대 다 (n : n)
+
+lect
+
+  lno(pk)       titl      sdt   edt
+   101         자바기초    -     -
+   102         네이버      -     -
+   103         파이썬      -     -
+
+
+lect-appl
+
+  (mno(fk)   lno(fk) pk)
+    1         101
+    1         103
+    4         101
+    4         102
+    4         103
+    1         101  // 중복신청
+
+
+- 중복신청 을 막기위해 mno와 lno를 pk로 묶어준다 
+
+
+stnt -ㅣ--ok- lect-appl k--ㅣ- lect
+
+stnt
+- 부모테이블
+
+lect-appl
+- 관계테이블
+    두테이블의 관계를 저장한다보통 
+    다대다 관계를 해소하기 위해 만듬
+- 자식테이블
+
+lect
+- 부모테이블
+
+
+<3h>DB 모델링</3h>
+
+DB모델링
+
+-> 데이터를 잘게 쪼갠다
+   데이터간의 관계를 정의한다
+
+=> 데이터 중복 제거
+    
+    1. 데이터 관리가 힘들다 여러 곳에 같은 데이터가 저장
+       변경하려면 여러 곳을 변경해야한다 
+
+    2. 변경 누락 발생 -> 데이터 결함 발생
+
+
+<3h>실행 순서</3h>
+
+
+-- 실행 순서: from -> where -> select -> order by
+-- 1) from 또는 join: 테이블의 전체 데이터 또는 조인 데이터
+-- 2) where: 조건에 따라 결과로 뽑을 데이터를 selection 한다
+-- 3) group by : 조건에 따라 뽑은 데이터를 특정 컬럼을 기준으로 데이터를 묶는다
+-- 4) having : 그룹을로 묶은 데이터를 조건에 따라 선별한다
+-- 5) select : 최종 결과로 뽑을 컬럼을 표시(projection)한다. 표현식으로 계산한 컬럼도 포함
+-- 6) order by : select 절에서 추가한 임의 컬럼이나 테이블 컬럼을 기준으로 정렬
+-- 7) limit : 결과 데이터에서 지정한 범위의 데이터를 선택한다
+-- 8) 결과추출 : 7번을 수행한 결과 데이터에서 5번에 표시된 컬럼만 추출한다
+
+
+<3h>JOIN</3h>
+
+1. cross join = cartesian join
+
+A{
+  a,b,c
+}
+
+B{
+  a,b,c
+}
+
+
+2. natural join
+
+     board         attach_file
+bno  title      fno   path    bno
+ 1    aaa       100   a.gif    1
+ 2    bbb       101   b.gif    1
+                102   c.gif    2
+
+같은 이름을 가진 컬럼의 값을 기준으로
+두 테이블의 데이터를 합친다
+
+1    aaa       100   a.gif    1
+1    aaa       101   b.gif    1
+2    bbb       102   c.gif    2
+
+
+3. join~on
+
+    board         attach_file
+ no  title       no   path    bno
+ 1    aaa       100   a.gif    1
+ 2    bbb       101   b.gif    1
+                102   c.gif    2
+
+
+두 테이블의 데이터를 join 하는 기준이 컬럼의 이름이 다를경우 사용하는 문법 
+=> (pk컬럼명 != fk컬럼명)
+
+1    aaa       100   a.gif    1
+1    bbb       101   b.gif    1
+2    bbb       102   c.gif    2
+
+
+
+</pre>
 </section>
 </main>
 </div>
