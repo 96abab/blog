@@ -7977,7 +7977,7 @@ FK = PK
 FK != PK
 
 
-<h3>테이블 관계: stnt -ㅣo-- ㅣ- memb</h3>
+<strong>테이블 관계: stnt -ㅣo-- ㅣ- memb</strong>
 
 
 stnt
@@ -8001,7 +8001,7 @@ stnt -ㅣo-- ㅣ- memb
 이라고 표기 0이상은 ,또는 .. 으로 표기한다
 
 
-<h3>테이블 관계: stnt -ok-- ok- lect</h3>
+<strong>테이블 관계: stnt -ok-- ok- lect</strong>
 -다 대 다 (n : n)
 
 lect
@@ -8041,7 +8041,7 @@ lect
 - 부모테이블
 
 
-<3h>DB 모델링</3h>
+<strong>DB 모델링</strong>
 
 DB모델링
 
@@ -8056,7 +8056,7 @@ DB모델링
     2. 변경 누락 발생 -> 데이터 결함 발생
 
 
-<3h>실행 순서</3h>
+<strong>실행 순서</strong>
 
 
 -- 실행 순서: from -> where -> select -> order by
@@ -8070,7 +8070,7 @@ DB모델링
 -- 8) 결과추출 : 7번을 수행한 결과 데이터에서 5번에 표시된 컬럼만 추출한다
 
 
-<3h>JOIN</3h>
+<strong>JOIN</strong>
 
 1. cross join = cartesian join
 
@@ -8114,6 +8114,280 @@ bno  title      fno   path    bno
 1    aaa       100   a.gif    1
 1    bbb       101   b.gif    1
 2    bbb       102   c.gif    2
+
+
+
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-02-09</h1>
+<pre>
+
+
+<h2>DBMS API : Vendor API(Native API)</h2>
+
+app <-(call,return)> oracle API <-(요청, 응답)> oracle 
+- DBMS 제조사에 제공
+
+app <-(call,return)> MS-SQL API <-(요청, 응답)> MS-SQL
+
+app <-(call,return)> MS-SQL API <-(요청, 응답)> MySQL
+- C/C++ -> (.dll(Dynamic Link Library) .lib)windows (.so(shared object))unix
+=> static libraty = dynamic library
+
+** DBMS마다 API 사용법이 다르다
+=> DBMS에 맞춰서 프로그래밍 해야한다
+
+app -> .lib(print(),System())
+=> .exe(실행파일) 
+
+2개를 실행
+
+Process {
+  app+.lib
+}
+
+Process {
+  app+.lib
+}
+
+app2 -> .lib(print(),System())
+=> .exe(실행파일) 
+
+2개를 실행
+
+Process {
+  app+.lib
+}
+
+Process {
+  app+.lib
+}
+
+
+위와 같은 상황이라면 메모리에 .lib가 중복 로딩된다
+
+static library(정적라이브러리)
+
+- 프로그램실행시 무조건 실행되기때문에 
+  중복실행이 가능하다 
+=> 메모리 낭비
+
+
+이런 메모리 낭비를 방지하기위해
+
+dll정보를 .lib 와 대체하고 이 정보들을 다루는 .dll .so
+를 공유하여 사용하면 메모리를 효율적으로 사용할수 있다
+
+
+<strong>메소드가 실행되는 방법</strong>
+
+JVM -(call)> OS -> computer -> 모니터 
+
+- 자바에서 메소드를 호출하면 JVM이 메소드를 해당 OS에 있는 메소드에 
+  맞춰서 호출 것이다 그래서 속도가 느리다 하지만 사용하기 편하다
+
+  이때 c,c++은 직접적으로 접근하기 때문에 속도가 빠르다 하지만 
+  OS마다 메소드명이 다르기 때문에 사용하기 복잡하다
+
+
+<strong>ODBC API 명세 -> ODBC Driver(.dll/.lib/.so) </strong>
+Open
+Database
+Connectivity
+
+- DBMS API 명세서
+
+app 
+
+-> API 사용법이 ODBC Driver로 인해 통일되어
+   DBMS마다 따로 개발할 필요가 없다 
+
+
+oracle ODBC API 구현 <-(call,return)> oracle API <-(요청, 응답)> oracle 
+
+MS-SQL ODBC API 구현 <-(call,return)> MS-SQL API <-(요청, 응답)> MS-SQL
+
+MYSQL ODBC API 구현 <-(call,return)> MS-SQL API <-(요청, 응답)> MySQL
+
+Excel ODBC API 구현 - (I/O) > Excel 
+
+() ODBC API 구현 (c/c++를 사용)
+- ODBC API 규격에 맞춰 함수 구현 => "ODBC Driver"
+
+
+<strong>JDBC API(인터페이스) -> JDBC Driver(클래스) </strong>
+
+Type1 = 'ODBC-JDBC 프릿지'
+
+JAVA APP 
+
+->
+
+JVM JDBC type1 Driver
+- JDBC API 인터페이스 구현
+- JRE에 기본 포함
+
+JDK { 
+  컴파일러
+  프로파일러
+  +
+JRE {
+  JVM + library
+  }
+}
+
+문제점
+- local에 ODBC Driver를 설치해야한다
+
+->
+
+oracle ODBC API 구현 <-(call,return)> oracle API <-(요청, 응답)> oracle 
+
+MS-SQL ODBC API 구현 <-(call,return)> MS-SQL API <-(요청, 응답)> MS-SQL
+
+MYSQL ODBC API 구현 <-(call,return)> MS-SQL API <-(요청, 응답)> MySQL
+
+Excel ODBC API 구현 - (I/O) > Excel 
+
+Apache poi
+  
+
+Type2 = 'Native API call'
+
+JABA app
+
+-> API 사용법이 같기 때문에 따로 프로그램을 짤 필요가 없다
+
+oracle JDBC Type2 Driver <-(call,return)> oracle API <-(요청, 응답)> oracle 
+
+MS-SQL JDBC Type2 Driver <-(call,return)> MS-SQL API <-(요청, 응답)> MS-SQL
+
+MYSQL JDBC Type2 Driver <-(call,return)> MS-SQL API <-(요청, 응답)> MySQL
+
+
+() JDBC Type2 Driver
+- Vendor 에서 사용 -> 다운로드 해야한다
+- Native c/c++ API 호출 -> local Vendor API 가 있어야 한다
+=>
+문제점
+- DBMS를 변경하면 local에 Vendor API를 교체해야한다
+- Type2 JDBC Driver를 교체
+
+
+Type3 = 'network Driver'
+
+
+JABA app
+- JDBC Driver를 다른타입으로 교체해도 API는 같기 때문에
+프로그램을 새로 짤 필요가 없다
+즉 app은 (드라이버타입) 과 아무상관없다
+
+-(call)>
+
+JDBC Driver 중계서버 통신용 JDBC Type3 Driver
+- JDBC API 규격에따라 만든 구현체
+- DBMS 를 교체 하더라도 영향을 받지 않는다
+- 중계서버에서 제공 
+  즉 중계서버를 교체하면 드라이버도 바꿔야한다
+- 중계서버를 따로 구매하여 비용증가
+- 중계서버를 경유하기 때문에 실행속도가 떨어진다
+
+->
+
+JDBC Driver 중계서버
+
+-> 
+
+oracle JDBC Driver <-(call,return)> oracle API <-(요청, 응답)> oracle 
+
+MS-SQL JDBC Driver <-(call,return)> MS-SQL API <-(요청, 응답)> MS-SQL
+
+MYSQL JDBC Driver <-(call,return)> MS-SQL API <-(요청, 응답)> MySQL
+
+=>
+
+로컬 {
+  JAVA APP
+  중계서버 통신용 JDBC Type3 Driver
+}
+
+서버2(middleware) {
+  JDBC Driver 중계서버
+  oracle JDBC Driver
+  oracle API
+}
+
+서버1 {
+  oracle
+}
+
+
+위 과정은 로컬과 서버2,서버1과 나눠서 요청,응답을 처리하기 때문에 속도가
+느리다 그리고 서버2의 중계서버가 로컬의 통신용 중계서버를 제공하기 때문
+에 중계서버가 바뀌면 통신용도 바꿔야한다  
+
+
+type4 = 'Network Protocol driver'
+
+
+JAVA App 
+
+->
+
+-> oracle Type4 Driver -> oracle 
+
+-> MS-SQL Type4 Driver -> MS-SQL
+
+-> MySQL Type4 Driver -> MySQL
+
+() Type4 Driver
+- DBMS Vendor에서 제공 -> 다운로드 해야한다
+- DBMS와 직접 통신하기 떄문에 local에 설치할게 없다
+  즉 c/c++과 같은 특정 OS에 종속되는 API를 사용하지 않는다
+  => "pure JAVA" 
+
+
+<h2>JDBC Driver 사용법</h2>
+
+
+(1)
+getconnection(JDBC URL(DBMS주소),ID,PWD) -> DriverManager (파일 경로: java.sql)
+
+-(2)>
+                                       (13)
+(3)                                    (7)
+createStatement() -> Connection 구현체 <-> T(Thread) DBMS
+                                       (8)
+-(4)>                                  (14)
+<(6)-
+(12)
+
+(5)
+executeQuery(select문) 
+            <->        Statement 구현체
+executeUpdate(insert,update,delete)
+
+
+-(9)>
+<(11)-
+
+(10)
+next() 
+            <->           ResultSet구현체 //(15) 서버에서 가져온 다음레코드의 각컬럼값 보관
+getxxx(컬럼명,컬럼번호)
+(16)
+
+
+<strong>Application Architecture</strong>
+
+
+Client -> BoardHandler -> BoardDao 
+                             <-
+                              JdbcBoardDao <-> (T) DBMS
+
+
 
 
 
