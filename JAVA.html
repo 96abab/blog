@@ -8392,6 +8392,180 @@ Client -> BoardHandler -> BoardDao
 
 
 </pre>
+<br>
+<hr>
+<br>
+<h1>2023-02-10</h1>
+<pre>
+
+<h2>DB커넥션 공유</h2>
+
+
+JDBCBoardDao
+
+insert()
+  Connetction 생성: 연결
+    1. Anthentication(이름) : 사용자가 유효여부 검사
+    2. Authorization(권한) : 사용자의 권한 검사
+      예) 
+      delete 접근가능?
+      
+      <strong>시스템간의 데이터 공유</strong>
+
+      인사시스템 -> HR database // all 권한
+          처리<->요청
+      회계시스템 -> 회계 database // all 권한
+
+      위와같은 상황에서 인사시스템의 database에 접근하여 모든 데이터
+      접근을 막고 요청한 데이터에만 접근할 수 있게하는 방법 
+      select권한만 부여한 아이디를 생성해준다
+
+      문제점 권한검사하는 시간이 많이 걸린다
+      -> 
+      해결방법 : DB커넥션 공유
+
+      1.
+      - Vendor가 달라 DB접근차단
+      - platorm이 다르다(C# : java) oson,xml로 데이터를 주고 받음 
+      => 이기종 시스템과 데이터교환
+      => system Integration(SI)
+        
+        회계시스템계발자의 경우
+        - 인사시스템으로부터 직원정보를 받아서 처리하는 기능개발
+          즉 기존 시스템과 연계
+
+        인사시스템 유지보수 개발자
+        - 회계시스템에서 요청한 서비스를 개발 기존시스템에 새로운
+          기능 추가(SM)
+         
+     
+  SQL 전달
+  결과리턴 및 연결 끊기
+
+
+findAll()
+  Connetction 생성: 연결
+  SQL 전달
+  결과리턴 및 연결 끊기
+
+
+<->
+
+DBMS
+
+
+<h2>Application server Architecture</h2>
+
+
+1. 기존방식
+  - 기능 추가,변경,삭제를 한다면 모든 pc에서 재설치 해야한다
+  - App의 기능변경이 잦은경우 
+    즉 유지보수가 힘들다
+  
+
+pc1 App
+
+pc2 App
+
+pc3 App
+
+
+2. App을 서버에서 실행
+  - APPlication Server(AS)
+  - 서버만 변경하면 된다
+  - 사용자 입력을 받아서 서버에 전달하면 서버 응답을 출력
+  
+  서버에서 실행하게 바꾼 이유?
+   - 세계화인한 경쟁이 치열해지고 제품들의 생명주기가 짧아졋다
+     이러한 상황때문에 app기능변경이 잦아져 서버만 바꾸면 되는
+     방식을 사용
+  
+
+pc1 client 
+  - 사용자 입력을 서버에 전달
+  - 서버 응답을 출력  
+
+pc2 client
+
+pc3 client
+
+<->
+
+Server
+  - 기능실행
+  - UI 생성
+
+  
+<strong>통신 규칙 (protocol)</strong>
+
+
+client
+
+server
+
+
+<strong>전송</strong>
+
+이전방식
+
+writeUTF() -> readUTF()
+
+
+개선방식
+
+print() -> 버퍼 -> writeUTF() -> readUTF()
+
+  <strong>StringWrite 의 활용</strong>
+
+  PrintWrite -> StringWrite -> 버퍼
+    print()
+    printf()
+    println()
+    ...
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
 </section>
 </main>
 </div>
