@@ -8524,28 +8524,115 @@ print() -> 버퍼 -> writeUTF() -> readUTF()
     ...
 
 
+
+
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-02-13</h1>
+<pre>
+
+<strong>Desktop Application 과 Application server </strong>
+
+Desktop App
+
+  Standalone App
+  - 지뢰찾기,메모장,포토샵,eclipseIDE
+
+
+  client/server
+  - 게임,메일,git
+
+
+Application
+
+- 기능변경이 쉽다
+  서버쪽만 변경하면 된다
+  클라이언트를 재설치 할 필요가 없다
+
+중앙에서 권한관리 -> 보안 관리가 쉽다
+
+서버에서 모든 기능을 실행
+-> thin client 예) 크롬북
+
+
+사용자 -> web Browser -> webserver -> app -> DBMS
+
+
+<h2>트랜잭션 다루기</h2>
+
+
+app_member
+a
+b
+c
+
+  app_student
+    a
+    b
+    c
+
+  app_teacher
+    c
+
+
+포함관계 (inclusive relationship)
+- 회원데이터는 학생과 강사 데이터와 동시에 관련될수 있다
+  c는 student이면서 teacher인 경우 이런식으로 표현 
+
+
+
+app_member
+1.홍길동
+2.임꺽정
+3.유관순
+4.유관순
+
+  app_student
+    1.홍길동
+    4.유관순
+
+  app_manager
+    2.임꺽정
+    
+  app_teacher
+    3.유관순
+
+
+배타적관계 (exclusive relationship)
+- 회원데이터는 학생,매니저,강사중 하나의 데이터 하고만 관련될 수 있다
+  유관순경우 student따로 teacher따로 만들어야한다
+
+
+<h2>DAO 와 테이블</h2>
+
+
+이전방식
+
+studentHandler -> studentDao -> app_student<table> 
+
+
+변경방식
+
+studentHandler -> memberDao -> app_student<table> 
+
+
+<strong>Handler - DAO - Table</strong>
   
+owner 
+- 변경권한 : insert/update/delete
+
+Dao -(owner)> table
+
+이때 테이블이 작고 관리가 용이한 경우 한개의 Dao가 두개의 테이블의 
+ownership을 가질수 있다 하지만 한개의 테이블이 1개 이상의 Dao를 가
+지는것은 관리가 어려워진다  
 
 
+Handler -> Dao -(owner)> table
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+한개의 Handler가 다른 Handler를 다루면 안된다
 
 
 
