@@ -8896,28 +8896,245 @@ Dao
 
 
 
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-02-15</h1>
+<pre>
 
 
+<h2>Mybatis 사용법</h2>
 
 
+<h3>1. Session 객체</h3>
+
+SqlSession.seletOne() -> select문 : 0 또는 1개 결과
+  - 만약 2개 이상의 결과를 리턴하면 예외발생
+
+SqlSesstion.selectList() -> select문 : 0개 이상의 결과
+
+SqlSesstion.insert() 
+SqlSesstion.update()
+SqlSesstion.delete()
+
+- insert/update/delete 메서드와 상관없이 실행가능
+  하지만 일관성있게 사용해야 한다 
+  => JDBC API 에서도 executeUpdate()로 모두 실행
 
 
+<h3>2. 메서드와 SQLID</h3>
+
+SQLMapper
+
+<!--
+<mapper namespace="BoardMapper"></mapper>
+
+<insert id="insert" parameterType="bitcamp.myapp.vo.Board">
+  insert into app_board(title, content, pwd)
+  values(#{title}, #{content}, #{password})
+  </insert>
+
+자바코드
+
+List<Board> list = sqlSesion.selectList("BoardMapper.findAll");
 
 
+- namespace와 id값으로 찾는다
+-->
+
+<h3>3. 컬럼과 프로퍼티</h3>
+
+<!--
+<select id="findAll" resultType= "bitcamp.myapp.vo.Board"> 
+  
+  select
+    board_id as no,   // 별명을 부여하여 프로퍼티를 호출한다
+    title,
+    created_date as createdDate,
+    view_cnt as viewCount
+  from
+    app_board
+    order by
+      board_id desc
+  
+</select>  
+-->
+- 위에서 호출하는 세터 메서드는 존재하지 않기때문에
+  해당 컬럼의 값을 자바 객체에 담을수 없다
 
 
+<h3>4. 결과 레코드와 자바 객체</h3>
 
 
+table의 레코드를 Board 인스턴스에 담아서 List에 보관한다
+그리고 selectList로 해당 인스턴스를 접근해 사용
 
 
+<h3>5. in-parametor 와 메서드 파라미터</h3>
 
 
+자바코드
+
+public void insert(Board b) {
+
+  try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+
+SqlSession.insert("BoardMapper.insert", b(Board 인스턴스));
+sqlSession.commit();
+  }
+}
+
+SQLMapper
+
+<!-- 
+<insert id="insert" parameterType="bitcamp.myapp.vo.Board">
+  insert into app_board(title, content, pwd)
+  values(#{title}, #{content}, #{password}) // get___의 리턴값
+
+  *주의*
+   - in-parametor는 타입에 상관없이 프로퍼티명 으로 값을 삽입 
+</insert>
+ -->
 
 
+ <h3>5. in-parametor 와 자바원시타입 String</h3>
 
 
+SqlSession.selectOne("BoardMapper.findByNo", 20);
 
 
+<h2>DAO와 Transaction</h2>
+
+                    insert
+                    commit 
+Handler -> MemberDao <-> DBMS
+        -> StudentDao
+
+
+- insert가 개별적으로 실행된다면 insert후에 commit하는게 맞다
+
+- 다른 작업과 묶일수 있는 경우라면 개별적으로 commit/rollback 하면 안된다
+ 위처럼 여러 Dao작업을 하나의 트랜젝션으로 묶어서 사용하는 경우가 있기 때문이다
+ 
+ => commit/rollback은 Dao를 사용하는 쪽에서 제어해야 한다
+
+
+ <h2>Mybatis를 사용하는 DAO의 트랜잭션 제어</h2>
+
+
+이전방식 
+
+
+ConnectionFactory 를 활용하여 DAO에 connection을 사용하는 방식
+
+setAutoCommit(false)
+ commit()
+ rollback()
+
+- 모든 작업이 하나의 connection에서 이루어졌다
+
+
+변경방식
+
+MemberDao -> SqlSession
+
+StudentDao -> SqlSession
+
+1. 트랜잭션 시작
+2. MemberDao
+3. StudentDao
+4. commit/rollback
+
+
+  <h3>SqlSession 의 트랜잭션 제어</h3>
+
+  Handler -> TransactionManager -> SqlSession Factory -> Thread
+
+
+  <h4>SqlSessionFactory 클래스의 기능 변경 (추가,변경,삭제)</h4>
+
+    SqlSessionFactory(interface)
+
+
+    BitcampSqlSessionFactory(concrete)
+
+    -> proxy 패턴 활용으로 sqlSessionFactory를 감싸서 사용한다
+
+    - SqlSessionFactory를 사용했을때 문제점
+      - MemberDao 와 StudentDao처럼 각각 다른 SqlSession 을 사용하는경우 
+        MemberDao가 작업을 처리한후 Session을 close한다 StudentDao의
+        작업은 적용하지 못한다
+
+        *해결방법*
+        proxy를 활용한다 interface를 구현하고 oiriginal 구현체에게 위임
+      
+        =>
+        
+        기존 코드는 변경하지 않고 원하는 기능을 구현체에서 수정 
+        하여 사용 2가지를 변경
+
+
+        1) commit을 false로 변경하고 사용한 Session을 null로 비워주고 
+           여러개의 Dao가 사용하는 경우 Session에 여러 Dao가 입력한 데
+           이터를 넣고 commit 을 하게 한다 
+
+           하지만 null이라면 하나의 Session만 사용한것이기때문에 original 리턴
+           아니라면 false 여러 Dao가 사용할 객체 리턴
+
+         public class BitcampSqlSessionFactory implements SqlSessionFactory {
+
+          SqlSessionFactory original;
+        
+          ThreadLocal<SqlSession> sqlSessionLocal = new ThreadLocal<>();
+        
+          public void prepareSqlSessionForThread() {
+            SqlSession sqlSession = sqlSessionLocal.get();
+            if (sqlSession == null) {
+              sqlSessionLocal.set(new BitcampSqlSession(original.openSession(false)));
+            }
+          }
+        
+          public void clearSqlSessionForThread() {
+            BitcampSqlSession sqlSession = (BitcampSqlSession) sqlSessionLocal.get();
+            sqlSession.closeOriginal();
+            sqlSessionLocal.set(null);
+          }
+        
+          public BitcampSqlSessionFactory(SqlSessionFactory original) {
+            this.original = original;
+          }
+        
+          @Override
+          public SqlSession openSession() {
+            SqlSession sqlSession = sqlSessionLocal.get();
+            if (sqlSession == null) {
+              // 트랜잭션 없이 사용할 SqlSession 리턴
+              return original.openSession(true);
+            }
+        
+            // 스레드에서 공유할 SqlSession 객체 리턴
+            return sqlSession;
+          }
+
+
+        2) try문에서 자동으로 original.close()를 사용하기 때문에
+            처음 데이터를 입력한 Dao만 적용되고 뒤에 Dao는 입력
+            불가 그래서 closeOriginal로 원하는 상황에 닫게 설정
+        
+        public class BitcampSqlSession implements SqlSession {
+
+          SqlSession original;
+        
+          public void closeOriginal() {
+            original.close();
+          }
+
+          @Override
+          public void close() {
+            //original.close();
+          }
+        
 
 
 </pre>
