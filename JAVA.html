@@ -8960,6 +8960,7 @@ List<Board> list = sqlSesion.selectList("BoardMapper.findAll");
   
 </select>  
 -->
+
 - 위에서 호출하는 세터 메서드는 존재하지 않기때문에
   해당 컬럼의 값을 자바 객체에 담을수 없다
 
@@ -9135,6 +9136,239 @@ StudentDao -> SqlSession
             //original.close();
           }
         
+
+
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-02-16</h1>
+<pre>
+
+
+<h3>DAO 구현체</h3>
+
+
+ BoardDao -> DAO구현체 -> InvocationHandler 구현체
+invoke 메서드로 Dao 구현체에 들어갈 메서드를 만들어 준다
+
+
+public class DaoGenerator implements InvocationHandler {
+
+  SqlSessionFactory sqlSessionFactory;
+
+  public DaoGenerator(SqlSessionFactory sqlSessionFactory) {
+    this.sqlSessionFactory = sqlSessionFactory;
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T> T getObject(Class<T> classInfo) {
+    String className = classInfo.getName();
+
+    return (T) Proxy.newProxyInstance(
+        getClass().getClassLoader(), // 현재 클래스의 로딩을 담당한 관리자: 즉 클래스 로딩 관리자
+        new Class[] {classInfo}, // 클래스가 구현해야 할 인터페이스 정보 목록
+        this // InvocationHandler 객체
+        );
+  }
+
+  // 자동 생성된 프록시 객체에 대해 메서드를 호출하면
+  // 실제 InvocationHandler의 invoke()가 호출된다.
+  @Override
+  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+
+    SqlSession sqlSession = sqlSessionFactory.openSession();
+
+    String daoName = proxy.getClass().getInterfaces()[0].getSimpleName();
+    String methodName = method.getName();
+    String sqlStatementName = String.format("%s.%s", daoName, methodName);
+    System.out.printf("%s.%s() 호출!\n", daoName, methodName);
+    Class<?> returnType = method.getReturnType();
+
+    if (returnType == int.class || returnType == void.class) {
+      return args == null ? sqlSession.insert(sqlStatementName) :
+        sqlSession.insert(sqlStatementName, args[0]);
+    } else if (returnType == List.class) {
+      return args == null ? sqlSession.selectList(sqlStatementName) :
+        sqlSession.selectList(sqlStatementName, args[0]);
+    } else {
+      return args == null ? sqlSession.selectOne(sqlStatementName) :
+        sqlSession.selectOne(sqlStatementName, args[0]);
+    }
+  }
+
+
+<h3>Application Server에 웹기술 적용</h3>
+
+
+Local
+  -client-app
+  -> 변경
+  web Browser
+
+  client-app 을 만들필요없다
+
+<-> 응답,요청
+
+Application Server
+  - server-app
+  ->변경
+  - web server
+  - Application server
+      call -> Serverapp(직접만든)
+
+  server-app 을 개발 X
+    - 통신 프로그래밍 X
+    - 멀티스레딩 X
+    - 프로토콜 X
+
+<-> 응답,요청
+
+DBMS
+
+
+<h3>Web Application Architecture</h3>
+
+
+web browser 
+
+->
+
+web server
+
+->
+
+Application server 
+
+->
+
+app
+
+->
+
+DBMS
+
+  <h4>Web Application Architecture : Servlet/JSP</h4>
+
+  web browser 
+
+  ->
+  Tomcat Server
+
+    web server
+    
+    ->
+    
+    Servlet Container 
+      - 서플릿 객체생성 -> 실행 -> 소멸관리
+      - DB커넥션 등 공유자원 관리
+
+    * 서블릿 (Servlet = server Application + let(작은것을 의미))
+       - 서버 어플리케이션의 작은 기능
+  ->
+  
+  Servlet JSP
+    - 작은기능을 수행하는 서버 app조각
+  
+  ->
+  
+  DBMS
+
+인사관리 시스템에 있는 정보입력,변경,삭제등 어플에 작은기능
+
+
+  <h4>Tomcat 서버 설치</h4>
+
+  ~/server/tomcat서버디렉토리/
+            bin/ : 톰켓 서버를 구동시키는 쉘스크립트와 실행파일이 들어있다
+            conf/ : 톰캣 서버 설정파일들
+            lib/ : .jar 자바라이브러리파일 톰켓 서버를 자바로 만든 프로그램
+                    (톰켓서버를 실행하는데 필요한 라이브러리)
+            logs/ : 톰켓 서버가 실행하는 동안 시스템 상태를 출력한 로그파일들
+            temp/ : 톰켓 서버가 실행할때 사용하는 임시작업폴더
+            webapp/ : 톰켓 서버가 실행시킬 web app들
+            work/ : 톰켓 서버가 생성한 변환 파일들
+
+  
+  <h4>서블릿/JSP 기술 규격</h4>
+
+  TomcatServer 구현체 (Servlet container)
+    - 서블릿 기술규격에 맞게 개발해야한다
+    그래야 규격에 맞게 작성한 app을 실행가능
+
+  -> call
+
+  서블릿
+    - 기술 규격에 맞게 작성해야 서버에서 
+    실행가능
+  
+
+<4h> Servlet App 만들기</4h>
+
+1. 프로잭트를 Servlet/JSP 웹 프로젝트로 전환
+  1) Servlet API 라이브러리 추가 -> build.gradle
+  2) 웹 프로잭트 표준 디렉토리 구조로 전환
+    local/main/java
+        / resources
+        / webapp
+            /*.html
+            /*기타 자원
+            /WEB-LUF
+    - 관련 디렉토리 생성
+    - gradle plugin추가 : war , eclipse-wtp 설정
+    - eclipse 웹프로잭트 속성 설정
+    - 'gradle clean eclipse' 실행
+      'gradle eclipse'
+    - 빌드및 배포 테스트 
+      'gradle build' 실행 -> buile -> libs -> web.war
+      -> 복사 -> %톰켓서버/webapps/web.war 이후 톰캣서버 재실행
+
+
+ 2. 서블릿 앱 만들기
+  
+servlet Container()
+  
+ ->
+
+HelloServlet(콘크리트)  ----------- Servlet(인터페이스)
+  init(){}
+    - servlet 객체 생성후 즉시 : 작업에 필요한 준비
+  service(){}
+    - 클라이언트 요청마다 : 클라이언트 요청 작업 수행
+  destroy(){}
+    - 웹앱 종료할때 : 사용한 자원 해제
+  getServletInfo(){}
+    - 서블릿의 간단한 설명 : 관리 기능을 위해
+  getServletConfig(){}  
+    - 서블릿 설정 정보: 작업중에 필요하면 사용
+
+    서블릿 lifecycle 메서드
+
+<h3>Eclipse 와 Tomcat 서버연동하기 </h3>
+
+1. Eclipse IDE preferences 에 temcat 서버경로 설정
+  -> Eclipse IDE에서 tomcat서버를 실행할 수 있도록 서버가 설치된 경로를 알려준다
+
+2. 개발 및 테스트용 배치 환경구축
+  - 톰켓서버가 설치된 폴더에 개발중인 webapp 을 직접 배치하기 않기 위해
+  - 테스트용 배치 완경및 폴더를 따로 준비한다
+
+  C:\Users\bitcamp\eclipse-workspace\.metadata\.plugins\org.eclipse.wst.server.core
+
+  에서 배치환경 구축
+
+  
+
+
+<h2>github 활용법</h2>
+
+repo. 에 올린 프로잭트가 어떻게 작동하는지 설명과 
+unittest 코드를 작성한다 
+
+
+
+
+
 
 
 </pre>
