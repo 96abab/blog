@@ -9372,6 +9372,132 @@ unittest 코드를 작성한다
 
 
 </pre>
+<br>
+<hr>
+<br>
+<h1>2023-02-17</h1>
+<pre>
+
+
+<3h>Applicatino Server Architecture</3h>
+
+
+Client App -> Server App -> DBMS
+
+- 네트워킹,멀티쓰레딩,프로토콜을 짜야한다 이때 회사마다 규칙이 다르기때문에
+  통일성이 없다 
+
+  해결
+  => 
+
+WebBrowser -> Webserver -> APP -> DBMS
+
+- 이미 네트워킹,쓰레딩,프로토콜이 표준기술 이기때문에 짤필요가 없고 어느 회사
+  에서든 사용법이 같다 HTML,CSS,JAVAScript  사용이 가능하다 
+
+- ui 기술이 다르다면 App 개발할때 라이브러리가 다르기때문에 
+  java로 개발한 app은 python에서 사용이 안된다  
+  
+  하지만 web기술을 사용하면 ui가 통일되어 app server를 사용할 때
+  문제가 없다  
+
+
+  APP
+
+    Application관리자 <-> App
+      
+      - App 생성->실행->소멸
+      - 공유자원관리
+      - web server와의 연동담당
+        - App 개발자가 web server로부터 데이터를 받고
+          웹서버에 결과 데이터를 보내는 것을 대신처리
+
+
+<h3>서버 이중화 </h3>
+
+Client <-> Tomcat Server <-> HelloServlet 
+
+
+c1 -> Tomcat Server <-> HelloServlet
+c2 ->
+
+c3 -> Tomcat Server// 문제발생 <-> HelloServlet 
+c4 ->
+
+      Tomcat Server -> HelloServlet
+
+- 문제가 발생했을때 사용하던 servlet은 serialize 인터페이스를 구현한 
+  객체를 상속 받아서 사용해야 한다 그래야 이전시 serialize 하여 인스
+  턴스를 그대로 유지 한상태로 이전시킨다 
+
+
+<h3>web Project 개발과 테스팅 흐름</h3>
+
+1)
+(프로젝트 폴더)
+web project
+  index.html
+    - 편집 및 저장
+
+2)
+(톰캣테스트 환경의 배치 폴더)
+temp0/wtpwebapps/myapp-server
+  - 자동 저장
+
+3)
+WebBrowser 갱신
+
+
+<h3>서블릿 출력과 한글 문자코드 인코딩</h3>
+
+out.println("AB가각")
+
+기본 문자집합 ISO-8859-1을 사용해 인코딩
+
+JVM 기본문자집합(UTF-16) -> 0041('A') 0042('B') 
+
+
+<h3>URL 정보 알아내기 getServletPath(),getPathInfo()</h3>
+
+
+http://localhost:8080/web/board/list?name='홍길동'
+
+
+String contextPath = request.getContextPath(); // web
+String servletPath = request.getServletPath(); // board
+String pathInfo = request.getPathInfo(); // list
+String queryString = request.getQueryString(); // name='홍길동'
+
+System.out.printf("%s -- %s-- %s-- %s\n", contextPath,servletPath, pathInfo,queryString);
+
+출력결과 :
+/web -- /board-- /list/a/ok/no-- ed
+
+
+<h4>요청파라미터와 한글 인코딩</h4>
+
+AB가각
+
+get요청(UTF-8) -> 전송 -> getParameter("neme") -> UTF-16 
+
+post요청(UTF-8) -> 전송 (IOS-8895-1)-> getParameter("name") -> UTF-16
+
+
+post요청으로 전송 받은 문자열이 UTF-8로 인코딩 되었다고 알려줘야한다
+-> request.setCharacterEncoding("UTF-8");
+
+
+<h4>Command design pattern</h4>
+
+ 하나 명령 -> 하나 메서드 
+
+실행될 기능을 캡슐화함으로써 기능의 실행을 요구하는 호출자(Invoker)
+클래스와 실제 기능을 실행하는 수신자(Receiver) 클래스 사이의 의존성을 제거한다
+
+따라서 실행될 기능의 변경에도 호출자 클래스를 수정 없이 그대로 사용 할 수 있도록 해준다
+
+
+</pre>
 </section>
 </main>
 </div>
