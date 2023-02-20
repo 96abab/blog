@@ -9379,7 +9379,7 @@ unittest 코드를 작성한다
 <pre>
 
 
-<3h>Applicatino Server Architecture</3h>
+<h3>Applicatino Server Architecture</h3>
 
 
 Client App -> Server App -> DBMS
@@ -9495,6 +9495,172 @@ post요청으로 전송 받은 문자열이 UTF-8로 인코딩 되었다고 알�
 클래스와 실제 기능을 실행하는 수신자(Receiver) 클래스 사이의 의존성을 제거한다
 
 따라서 실행될 기능의 변경에도 호출자 클래스를 수정 없이 그대로 사용 할 수 있도록 해준다
+
+
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-02-20</h1>
+<pre>
+ 
+
+<h3>myapp 수정</h3>
+
+
+from 
+
+- radio 
+- checkbox
+- selectbox 
+
+선택 사항이라면 선택안함 항목을 추가해줘야한다 
+하지만 필수항목이라면 checked,selected와 같이
+기본 선택하게 표시   
+
+
+Mapper
+
+- dynamicsql
+- staticsql
+
+
+<h3>리스너 및 servletcontext 보관소 사용법</h3>
+
+
+servletcontext
+  - webapp시작 후 종료시까지 유지
+  서블릿들이 공유할 자원을 보관
+  예) DAO,DB커넥션등
+
+HttpSession
+  - 로그인 후 로그아웃 까지
+  로그인 동안 사용할 정보 저장
+  예) 로그인 사용자 정보
+
+ServletRequest
+  - 요청 후 응답까지
+  요청처리중 생성된 중간결과 보관  
+  s1,s2,s3
+  예) select결과등
+
+JSPcontext
+  - JSP 실행하는 동안 유지
+  각 JSP를 실행할 때마다 생성 실행완료 후 종료
+  
+
+<h4>리스너</h4>
+
+
+  ServletContextlistener(구현체)
+
+  - 웹 어플리케이션이 시작되거나 종료될 때 호출할 메서드를 정의한 인터페이스.
+
+  - contextInitialized(ServletContextEvent sce) : 웹어플리케이션을 초기화할 때 호출
+  
+  - contextDestroyed(ServletContextEvent sce) : 웹 어플리케이션을 종료할 때 호출.
+
+
+  ServletRequestListener(구현체)
+
+  - requestInitialized : ServletRequest 객체가 생성될 때 호출됨 (요청들어왓을때)
+
+  - requestDestroyed : ServletRequest 객체가 소멸될 때 호출됨 (요청을 완료할때)
+
+
+  HttpSessionListener(구현체)
+
+  - sessionCreated() : 세션 생성할 때 (로그인할때)
+
+  - sessionDestroyed(): 세션 종료할 때 (로그아웃할때)
+
+
+<h3>자원공유 전/후</h3>
+
+공유 전
+  - 서블릿 마다 DAO 객체를 생성한후 보유한다 => 메모리 낭비
+
+공유 후 (Flyweight 패턴)
+  - 서블릿 들이 공유하는 Dao를 만든다
+
+
+<h3>필터 구동과 사용법</h3>
+
+- 서블릿 실행 전/후 로 작업을 추가할 수 있다
+- GOF의 chain of Responsibility 패턴
+
+    - 객체 지향 프로그래밍에서 책임의 분리와 위임을 적용할 수 있는 유용한 방법 중 하나입니다
+      객체들 간의 결합도를 낮추면서 유연성을 확보하고 객체의 책임을 분리하여 객체의 재사용성을
+      높이는 데에도 도움을 줌
+    
+      =>
+      기능(작업)을 추가/ 제거하기 쉽다(기존코드수정x)
+
+  <h4>필터 실행 과정</h4>
+
+   요청 -> Servlet Container -> doFilter() -> Filter1-> doFilter() -> Filter2 -> servlet() -> 서블릿 
+
+   - 호출된 순서로 리턴된다
+
+  doFilter(){
+    // 다음필터 실행전 수행할 작업
+    nextChain.doFilter(); // 다음필터 실행
+    // 다음필터 실행한후 수행할 작업
+  }
+
+  @WebFilter("/student/*")
+public class Filter3 implements Filter {
+
+  // 웹앱 시작시 필터 생성
+  @Override
+  public void init(FilterConfig filterConfig) throws ServletException { 
+    System.out.println("Filter3.init() 호출");
+  }
+
+  // 요청이 들어왔을 때 생성
+  @Override
+  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
+      throws IOException, ServletException { 
+    System.out.println("Filter3.doFilter() - 작업시작");
+
+    chain.doFilter(request, response); // 다음 필터없으면 서블릿 실행
+
+    System.out.println("Filter3.doFilter() - 작업끝");
+  }
+
+  // 웹앱 종료시 필터 제거
+  @Override
+  public void destroy() {       
+    System.out.println("Filter3.destroy() 호출");
+  }
+}
+
+  - 필터 등록하는 방법 deployment(배치)방법
+  
+  실행예)
+
+  1.
+
+  요청 <-> Servlet Container <-> Filter1 <-> filter2 <-> BoardListServlet
+
+  - 요청순서대로 리턴
+
+<h3>java 와 JSP</h3>
+
+
+class BoardListServlet -> JSP 작성에 필요한 태그 필요한  
+
+<% (@) : directive element = 태그 사이에 JSP 페이지의 속성을 정의
+
+<% (!) : declaration elemen = 필드와 메서드 정의
+
+<% : scriptlet : 자바코드 정의
+() : = 자바코드
+%>
+
+<% (=) : expression element = 변수나 함수 호출 결과 등을 출력하는 데 사용
+                              자동으로 문자열로 변환되어 출력
+
 
 
 </pre>
