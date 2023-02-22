@@ -9671,8 +9671,15 @@ class BoardListServlet -> JSP 작성에 필요한 태그 필요한
 <pre>
 
 
+<h4>web Application Architecture</h4>
+
+
+Servlet container <-> Servlet <-> JDBC API <-> DBMS
+
 Servlet 
 - 자바코드중심
+
+=>
 
 JSP
 - 출력중심 -> UI생성이 쉽다 -> "view" 역할
@@ -9791,6 +9798,138 @@ CSR 방식의 경우, 초기 html 에는 별다른 정보가 없습니다.
 
 그러므로 검색엔진 봇이 수집하는 콘텐츠 정보가 적어, SSR 방식으로 개발된 웹
  사이트에 비해 상대적으로 검색 노출에 불리하게 됩니다. 
+
+
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-02-22</h1>
+<pre>
+
+
+<h3>세션으로 클라이언트 구분하기</h3>
+
+
+Connection - Oriented
+연결후 데이터 전송
+
+  - Stateful
+   client가 접속을 종료할 때 까지 유지
+
+   - Stateless
+   하나의 요청이 끝날때까지 유지
+
+Connectionless
+일단 데이터 전송 
+
+
+WebBrowser <-> Servlet Container
+
+- 쿠키 = 세션ID
+
+  웹서버가 웹브라우저에게 보내는 정보 
+  브라우저에서 정보 보관 웹서버 방문시
+  제출
+
+- Session 객체
+
+  세션ID로 접근한 클라이언트를 확인함
+
+  <h4>세션 생성및 사용 과정</h4>
+    - 세션ID는 cookie
+
+  1. client -> Server ->  Session
+
+    1) 클라이언트가 요청을하면 서버가 세션을 생성
+
+    2) 세션ID(쿠키)를 클라이언트에게 부여 
+      =  응답프로토콜
+       Set-Cookie: age=20
+       Set-Cookie: working=true
+       Set-Cookie: name2=홍길동 
+
+    3) 클라이언트 쿠키보관
+
+    4) 다시 요청시 쿠키를 통해 이전 정보를 server로 넘겨줌 
+      =  요청프로토콜
+      Cookie: name=hong; age=20; working=true; name2=홍길동
+
+
+  <h4>세션과 쿠키를 이용한 로그인처리</h4>
+
+WebBrowser -> ServletContainer -> LoginServlet -> StudentDao -> DBMS
+
+Browser가 로그인 요청을 하면 세션ID를 받아 쿠키테이블에 보관한다
+그리고 나중에 재 방문시 세션ID를 통해 저장된 정보를 확인하고 접
+근한다 이때 ** ID가 없다면 server에서 새로 만들어서 쿠키로 보내
+준다 이 쿠키는 브라우저가 종료되면 지워진다
+
+<h4>web.xml</h4>
+
+
+$contextroot/ *html,css,js,gif 등 정적자원
+/ jsp <- 동적자원
+/WEB-INF
+  classes/ .calss,.properties,.xml 등
+  lib/.jar
+  web.xml <- web app 설정정보를 담은 파일 자원배치 정보
+                     서블릿/JSP,필터,리스너,파라미터등   <= Deployment Descriptor 파일 (DD파일)
+
+
+<h4>Refresh vs Redirect</4h>
+
+Refresh
+- 컨텐트 포함 응답후 출력
+
+Redirect
+- 콘텐트 포함하지 않음
+
+
+<h4>필터를 이용한 로그인 여부검사</h4>
+
+ServletContainer -> AuthFilter -> ... -> Servlet
+
+
+
+ <h4>DB데이터를 중첩객체에 저장하는 방법</h4>
+
+ 이전 방식 
+
+ 번호 제목 작성자번호   이름
+  1    a      10       가나다    -> :Board
+
+ - 부모테이블과 관계가 없었다
+
+
+ Board {       <>-->     Member {
+  번호                      번호
+  제목                      이름
+  작성자번호              }
+  이름
+ }                  
+
+
+=> SQL에서 설정 result map
+
+
+
+  <h4>테이블 관계와 객체 관계의 비교</h4>
+
+  테이블 관계
+
+    app_member -ㅣ-- ok- app_board
+  
+ 
+  객체 관계
+
+   Board <>--> Member
+   Member <>--> Board
+
+   필요에 따라 관계를 정의 
+   테이블 관계의 영향을 받지 않음
+
+
 
 
 </pre>
