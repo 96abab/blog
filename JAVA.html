@@ -9877,7 +9877,7 @@ $contextroot/ *html,css,js,gif 등 정적자원
                      서블릿/JSP,필터,리스너,파라미터등   <= Deployment Descriptor 파일 (DD파일)
 
 
-<h4>Refresh vs Redirect</4h>
+<h4>Refresh vs Redirect</h4>
 
 Refresh
 - 컨텐트 포함 응답후 출력
@@ -9928,6 +9928,82 @@ ServletContainer -> AuthFilter -> ... -> Servlet
 
    필요에 따라 관계를 정의 
    테이블 관계의 영향을 받지 않음
+
+
+
+
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-02-23</h1>
+<pre>
+
+
+<h3>파일업로드처리 </h3>
+
+
+app_member -ㅣ-- ok- app_board -ㅣ-- ok- app_board-file
+
+member_id(pk)    board_id(pk)             boardfile_id(pk)
+                 writer(fk)               attachedFiles(fk)
+
+
+  <h4>파일업로드처리 - Servlet과 Dao</h4>
+
+  BoardInsertServlet -> BoardDao -> app_board
+
+
+  form.jsp 
+
+    input type="file" name='files' multiple
+    
+    - multiple을 붙여야 파일 여러개 지정가능 
+
+  
+  BoardInsertServlet.java
+
+    String[] files = request.getParameterValues("files");
+    for (String file : files) {
+      System.out.println(file);
+    }
+
+    - 파일이 여러개 넘겨오게 할려면 값을 배열로 받고 줘야한다
+
+    
+    
+  <h4>파일업로드처리 - 멀티파트 데이터 처리</h4>
+
+
+  Apache.org의 fileupload 라이브러리
+  - 멀티파트 형식의 요청데이터를 객체에 담아준다
+
+  파라미터 정보 -> 객체  
+
+  - 버퍼를 사용하여 객체를 저장한후 마지막에 요청을 처리한다
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
