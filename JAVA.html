@@ -9985,6 +9985,96 @@ member_id(pk)    board_id(pk)             boardfile_id(pk)
   
 
 
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-02-24</h1>
+<pre>
+
+  - 컴퓨터를 효율적으로 사용하기 위해 vm 이 등장하였지만 os를 각각 설치해야하는 
+  단점이 있다 이것을 해결한 것이 os는 공유하여 사용하자는 방법을 사용한 도커이다 
+
+  
+<h3>서비스 객체 도입 - 비스니스 로직 분리 </h3>
+
+BoardInsertServlet -> BoardDao
+                   -> BoardFile
+  
+
+BoardInsertServlet
+
+ - 입력값 가공
+ - 업무흐름제어(+트랜잭션제어)
+    : 회사마다 업무흐름이 다르며 자주 변경된다
+    -> controller에서 비즈니스 로직을 분리하여 여러 서블릿이 
+    비즈니스 로직을 재사용할 수 있다
+ - 출력제어
+
+
+=> 
+
+BoardInsertServlet -> BoardService
+
+
+BoardInsertServlet
+ - 입력값과 출력제어
+
+BoardService
+ - 업무흐름과 트랜잭션제어
+
+
+<h4>Service interface적용</h4>
+
+DefaultService를 interface로 전환하고 
+implements 하여 사용
+
+
+<h3>Front Controller 도입</h3>
+
+ Front Controller
+ - 브라우저 요청을 대신 받아준다
+
+DispatcherServlet 
+
+->
+
+ 페이지 컨트롤러
+ - 특정 페이지 요청 담당
+ - 굳이 서블릿이 될 필요가 없고 페이지 컨트롤러
+ 관리를 따로 분리할 수 있다
+  
+BoardInsertServlet
+BoardListServlet
+BoardViewServlet
+
+
+
+/app/board/list
+->
+DispatcherServlet 
+->
+BoardListServlet
+
+  
+  <h4>Front Controller와 page Controller (POJO)</h4>
+
+  DispatcherServlet 
+  
+  ->
+  
+  page controller(인터페이스)
+
+    BoardListController
+
+    BoardViewController
+
+
+  - 직접요청을 하지 않기때문에 POJO로 변환
+
+
+
+
 
 
 
