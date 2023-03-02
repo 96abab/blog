@@ -10337,6 +10337,136 @@ Java Enterprise Edition
 
 
 </pre>
+<br>
+<hr>
+<br>
+<h1>2023-03-02</h1>
+<pre>
+
+
+<h3>Transaction Propagation(관리) 정책</h3>
+
+
+1. REQUIRED
+- 기존 트랜잭션이 존재하면 그 트랜잭션을 사용하고 없으면 새로운 트랜잭션을 생성
+
+call 
+
+-> 
+트랜잭션없이 메서드 호출하면 자동으로 생성 
+
+m1() 
+
+->
+호출자가 이미 트랜잭션 상태에 있다면 기존 트랜잭션에 속해서 실행
+
+m2()
+
+
+- 즉 중간작업 혹은 마지막 작업이 rollback 된다면 이전 작업도 지워진다
+
+
+2. PROPAGATION_REQUIRES_NEW
+- 항상 새로운 트랜잭션 생성
+call 
+
+-> 
+트랜잭션없이 메서드 호출하면 자동으로 생성 
+
+m1() 
+
+->
+메서드를 호출할 때마다 트랜잭션 생성
+
+m2()
+
+
+- 트랜잭션이 다르기 때문에 메소드마다 각각 rollback된다
+
+
+3. MANDATORY
+- 기존 트랜잭션이 존재하면 그 트랜잭션을 사용하고 없으면 예외를 발생
+
+
+4. SUPPORTS
+- 기존 트랜잭션이 존재하면 그 트랜잭션을 사용하고 없으면 트랜잭션 없이 실행
+
+
+5. NEVER
+- 트랜잭션 없이 실행합니다. 기존 트랜잭션이 존재하면 예외를 발생시킵니다.
+
+
+ <h4>애노테이션으로 트랜잭션 다루기</h4>
+
+
+ //@Configuration
+ // @Transactional 애노테이션으로 트랜잭션을 제어하려면 추가해야한다
+
+@EnableTransactionManagement 
+public class AppConfig {
+}
+
+
+@Service
+public class DefaultBoardService implements BoardService {
+
+  @Autowired private BoardDao boardDao;
+  @Autowired private BoardFileDao boardFileDao;
+
+  @Transactional // 해당 범위 내 메서드가 트랜잭션이 되도록 보장(선언적 트랜잭션)
+  @Override
+  public void add(Board board) {
+    boardDao.insert(board);
+    if (board.getAttachedFiles().size() > 0) {
+      for (BoardFile boardFile : board.getAttachedFiles()) {
+        boardFile.setBoardNo(board.getNo());
+      }
+      boardFileDao.insertList(board.getAttachedFiles());
+    }
+  }
+}
+
+
+<h3>ServletContainerInitializer 구현체</h3>
+
+
+ServletContainer
+
+-> 
+
+wep app1 (hr.war)
+ - 인사관리 시스템 
+
+wep app2 (crm.war)
+ - 고객관리 시스템
+
+web app3 (scm.web)
+ - 체인관리시스템
+
+
+1. ServletContainerInitializer 구현체 + WebApplicationInitializer
+
+
+MyApplicationInitializer(interface) <- ApplicationInitializer(concrete)
+
+- Spring IoC 컨테이너 준비
+- 프론트 컨트롤러준비
+
+AbstractDispatcherServletInitializer (abstract)
+
+- Spring Ioc 컨테이너 준비
+- 프론트컨트롤러 설정
+  <ul>이름</ul>
+  <ul>url</ul>
+  <ul>멀티파트</ul>
+
+
+AbstractAnnotationConfigDispatcherServletInitializer (abstract)
+
+- Spring Ioc 컨테이너의 설정 클래스 준비
+- 프론트 컨트롤러 설정
+
+</pre>
 </section>
 </main>
 </div>
