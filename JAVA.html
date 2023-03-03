@@ -10456,15 +10456,163 @@ AbstractDispatcherServletInitializer (abstract)
 
 - Spring Ioc 컨테이너 준비
 - 프론트컨트롤러 설정
-  <ul>이름</ul>
-  <ul>url</ul>
-  <ul>멀티파트</ul>
+  이름
+  url
+  멀티파트
 
 
 AbstractAnnotationConfigDispatcherServletInitializer (abstract)
 
 - Spring Ioc 컨테이너의 설정 클래스 준비
 - 프론트 컨트롤러 설정
+
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-03-03</h1>
+<pre>
+
+
+<h3>Spring WebMVC 아키텍쳐</h3>
+
+요청
+
+<->
+
+DispatcherServlet(Front Controller) <-> ViewResolver
+
+인터셉터=(스프링필터)
+<->
+
+Page Controller
+
+
+ DispatcherServlet이 ViewResolver에서 "board/list" 를 리턴받아오면 Page Controller가 
+ view 위치정보인 "/WEB-INF/jsp/board/list.jsp" 로 바꿔 DispatcherResolver에게 리턴하
+ 면 list.jsp를 실행 
+
+ 이때 ViewResolver에서 리턴받아오는게 없다면 요청url을 넘겨준다
+
+
+<h4>spring MultipartFile 사용법</h4>
+
+
+@PostMapping("insert")
+public String insert(
+    Board board,
+    Part[] files, // List<MultipartFile> files 로 변경
+    Model model, // ServletRequest 보관소에 저장할 값을 담는 임시 저장소
+    // 이 객체에 값을 담아 두면 프론트 컨트롤러(DispatcherServlet)가
+    // ServletRequest 보관소로 옮겨 담을 것이다.
+    HttpSession session) {
+  try {
+    Member loginUser = (Member) session.getAttribute("loginUser");
+
+    Member writer = new Member();
+    writer.setNo(loginUser.getNo());
+    board.setWriter(writer);
+
+    List<BoardFile> boardFiles = new ArrayList<>();
+    for (Part part : files) { // (MultipartFile file : files) 로 변경
+      if (part.getSize() == 0) { // (file.isEmpty()) 로 변경
+        continue;
+      }
+
+      String filename = UUID.randomUUID().toString();
+      part.write(servletContext.getRealPath("/board/upload/" + filename)); // file.transferTo(new File(...)) 으로 변경
+
+      BoardFile boardFile = new BoardFile();
+      boardFile.setOriginalFilename(part.getSubmittedFileName()); // file.OriginalFilename()로 변경
+      boardFile.setFilepath(filename);
+      boardFile.setMimeType(part.getContentType()); // file.getContentType() 로 변경
+      boardFiles.add(boardFile);
+    }
+    board.setAttachedFiles(boardFiles);
+
+    boardService.add(board);
+
+  } catch (Exception e) {
+    e.printStackTrace();
+    model.addAttribute("error", "data");
+  }
+  return "/board/insert.jsp";
+}
+
+
+<h3>공용객체(Service,DAO등)와 웹관련(Controller등) 객체</h3>
+
+/app/*
+DispatcherServlet(FrontController)
+  WebApplicationContext(IoC컨테이너) // 웹관련 객체만 둔다
+   - Authcontroller
+   - Boardcontroller 
+   + 인터셉터
+
+/admin/*
+DispatcherServlet(FrontController)
+  WebApplicationContext(IoC컨테이너)
+
+
+서로 Class가 사용될때 RootConfig에서 공유할수 있게 만든다
+
+
+<h3>필터링 기술들</h3>
+
+
+서블릿필터
+ServletContainer 가 DispatcherServlet 요청하고 받을때 사용
+
+인터셉터
+DispatcherServlet이 Page Controller 요청,응답을 받을때 사용
+
+AOP(Aspect Oriented Programming)
+IoC컨테이너가 관리하는 객체에 대해 메서드 호출 전/후에 기능 삽입
+proxy 패턴적용하여 원래 코드는 손대지 않고 기능추가 가능
+
+
+  <h4>interceptor</h4>
+  
+  WebMVcCongigurer 인터페이스를 implements하고 @EnableWebMvc로 이 클래스에
+  WebMVC를 처리할거라고 알려준다 그리고 addInterceptors메소드를 오버라이딩
+  하면 된다 
+
+
+<h3>Tiles</h3>
+
+
+화명구성을 변경할 수 있는 프레임 워크 레이아웃 구성을
+파일로 분리하여 관리하기 때문에 유지보수가 좋다
+
+1. 레이아웃(Layout)
+
+- 화면의 구성 요소를 정의한 틀을 의미합니다. 예를 들어 상단 메뉴 좌측 메뉴
+ 본문 영역 등이 있을 수 있습니다 레이아웃은 타일즈 XML 파일에서 정의합니다
+
+
+2. 타일즈(Attribute)
+
+- 레이아웃에 포함될 요소로, JSP 파일에서 사용하는 변수와 비슷합니다 예를 
+들어 타일즈 속성을 사용하여 레이아웃의 좌측 메뉴 영역에 표시할 메뉴 항목
+을 정의할 수 있습니다
+
+
+3. 타일즈 뷰(Tiles View)
+
+- 타일즈 뷰는 레이아웃과 타일즈 속성을 조합하여 생성되는 JSP 파일입니다
+ 예를 들어 메인 레이아웃과 타일즈 속성을 조합하여 회원 가입 화면을 구성
+ 할 수 있습니다.
+
+
+장점
+
+1. 레이아웃 구성별로 분리하여 코드의 재사용성이 증가하여 유지보수가 좋다
+
+2. 레이아웃 파일을 통일된 형태로 정의할 수 있기 때문에 화면 일관성을 유지
+
+3. 타일즈 속성을 사용하여 화면을 구성하기 때문에, 높은 자유도를 가지고 화면을 구성
+
+
 
 </pre>
 </section>
