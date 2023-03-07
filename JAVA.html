@@ -10723,6 +10723,194 @@ th:object 속성과 th:method 속성을 함께 사용하면 Thymeleaf에서 객�
 
 
 </pre>
+<br>
+<hr>
+<br>
+<h1>2023-03-07</h1>
+<pre>
+
+
+<h3>Thymeleaf - HTML5 - ish(HTML5 문법에 맞게)</h3>
+
+
+&lt;data-th-text="----"&gt; 형식으로 시작 테그안에 작성
+
+&lt;th:text="----"&gt; 예전형식
+
+
+1. 태그 반복생성
+
+&lt;data-th-each="student : ${students}"&gt;
+
+자바의 for 문법과 같다
+
+for (Student student : request.getAttribute("students")){--}
+
+
+2. 태그의 콘텐트 설정
+
+&lt;td&gt; 100 &lt;/td&gt; 
+=> element=tag
+
+실행결과
+
+&lt;td data-th-text="${student.no}"&gt;1&lt;/td&gt;
+
+3. 링크 설정
+
+&lt;a href="view?no=1" 
+
+  data-th-href="@{view(no=${student.no})}"
+  data-th-text="${studnet.name}"&gt;이름&lt;/a&gt;
+
+
+context root => /view -> /web/view
+
+- /web/ contextroot = web app 경로
+
+
+reatve path => view -> /web/app/student/view
+
+- /web/app/student = 현재경로
+
+
+absolute path => ~/view -> http://localhost:8080/view
+ 
+- http://localhost:8080/ = 서버루트 
+
+
+4. switch 문법
+
+&lt;span&gt;전공&lt;/span&gt;
+
+&lt;span&gt; = UI에 영향을 끼치지 않는다
+
+그래서 switch에 case를 사용할 때 사용하면 좋다
+
+예) 
+
+&lt;td data-th-switch="${student.level}"&gt; 
+&lt;span data-th-case="0"&gt;비전공자&lt;/span&gt;
+&lt;span data-th-case="1"&gt;전공자&lt;/span&gt;
+.
+.
+.
+&lt;/span&gt;
+
+5. 보관소에서 값 꺼내기
+
+${param.keyword} -> request.getParameter("keyword")
+
+
+${studnet} -> request.getAttribute("student") 
+
+-> ServletRequest
+
+
+${session.loginUser} -> request.getAttribute("loginUser")
+
+-> HttpSession
+
+
+${application.boardService} -> context.getAttribute("boardService")
+
+-> ServletContext
+
+
+예외처리
+
+
+@ControllerAdvice
+ControllerAdvice
+
+@ExceptionHandler
+String handle(Exception e) {
+ --------------------
+}
+
+- 모든 컨트롤러의 request handler에서 예외가 발생할 때 호출된다 
+
+
+Controller
+
+ExceptionHandler String handle(Exception e) {-}
+- 자신이 소속된 Controller의 request handler 에서 예외 발생시 호출
+
+
+<h3>log4j 2.x 사용하기</h3>
+
+1. level
+- 로그의 의미
+
+
+Trace 
+실행 흐름을 상세하게 추적할때 사용
+
+<
+
+Debug 
+개발자가 실행 상태 확인을 위해 기록하는 것
+
+<
+
+Info
+실행상황 기록 
+-> 운영자에게 알릴내용
+<
+
+Warn 
+실행은 성공했지만 문제는 발생할 수 있는 여지도 있는 경우
+관리자의 주의가 필요한 경우
+<
+
+Error 
+실행 요청오류
+<
+
+Fatal
+- 시스템을 더이상 실행 할 수 없는 상황 => 재시작이 필요한 경우
+
+
+2. log 사용법
+
+Logger log = LogManager.getLogger(getClass());
+
+- org.apache.logging.log4j
+
+
+log.xxx("") 
+
+warn 범위
+
+warn()
+error()
+fatal()
+
+debug 범위
+
+warn()
+error()
+fatal()
++
+debug()
+info()
+
+trace 범위
+
+warn()
+error()
+fatal()
++
+debug()
+info()
++
+trace()
+
+
+&lt;Root level="xxx"&gt; - &lt;/Root&gt;
+
+
+</pre>
 </section>
 </main>
 </div>
