@@ -10911,6 +10911,76 @@ trace()
 
 
 </pre>
+<br>
+<hr>
+<br>
+<h1>2023-03-08</h1>
+<pre>
+
+
+<h3>Front-end/ Back-end</h3>
+
+1. Server- rendering -> 클라이언트가 출력할 UI를 서버에서 생성
+
+브라우저에서 요청시 App Server에서 응답을 (HTML+CSS+JavaScript) 
+
+
+2. Client-rendering -> 서버에서 받는 데이터를 가지고 클라이언트에서 동적으로 UI생성
+
+1) Web Browser에서 list.html을 요청
+2) Application Server 에서 list() 
+3) Controller  -> Service -> DAO
+
+Application Server는 List또는 배열 객체를 받아 JSON파싱 -> JAvaScript -> 
+
+
+<h4>promise</h4>
+
+executor 실행 
+- resolve 또는 reject 통지
+
+->
+
+Promise
+
+->
+
+resolve 통지시 호출
+.then (onfulFillment) 
+- 작업들을 체인으로 엮어 순서대로 실행시킨다
+
+executor -> ononfulFillment -> ... 
+
+
+-리스너가 다른체인에 연결된 다른 then 에 값을 주려면 return 을 해줘야한다
+
+
+reject 통시지 호출
+
+.then
+예외처리 핸들러가 없으면 다른 Promise객체에 전달 그후 마지막에 catch 로 전달 
+
+catch
+예외를 처리 (이후 fulfill 통지)
+
+
+<h4></h4>
+
+
+DispatcherServlet
+
+call
+<->
+값리턴
+
+Controller
+
+
+- 알맞는 리턴값을 HttpMessageConverter 가 변환한다
+
+
+
+</pre>
 </section>
 </main>
 </div>
