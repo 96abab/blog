@@ -10981,6 +10981,77 @@ Controller
 
 
 </pre>
+<br>
+<hr>
+<br>
+<h1>2023-03-09</h1>
+<pre>
+
+  
+호출 -> fetch(게시글조회) -> AJAX 
+
+호출 -> fetch(로그인사용자조회) -> AJAX
+
+- 위는 비동기 상황이다 따라서 게시글 조회를 하기 전에
+로그인 사용자 조회를 하면 게시글이 없다고 나오는 경우
+가 생겨 오류가 발생한다
+
+해결책
+
+
+<h3>Cookie 활용과 사용법</h3>
+
+
+if (document.querySelector('input[type="checkbox"]:checked') != null) {
+  setCookie('email', document.querySelector('input[name="email"]').value, 60 * 60 * 24 * 7);
+} else {
+  setCookie('email', '', 0);
+}
+
+
+function getCookie(cookieName){
+  var cookieValue=null;
+  if(document.cookie){
+      var array=document.cookie.split((escape(cookieName)+'='));
+      if(array.length >= 2){
+          var arraySub=array[1].split(';');
+          cookieValue=unescape(arraySub[0]);
+      }
+  }
+  return cookieValue;
+}
+
+function setCookie(cookieName, cookieValue, cookieMaxAge, cookiePath, cookieDomain, cookieSecure){
+  var cookieText=encodeURIComponent(cookieName)+'='+encodeURIComponent(cookieValue);
+  cookieText+=(cookieMaxAge ? '; max-age='+cookieMaxAge : '');
+  cookieText+=(cookiePath ? '; path='+cookiePath : '');
+  cookieText+=(cookieDomain ? '; domain='+cookieDomain : '');
+  cookieText+=(cookieSecure ? '; SECURE' : '');
+  document.cookie=cookieText;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
 </section>
 </main>
 </div>
