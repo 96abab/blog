@@ -11032,22 +11032,80 @@ function setCookie(cookieName, cookieValue, cookieMaxAge, cookiePath, cookieDoma
 
 
 
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-03-11</h1>
+<pre>
 
 
+<h3>entries 배열을 쿼리스트링으로 변환하기</h3>
 
 
+세 함수 모두 entries 배열을 인자로 받는다
+
+세 함수 모두 encodeURIComponent 함수를 사용하여 쿼리스트링에 사용할 수 없는 문자열을 인코딩하고 있다
+
+for...of 루프를 사용한 toQueryStringFromEntries는 if 문을 사용하여 첫 번째 요소를 제외하고 & 문자를 추가하고 있습니다.
+map 메서드와 전개 연산자를 사용한 2,3 두 함수는 join 메서드를 사용하여 배열 요소를 & 문자로 구분한 문자열을 생성하고 있습니다.
 
 
+1. 
+
+- toQueryStringFromEntries는 for...of 루프를 사용하여 entries 배열의 각 요소를 순회하면서 쿼리스트링 형태로 변환
+
+function toQueryStringFromEntries(entries) {
+  let qs = "";
+  for (let [key, value] of entries) {
+    if (qs.length > 0) {
+      qs += "&";
+    }
+    qs += encodeURIComponent(key) + "=" + encodeURIComponent(value);
+  }
+  return qs;
+}
 
 
+2.
+
+- toQueryStringFromEntries2는 배열 메서드인 map을 사용하여 entries 배열을 새로운 배열로 변환한 후에 쿼리스트링 형태로 변환
+
+function toQueryStringFromEntries2(entries) {
+  let arr = [];
+  for (let entry of entries) {
+    arr.push(entry);
+  }
+  
+  //console.log(arr);
+  
+  let arr2 = arr.map(x => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`);
+  //console.log(arr2);
+  
+  let str = arr2.join('&');
+  //console.log(str);
+  
+  return str;
+}
 
 
+3.
 
+- toQueryStringFromEntries3는 전개 연산자를 사용하여 entries 배열을 새로운 배열로 변환한 후에 쿼리스트링 형태로 변환
 
-
-
-
-
+function toQueryStringFromEntries3(entries) {
+  let arr = [...entries];
+  
+  //console.log(arr);
+  
+  let arr2 = arr.map(x => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`);
+  //console.log(arr2);
+  
+  let str = arr2.join('&');
+  //console.log(str);
+  
+  return str;
+	}
 
 
 
