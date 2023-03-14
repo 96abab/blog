@@ -11139,6 +11139,127 @@ function toQueryStringFromEntries3(entries) {
 
 
 </pre>
+<br>
+<hr>
+<br>
+<h1>2023-03-14</h1>
+<pre>
+
+
+<h3>React</h3>
+
+React는 Facebook에서 개발한 UI 라이브러리로, 사용자 인터페이스를 만들기 위한 자바스크립트 
+라이브러리입니다. React는 SPA(Single Page Application) 개발을 위해 설계되었으며, 대규모 웹
+애플리케이션에서 사용하기에 적합합니다.
+
+React는 가상 DOM(Virtual DOM)을 사용하여 성능을 최적화하고, 컴포넌트(Component) 기반으로 
+UI를 구성합니다. 이를 통해 코드 재사용성이 높아지며, 유지보수와 확장성도 쉽게 처리할 수 
+있습니다.
+
+
+특징
+
+1. 가상 DOM(Virtual DOM)
+
+ - React는 가상 DOM을 사용하여 UI를 렌더링합니다. 이를 통해 실제 DOM 조작을 최소화하고
+ 렌더링 속도를 높일 수 있습니다.
+
+
+2. 컴포넌트(Component)
+
+ - React는 컴포넌트(Component) 기반으로 UI를 구성합니다. 컴포넌트는 UI의 일부를 구성하는
+ 독립적인 모듈로, 각각의 컴포넌트는 상태(state)와 속성(props)을 가질 수 있습니다
+
+
+3. JSX
+
+ - React는 JSX라는 문법을 사용하여 컴포넌트를 정의합니다. JSX는 자바스크립트를 확장한 
+ 문법으로, HTML과 유사한 구문을 사용하여 UI를 정의할 수 있습니다.
+
+
+4. 단방향 데이터 흐름
+
+ - React는 단방향 데이터 흐름을 지향합니다. 컴포넌트는 상위 컴포넌트에서 전달된 속성(props)
+ 을 읽을 수 있지만, 하위 컴포넌트에서는 직접적으로 상위 컴포넌트의 상태(state)를 변경할 수 
+ 없습니다.
+
+
+React는 UI 라이브러리이므로, React 자체만으로는 웹 애플리케이션을 개발할 수는 없습니다.
+따라서 React를 사용할 때는 React와 함께 사용할 다른 라이브러리 및 프레임워크를 결합하여
+사용합니다. 대표적인 예로는 Redux, React Router, Material-UI 등이 있습니다
+
+
+
+&lt;div&gt;...&lt;/div&gt;
+
+DOM(web Browser가 생성및 관리) 의 컴포넌트,태그,element
+
+
+React.Component
+
+- DOM의 데이터 관리
+- DOM을 제어
+- 하위 컴포넌트 제어
+- DOM UI생성
+
+
+React
+- virtural DOM 
+개발자가React API로 가상의 DOM을 제어 React가 가상 DOM을 실제 DOM과
+비교하여 최소한의 변경으로 UI를 적용
+
+web Browser
+- real DOM
+예전방식 개발자가 DOM API 를 사용해서 직접 제어
+
+
+realDOM에 div#root 라는 id를가진 객체를 ReactDOM.createRoot()  
+가상 돔을 생성후 UI를 출력한다
+
+
+<h4>React - properties, state 저장소</h4>
+
+
+
+ReactComponent
+
+1. props
+
+Attribute 저장소 (readonly)
+태그 속성을 표현할 때
+
+
+2. state 
+
+일반값을 보관하는 용도 (read/write)
+- 생성자에서 준비해야 한다
+- setState() 를 호출하여 값을 바꾼다 
+-> 값이 변경되면 render() 자동호출
+-> UI변경 tag생성
+
+
+<h3>lombok</h3>
+
+
+롬복(Lombok)은 자바 언어를 위한 라이브러리로, 자동화된 코드 생성 기능을 제공하여 개발자가
+반복적으로 작성해야 하는 코드를 줄여줍니다. 롬복을 사용하면 Getter/Setter, 생성자, equals
+/hashCode, toString 등과 같은 일반적인 메서드를 자동으로 생성할 수 있습니다.
+
+롬복은 자바 소스 코드에 애노테이션(annotation)을 추가하여 이러한 코드를 생성합니다.예를 들
+어, @Getter와 @Setter 애노테이션을 사용하면 해당 클래스의 모든 필드에 대한 Getter와 Setter
+를 자동으로 생성할 수 있습니다. 마찬가지로, @AllArgsConstructor 애노테이션을 사용하면 해당
+클래스에 모든 필드를 사용하는 생성자를 자동으로 생성할 수있습니다.
+
+롬복은 개발자의 생산성을 향상시키는 데 도움이 되며, 코드의 가독성과 유지 보수성을 높일 수 
+있습니다. 또한, 롬복은 자동화된 코드 생성을 통해 오타나 버그를 줄일 수 있습니다.
+
+하지만, 롬복을 사용할 때는 약간의 주의가 필요합니다. 롬복이 자동으로 생성하는 코드가 코드
+의 구조를 이해하고 있지 않은 다른 개발자가 코드를 이해하는 데 문제가 될 수 있습니다. 또한
+롬복이 제공하는 애노테이션을 잘못 사용하면 컴파일러 오류가 발생할 수 있습니다
+
+
+
+</pre>
 </section>
 </main>
 </div>
