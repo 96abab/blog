@@ -11260,6 +11260,185 @@ Attribute 저장소 (readonly)
 
 
 </pre>
+<br>
+<hr>
+<br>
+<h1>2023-03-15</h1>
+<pre>
+
+
+<h3></h3>
+
+
+"use strict";
+
+// DOM element vs React element
+const element = &lt;h1&gt;Hello, world!&lt;/h1&gt;;
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(element);
+
+->
+위에 작성한 js파일이 아래와 같이 변환되어 기존에 있는 DOMElement
+에 새로만든 DOMElement와 비교하여 바뀐곳을 바꿔서 출력
+
+"use strict";
+
+// DOM element vs React element
+
+var element = React.createElement(
+  "h1",
+  null,
+  "Hello, world!"
+);
+var root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(element);
+
+
+
+React element(component)
+-root,element
+
+DOM element
+-&lt;h1&gt; Hello! &lt;/h1&gt;;
+
+
+"use strict";
+
+// 클래스 컴포넌트 만들기
+// => 컴포넌트의 이름은 항상 대문자로 시작한다.
+class Welcome extends React.Component {
+  render() {
+    return &lt;h1&gt;Hello, {this.props.name}&lt;/h1&gt;;
+  }
+}
+
+const element = &lt;Welcome name="임꺽정" /&gt;;
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(element);
+
+
+- 클래스컴포넌트로 내장 함수인 render()를 사용해서 DOMElement를 ReactElement로 바꿔준다
+그리고 "const element = &lt;Welcome name="임꺽정" /&gt;;" 를 사용하여 클래스의 인스턴
+스를 생성하여 값을 지정해준다 (기존 인스턴스 생성 방식인 new도 가능) root.render(element);
+로 생성한 DOMElement를 UI에 붙여준다
+
+
+"use strict";
+
+// 함수 컴포넌트 만들기
+// => 컴포넌트의 이름은 항상 대문자로 시작한다.
+function Welcome(props) {
+  return &lt;h1&gt;Hello, {props.name}&lt;/h1&gt;;
+}
+
+// Welcome() 함수를 통해 DOM 엘리먼트를 생성할 리액트 컴포넌트 (엘리먼트)를 만든다
+const element = &lt;Welcome name="홍길동" /&gt;;
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(element);
+
+
+-함수컴포넌트로 render() 를 생략할 수 있다 대신 (props) 파라미터를 받아야한다
+
+
+"use strict";
+
+// 4단계: 클래스 컴포넌트 사용 + State
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+class Clock extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { date: new Date() };
+  }
+  render() {
+    return (
+      &lt;div&gt;
+        &lt;h1&gt;Hello, world!&lt;/h1&gt;
+        &lt;h2&gt;It is {this.state.date.toLocaleTimeString()}.&lt;/h2&gt;
+        &lt;/div&gt;
+    );
+  }
+}
+
+root.render(<Clock />);
+
+
+- 클래스컴포넌트를 사용하여 해당 객체의 프로퍼티를 this.state에 저장하여 사용
+
+
+&lt;script&gt;
+  let obj1 = {
+    no: 100,
+    name: "이순신",
+    print: function () {
+      console.log("==>", this.no, this.name);
+    },
+  };
+
+  let obj2 = {
+    no: 200,
+    name: "강감찬",
+    // 기존 obj1.print() 함수의 proxy함수를 만든다
+    // 이 함수의 this 변수는 obj1을 가리킨다
+    // 따라서 이 함수를 호출하면 무조건 obj1을 this에 전달
+    // => proxy() --> obj1.print()
+    print: obj1.print.bind(obj1), // 새로만든 함수를 리턴
+  };
+
+  obj2.print();
+  &lt;/script&gt;
+
+
+- this로 부모 컴포넌트의 함수를 자식 컴포넌트에게 그대로 전달하고 싶다면
+  bind로 부모 컴포넌트 함수의 proxy를 만들어서 전달해준다
+
+  **주의**
+
+  이때 생성되는 함수는 새로운 함수에 똑같은 값이 담겨 있는것이다
+
+
+  "use strict";
+
+  // 이벤트 리스너 등록하기
+  
+  class Toggle extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = { isToggleOn: true };
+    }
+  
+    // 인스턴스 필드에 arrow function을 할당하면
+    // this를 명시적으로 bind 할 필요가 없다.
+    handleClick = () => {
+      // arrow function에는 빌트인 변수 this, arguments, super 가 없다.
+      // 따라서 클로저 바깥 변수 this를 따로 복제해 둔다.
+      // 이것을 보통 '바인드(bind) 한다'라고 표현한다.
+      this.setState((prevState) => ({
+        isToggleOn: !prevState.isToggleOn,
+      }));
+    };
+  
+    render() {
+      return (
+        <button onClick={this.handleClick}>
+          {this.state.isToggleOn ? "ON" : "OFF"}
+        </button>
+      );
+    }
+  }
+  
+  const root = ReactDOM.createRoot(document.getElementById("root"));
+  root.render(<Toggle />);
+  
+
+  - arrow function은 this로 바깥객체를 복제하여두기 때문에 bind를 할 필요가 없다
+  
+
+
+
+</pre>
 </section>
 </main>
 </div>
