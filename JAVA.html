@@ -11422,15 +11422,15 @@ root.render(<Clock />);
   
     render() {
       return (
-        <button onClick={this.handleClick}>
+        &lt;button onClick={this.handleClick}&gt;
           {this.state.isToggleOn ? "ON" : "OFF"}
-        </button>
+          &lt;/button&gt;
       );
     }
   }
   
   const root = ReactDOM.createRoot(document.getElementById("root"));
-  root.render(<Toggle />);
+  root.render(&lt;Toggle /&gt;);
   
 
   - arrow function은 this로 바깥객체를 복제하여두기 때문에 bind를 할 필요가 없다
@@ -11439,6 +11439,78 @@ root.render(<Clock />);
 
 
 </pre>
+<br>
+<hr>
+<br>
+<h1>2023-03-16</h1>
+
+
+<h3>React - this</h3>
+
+
+React에서 this는 JavaScript와 마찬가지로 해당 컴포넌트의 인스턴스를 가리키는 키워드입니다.
+
+React 클래스 컴포넌트에서 this를 사용하면 해당 컴포넌트의 인스턴스를 가리킵니다.따라서
+this.state나 this.props와 같은 형태로 인스턴스의 상태나 속성을 참조할 수 있습니다.
+
+그러나 JavaScript에서는 this가 함수 호출 방식에 따라 값이 달라질 수 있는데, React에서도 마
+찬가지입니다. 일반적으로 함수를 호출하는 방식에 따라 this의 값이 달라집니다. 그렇기 때문에
+React 클래스 컴포넌트에서 this를 사용할 때 주의해야 합니다.
+
+예를 들어, 일반적인 함수에서 this는 해당 함수를 호출한 객체를 참조합니다.
+하지만 화살표 함수에서는 this가 전역 객체를 참조합니다. 또한, 이벤트 핸들러에서 this를 사
+용하면 핸들러가 호출되는 컴포넌트의 인스턴스가 아닌 다른 객체를 참조할 수 있습니다.
+
+따라서 React에서는 함수를 호출하는 방식에 따라 this의 값이 달라질 수 있는 문제를 해결하기 
+위해, 함수를 호출하는 컨텍스트에서 this 값을 바인딩하는 방법을 사용합니다. 
+
+예를 들어, 클래스의 생성자 함수에서 this.handleClick = this.handleClick.bind(this);와 같은
+형태로 this 값을 수동으로 바인딩할 수 있습니다.
+
+또는 화살표 함수를 사용하면, 함수의 호출 컨텍스트가 아니라 선언된 컨텍스트에 this 값을 자
+동으로 바인딩합니다.
+
+
+1. 생성자 함수에서 bind() 메서드 사용하기
+
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    console.log(this); // MyComponent 인스턴스를 출력
+  }
+
+  render() {
+    return (
+      &lt;button onClick={this.handleClick}&gt;
+        Click me
+        &lt;/button&gt;
+    );
+  }
+}
+
+
+2. 화살표 함수 사용하기
+
+
+class MyComponent extends React.Component {
+  handleClick = () => {
+    console.log(this); // MyComponent 인스턴스를 출력
+  }
+
+  render() {
+    return (
+      &lt;button onClick={this.handleClick}&gt;
+        Click me
+      &lt;/button&gt;
+    );
+  }
+}
+
+
 </section>
 </main>
 </div>
