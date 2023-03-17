@@ -11443,6 +11443,7 @@ root.render(<Clock />);
 <hr>
 <br>
 <h1>2023-03-16</h1>
+<pre>
 
 
 <h3>React - this</h3>
@@ -11510,7 +11511,113 @@ class MyComponent extends React.Component {
   }
 }
 
+</pre>
+<br>
+<hr>
+<br>
+<h1>2023-03-17</h1>
+<pre>
 
+
+<h3>DB 모델링</h3>
+
+
+학생일경우
+
+column: 학번,이름,이메일,전화,우편번호,기본주소,상세주소,학력,학교,재직여부,...
+
+
+1.
+
+key
+- 데이터를 구분할때 사용할 컬럼값들
+
+super key {
+
+  학번
+  이메일
+  이름+전화
+  이름+학번
+  이메일+전화
+  이메일+이름
+
+}
+
+-> 중복될 수 없는 값만 선별하는 것 
+
+2.
+
+candidate key(후보키) {
+
+  학번
+  이메일
+  이름+전화
+
+}
+
+-> 변경할 수 없는 값을 선별
+
+3.
+
+primary key(주키) {
+
+  학번
+
+}
+
+-> 주키로 선별하지 않은 candidate key는 Alternate key로서 사용가능
+
+4.
+
+Alternate key(대안키){
+  
+  이메일
+  이름+전화
+
+}
+
+-> 데이터를 구분할때 사용할 키가 없다면 사용할 인공키(대리키)를 생성
+
+5.
+
+Surrogate key(대리키) = Artificial key(인공키)
+
+{
+
+게시글 일련번호  
+
+}
+
+
+ER Diagram
+
+
+논리 모델링
+
+- DBMS 고려X
+- 개연적인 모델링
+- 데이터 식별
+- 데이터 간의 관계 식별
+- 업무용어, 자연어 사용
+
+
+물리 모델링
+
+- DBMS에 맞춰 모델링
+- 물리적인 모델링
+- 데이터를 테이블과 컬럼으로 표현
+- 테이블간의 관계로 전환
+- DBMS Guide에 맞춰 용어사용
+- DBMS의 제약조건 부여
+
+reverse engineering
+<->
+forwrd engineering
+
+SQL
+
+
+</pre>
 </section>
 </main>
 </div>
