@@ -293,7 +293,135 @@
       
           alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
       </code></pre></div></div>
-      
+<br>
+<hr>
+<br>
+<h1>2023-03-21</h1>
+<pre>
+
+
+<h3>virtualbox</h3>
+
+https://www.virtualbox.org/
+
+에서 downloads -> windows host 설치하기
+
+https://www.vagrantup.com/
+
+에서 download -> windows -> AMD64 설치
+
+mkdir vm-projects 
+->
+mkdir host1
+으로 들어간후 
+
+config.vm.box = "sysnet4admin/CentOS-k8s"
+- contos7설치
+
+또는
+
+config.vm.box = "sysnet4admin/Ubuntu-k8s"
+- ubuntu 설치
+
+설정후 vagrant up 으로 설치
+
+vagrant ssh 로 접속
+
+vagrant@k8s:~$ 
+~$는 사용자
+~#은 관리자
+
+man grep 으로 메뉴얼 확인가능 // 엔터로 한줄씩 내려감,스페이스바 한페이지씩, 나가려면 q
+
+
+<h3>inode와 파일의 관계</h3> 
+
+file.txt 는 inode를 지칭하는 이름이고
+inode 는 파일의 데이터가 저장될 위치를 알려주는 정보이다
+
+
+vagrant@k8s:~$ sudo ln /etc/hosts host_link2
+로 링크를 생성 
+
+-rw-r--r-- 3 root    root     218 Mar 20  2021 host_link2
+3 은 링크수다 이 링크 수가 0이 되면 inode가 사라진다
+
+rm -rf test1
+하위 디렉토리까지 삭제
+
+cat host_link
+파일 내용 출력
+
+mv temp1 ok
+파일명 ok로 변경
+
+grep "alias" .bashrc
+.bashrc 에서 "alias" 라는 단어가 있는 줄을 출력
+
+find /etc -name "cron" -ls
+etc에서 cron이라는 파일을 찾고 리스트로 출력
+
+sudo apt install nano
+나노 설치
+
+Shell의 특성 인터페이스 
+
+REPL(Read-Eval-Print-Loop)
+
+
+alias 별명을 부여해줌
+
+
+\ 는 이스케이프 특수기능을 탈출하는 기능이다
+또 마지막에 입력하면 다음 라인도 입력을하겟다 라는 의미이다
+
+vagrant@k8s:~$ echo "MY name is "hong"."
+MY name is hong.
+vagrant@k8s:~$ echo "MY name is \"hong\"."
+MY name is "hong".
+
+
+cat << hello
+hello가 나오기전까지 입력할수 있다
+
+cat << EOF > hello
+EOF가 나오기전까지 입력하고 나오면 hello에 내보낸다
+
+
+약자
+
+urs (User requirements document)
+- 소프트웨어 제품이나 서비스를 개발할 때, 사용자가 필요로 하는 기능, 요구 사항, 제약 사항 등을
+  문서화하여 개발 프로젝트의 기반을 제공하는 문서입
+
+
+pwd (print working directory)
+- 컴퓨터의 명령 줄 인터페이스에서 현재 작업 중인 디렉터리의
+  이름을 출력하는 데 쓰인다
+
+
+grep (Global regular expression print)
+- 정규 표현식을 사용하여 파일 내에서 문자열을 검색하는 강력한 검색 도구
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
   </section>
 </main>
 </div>
