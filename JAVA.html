@@ -11618,6 +11618,63 @@ SQL
 
 
 </pre>
+<br>
+<hr>
+<br>
+<h1>2023-03-28</h1>
+<pre>
+
+
+<h3>Facebook 로그인 구동 과정</h3>
+
+
+1. client가 Facebook에 로그인 요청 accessToken을 줌
+
+2. accessToken으로 app-server에 로그인 요청
+
+3. server가 facebook에 정보 확인 요청 유효성 검사를 하고 맞으면 정보를 보내줌
+
+4. 정보가 DBMS에 있다면 로그인, 없다면 자동회원가입
+
+5. server가 회원정보를 받으면 HttpSession에 정보 저장
+
+6. client 로그인허용
+
+
+<h3>SpringBoot web application Dokcer Image 만들기</h3>
+
+1. windows11 shell x64 업그래이드 해주기 
+
+2. powershell 로 작업 
+
+3. myapp 으로가서 gradle clean 후 gradle build
+
+4. java -jar app-server/build/libs/app-server-0.0.1-SNAPSHOT.jar 로 실행
+- 만약 페이지가 안나온다면 webapp을 resuorces로 옮기고 static으로 만든후
+3번을 다시하고 실행
+
+5. myapp바로 밑에 Docker파일 생성하고 파일을 열면 관련 업데이트 실행
+
+6. docker build -t 96abab/myapp:0.0.1 .  이미지화 
+- docker desktop 실행후 해야함
+
+7. docker container rename [무작위 이름] myapp 컨테이너 이름 변경
+
+8. vo로가서 student.java 와 teacher에 
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+추가
+
+9. docker run -d -p 80:80 -v /mnt/c/Users/bitcamp/webapp-upload:/root/webapp-upload --name myapp 96abab/myapp:0.0.1
+- 저장소와 연결
+
+
+
+
+
+
+
+</pre>
 </section>
 </main>
 </div>
